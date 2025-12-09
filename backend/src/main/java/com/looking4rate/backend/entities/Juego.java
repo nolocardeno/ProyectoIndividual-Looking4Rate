@@ -45,4 +45,7 @@ public class Juego {
 
     @OneToMany(mappedBy = "juego", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JuegoDesarrolladora> desarrolladoras;
+
+    @OneToMany(mappedBy = "juego", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JuegoGenero> generos;
 }
