@@ -1,0 +1,173 @@
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// THEME TOGGLE COMPONENT
+// Boton toggle para cambiar entre modo oscuro y claro
+// ==========================================================================
+
+:host {
+  display: block;
+}
+
+.theme-toggle {
+  // --------------------------------------------------------------------------
+  // Estilos base
+  // --------------------------------------------------------------------------
+  appearance: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+
+  // --------------------------------------------------------------------------
+  // TRACK (pista del toggle)
+  // --------------------------------------------------------------------------
+  &__track {
+    width: 48px;
+    height: 26px;
+    background: linear-gradient(
+      180deg, 
+      $color-primary-dark 0%,
+      color.mix($color-primary-dark, $color-accent-dark, 70%) 100%
+    );
+    border-radius: $radius-full;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    @include transition(background);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-full;
+      padding: $border-thin;
+      background: linear-gradient(
+        180deg,
+        rgba($color-text-alt-dark, 1) 0%,
+        rgba($color-text-alt-dark, 0.1) 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      @include transition(all);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ICONOS
+  // --------------------------------------------------------------------------
+  &__icon {
+    width: 14px;
+    height: 14px;
+    color: $color-text-alt-dark;
+    z-index: 1;
+    @include transition(color);
+
+    &--moon,
+    &--sun {
+      color: $color-text-dark;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // THUMB (bolita del toggle)
+  // --------------------------------------------------------------------------
+  &__thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(
+      180deg, 
+      color.adjust($color-primary-dark, $lightness: 20%) 0%,
+      color.mix($color-primary-dark, $color-accent-dark, 40%) 100%
+    );
+    border-radius: $radius-full;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    transition: transform $transition-base $transition-ease,
+                background $transition-base $transition-ease;
+
+    &--light {
+      transform: translateX(22px);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Estados interactivos
+  // --------------------------------------------------------------------------
+  &:hover {
+    transform: translateY(-1px);
+    
+    .theme-toggle__track {
+      background: linear-gradient(
+        180deg, 
+        $color-primary-dark 0%,
+        color.mix($color-primary-dark, $color-accent-dark, 50%) 100%
+      );
+      box-shadow: $shadow-hover-accent;
+
+      &::before {
+        background: linear-gradient(
+          180deg,
+          rgba($color-text-dark, 1) 0%,
+          rgba($color-text-dark, 0.1) 100%
+        );
+      }
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+    
+    .theme-toggle__track {
+      box-shadow: $shadow-active-accent;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: $radius-full;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Movil (640px)
+@media (max-width: $breakpoint-sm) {
+  .theme-toggle {
+    &__track {
+      width: 42px;
+      height: 22px;
+      padding: 0 4px;
+    }
+
+    &__icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    &__thumb {
+      width: 16px;
+      height: 16px;
+
+      &--light {
+        transform: translateX(20px);
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+// ==========================================================================
+// ELEMENTOS HTML BASE
+// Estilos por defecto para elementos HTML sin clases
+// ==========================================================================
+
+@use '../00-settings/variables' as *;
+
+// --------------------------------------------------------------------------
+// HTML Y BODY
+// --------------------------------------------------------------------------
+html {
+  background-color: var(--bg-primary);
+  transition: background-color $transition-base $transition-ease;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color $transition-base $transition-ease,
+              color $transition-base $transition-ease;
+  overflow-x: hidden;
+  min-width: 320px;
+}
+
+// --------------------------------------------------------------------------
+// ENCABEZADOS
+// --------------------------------------------------------------------------
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-primary;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: var(--text-primary);
+  transition: color $transition-base $transition-ease;
+}
+
+// --------------------------------------------------------------------------
+// PARRAFOS
+// --------------------------------------------------------------------------
+p {
+  font-size: $font-size-md;
+  line-height: $line-height-normal;
+  color: var(--text-secondary);
+  transition: color $transition-base $transition-ease;
+}
+
+// --------------------------------------------------------------------------
+// LISTAS
+// --------------------------------------------------------------------------
+ul, ol {
+  list-style: none;
+}
+
+// --------------------------------------------------------------------------
+// BOTONES
+// --------------------------------------------------------------------------
+button {
+  font-family: $font-primary;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: all $transition-base $transition-ease;
+}
+
+// --------------------------------------------------------------------------
+// INPUTS
+// --------------------------------------------------------------------------
+input, textarea, select {
+  border: $border-thin solid var(--border-color);
+  border-radius: $radius-sm;
+  padding: $spacing-1 $spacing-2;
+  font-family: $font-primary;
+  background: transparent;
+  color: var(--text-primary);
+  transition: border-color $transition-base $transition-ease,
+              color $transition-base $transition-ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// Movil (640px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-sm) {
+  html {
+    font-size: 14px;
+  }
+
+  p {
+    font-size: $font-size-sm;
+  }
+}

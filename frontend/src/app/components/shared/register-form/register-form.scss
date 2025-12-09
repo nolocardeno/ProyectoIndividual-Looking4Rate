@@ -1,0 +1,335 @@
+// ==========================================================================
+// REGISTER-FORM COMPONENT
+// Modal de registro con estilos BEM y soporte responsive
+// ==========================================================================
+
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// --------------------------------------------------------------------------
+// OVERLAY
+// --------------------------------------------------------------------------
+.register-modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: $spacing-4;
+  box-sizing: border-box;
+}
+
+// --------------------------------------------------------------------------
+// MODAL CONTAINER
+// --------------------------------------------------------------------------
+.register-modal {
+  background: linear-gradient(
+    180deg, 
+    $color-primary-dark 0%,
+    color.mix($color-primary-dark, $color-accent-dark, 70%) 100%
+  );
+  border-radius: $radius-lg;
+  width: 100%;
+  max-width: 350px;
+  box-shadow: $shadow-complete;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  // Borde decorativo con gradiente
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-lg;
+    padding: $border-thin;
+    background: $color-text-alt-dark;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  // --------------------------------------------------------------------------
+  // HEADER
+  // --------------------------------------------------------------------------
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-2 $spacing-6;
+    border-bottom: $border-thin solid $color-text-alt-dark;
+  }
+
+  &__title {
+    color: $color-text-dark;
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    margin: 0;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: $color-text-alt-dark;
+    cursor: pointer;
+    padding: $spacing-1;
+    @include transition(color);
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    &:hover {
+      color: $color-text-dark;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // FORM
+  // --------------------------------------------------------------------------
+  &__form {
+    padding: $spacing-4 $spacing-6;
+  }
+
+  &__fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+  }
+
+  &__legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  // --------------------------------------------------------------------------
+  // ACTIONS
+  // --------------------------------------------------------------------------
+  &__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: $spacing-4;
+  }
+
+  &__submit {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-primary;
+    font-weight: $font-weight-regular;
+    border-radius: $radius-md;
+    cursor: pointer;
+    @include transition(all);
+    padding: 0.275rem $spacing-2;
+    font-size: $font-size-md;
+    position: relative;
+    background: linear-gradient(
+      180deg, 
+      $color-primary-dark 0%,
+      color.mix($color-primary-dark, $color-accent-dark, 70%) 100%
+    );
+    border: none;
+    color: $color-text-dark;
+    letter-spacing: 0.02em;
+    box-shadow: $shadow-complete;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-md;
+      padding: $border-thin;
+      background: linear-gradient(
+        180deg,
+        rgba($color-text-alt-dark, 1) 0%,
+        rgba($color-text-alt-dark, 0.1) 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      @include transition(all);
+    }
+
+    &:hover {
+      background: linear-gradient(
+        180deg, 
+        $color-primary-dark 0%,
+        color.mix($color-primary-dark, $color-accent-dark, 50%) 100%
+      );
+
+      &::before {
+        background: linear-gradient(
+          180deg,
+          rgba($color-text-dark, 1) 0%,
+          rgba($color-text-dark, 0.1) 100%
+        );
+      }
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      
+      &:hover {
+        background: linear-gradient(
+          180deg, 
+          $color-primary-dark 0%,
+          color.mix($color-primary-dark, $color-accent-dark, 70%) 100%
+        );
+        
+        &::before {
+          background: linear-gradient(
+            180deg,
+            rgba($color-text-alt-dark, 1) 0%,
+            rgba($color-text-alt-dark, 0.1) 100%
+          );
+        }
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // FORM INPUTS (contexto modal)
+  // --------------------------------------------------------------------------
+  .form-input {
+    &__label {
+      color: $color-text-dark;
+      font-size: $font-size-md;
+      margin-bottom: $spacing-1;
+    }
+
+    &__field {
+      background-color: #8a9298;
+      color: #1a1d24;
+      border: none;
+      border-radius: $radius-2xl;
+      padding: $spacing-2 $spacing-3;
+      width: 100%;
+      box-sizing: border-box;
+
+      &::placeholder {
+        color: #4a5560;
+      }
+
+      &:hover {
+        background-color: #959ca2;
+      }
+
+      &:focus {
+        background-color: #a0a7ad;
+      }
+    }
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// Tablet (768px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-md) {
+  .register-modal__overlay {
+    padding: $spacing-3;
+  }
+
+  .register-modal {
+    max-width: 320px;
+
+    &__header {
+      padding: $spacing-2 $spacing-4;
+    }
+
+    &__form {
+      padding: $spacing-3 $spacing-4;
+    }
+
+    &__title {
+      font-size: $font-size-md;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// Movil (640px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-sm) {
+  .register-modal__overlay {
+    padding: $spacing-2;
+  }
+
+  .register-modal {
+    max-width: 100%;
+    border-radius: $radius-md;
+
+    &__header {
+      padding: $spacing-2 $spacing-3;
+    }
+
+    &__form {
+      padding: $spacing-3;
+    }
+
+    &__fieldset {
+      gap: $spacing-2;
+    }
+
+    &__title {
+      font-size: $font-size-md;
+    }
+
+    &__close {
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+
+    &__submit {
+      width: 100%;
+      padding: $spacing-2;
+    }
+
+    .form-input {
+      &__label {
+        font-size: $font-size-sm;
+      }
+
+      &__field {
+        padding: $spacing-2;
+        font-size: $font-size-sm;
+      }
+    }
+  }
+}

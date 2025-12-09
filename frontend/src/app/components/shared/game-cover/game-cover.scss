@@ -1,0 +1,95 @@
+@use 'styles/00-settings/variables' as *;
+
+// ==========================================================================
+// GAME COVER COMPONENT
+// Caratula de videojuego con borde, sombra y efecto hover
+// ==========================================================================
+
+:host {
+  display: block;
+}
+
+:host-context(.home__covers) {
+  width: 100%;
+}
+
+.game-cover {
+  // --------------------------------------------------------------------------
+  // Variables CSS locales
+  // --------------------------------------------------------------------------
+  --cover-radius: #{$radius-md};
+  --cover-border: 2px;
+
+  // --------------------------------------------------------------------------
+  // Estilos base
+  // --------------------------------------------------------------------------
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--cover-radius);
+  overflow: hidden;
+  cursor: pointer;
+  border: var(--cover-border) solid var(--color-border, #{$color-text-alt-dark});
+  box-shadow: $shadow-complete;
+  background-color: var(--color-bg-alt, #{$color-secondary-dark});
+  transition: transform $transition-base $transition-ease;
+
+  // --------------------------------------------------------------------------
+  // Estados interactivos
+  // --------------------------------------------------------------------------
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  // --------------------------------------------------------------------------
+  // ELEMENTOS
+  // --------------------------------------------------------------------------
+  &__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  // --------------------------------------------------------------------------
+  // TAMANOS
+  // --------------------------------------------------------------------------
+  &--sm {
+    --cover-radius: #{$radius-md};
+    --cover-border: 1px;
+    width: 100px;
+    height: 140px;
+  }
+
+  &--md {
+    --cover-radius: #{$radius-lg};
+    --cover-border: 1px;
+    width: 150px;
+    height: 210px;
+  }
+
+  &--lg {
+    --cover-radius: #{$radius-md};
+    --cover-border: 1px;
+    width: 100%;
+    height: 0;
+    padding-bottom: 140%;
+  }
+}
+
+// ==========================================================================
+// RESETS
+// ==========================================================================
+
+a.game-cover {
+  text-decoration: none;
+  color: inherit;
+}
+
+figure.game-cover {
+  margin: 0;
+}

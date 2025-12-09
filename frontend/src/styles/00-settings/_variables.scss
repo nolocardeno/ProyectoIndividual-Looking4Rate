@@ -1,0 +1,152 @@
+// ==========================================================================
+// DESIGN TOKENS - Variables SCSS
+// Sistema de tokens de diseno para coherencia visual
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// COLORES - Modo oscuro
+// --------------------------------------------------------------------------
+$color-primary-dark: #16181C;
+$color-secondary-dark: #384A5B;
+$color-accent-dark: #00B894;
+$color-text-dark: #F2F4F8;
+$color-text-alt-dark: #AAB4C0;
+$color-header-footer-dark: #0D0E11;
+
+// Colores semanticos (oscuro)
+$color-error-dark: #D46363;
+$color-success-dark: #B5D366;
+$color-warning-dark: #F59E42;
+$color-info-dark: #3B82F6;
+
+// --------------------------------------------------------------------------
+// COLORES - Modo claro
+// --------------------------------------------------------------------------
+$color-primary-light: #EDEDED;
+$color-secondary-light: #597085;
+$color-accent-light: #0A7CFF;
+$color-text-light: #1A1A1A;
+$color-text-alt-light: #4E4F50;
+$color-header-footer-light: #2A2F2F;
+
+// Colores semanticos (claro)
+$color-error-light: #EF4444;
+$color-success-light: #22C55E;
+$color-warning-light: #F59E42;
+$color-info-light: #3B82F6;
+
+// --------------------------------------------------------------------------
+// PALETA DE GRISES
+// --------------------------------------------------------------------------
+$color-gray-50-dark:  #F9FAFB;
+$color-gray-100-dark: #F3F4F6;
+$color-gray-200-dark: #E5E7EB;
+$color-gray-300-dark: #D1D5DB;
+$color-gray-400-dark: #9CA3AF;
+$color-gray-500-dark: #6B7280;
+$color-gray-600-dark: #4B5563;
+$color-gray-700-dark: #374151;
+$color-gray-800-dark: #1F2937;
+$color-gray-900-dark: #111827;
+
+// --------------------------------------------------------------------------
+// TIPOGRAFIA
+// --------------------------------------------------------------------------
+$font-primary: 'Outfit', Arial, sans-serif;
+$font-secondary: 'Playfair Display', serif;
+
+// Escala de tamanos (base 8px)
+$font-size-xs: 0.5rem;    // 8px
+$font-size-sm: 0.75rem;   // 12px
+$font-size-md: 1rem;      // 16px
+$font-size-lg: 1.5rem;    // 24px
+$font-size-xl: 2rem;      // 32px
+$font-size-2xl: 2.5rem;   // 40px
+$font-size-3xl: 3rem;     // 48px
+$font-size-4xl: 3.5rem;   // 56px
+$font-size-5xl: 4rem;     // 64px
+
+// Pesos tipograficos
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Alturas de linea
+$line-height-tight: 1.1;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.75;
+
+// --------------------------------------------------------------------------
+// ESPACIADO (base 8px)
+// --------------------------------------------------------------------------
+$spacing-1: 0.5rem;     // 8px
+$spacing-2: 1rem;       // 16px
+$spacing-3: 1.5rem;     // 24px
+$spacing-4: 2rem;       // 32px
+$spacing-5: 2.5rem;     // 40px
+$spacing-6: 3rem;       // 48px
+$spacing-7: 3.5rem;     // 56px
+$spacing-8: 4rem;       // 64px
+$spacing-9: 4.5rem;     // 72px
+$spacing-10: 5rem;      // 80px
+$spacing-11: 5.5rem;    // 88px
+$spacing-12: 6rem;      // 96px
+$spacing-header-footer: 3.75rem; // 60px
+
+// --------------------------------------------------------------------------
+// LAYOUT
+// --------------------------------------------------------------------------
+$page-padding-x: 15.9375rem; // 255px
+
+// --------------------------------------------------------------------------
+// BREAKPOINTS
+// --------------------------------------------------------------------------
+$breakpoint-sm: 40rem;   // 640px - movil grande
+$breakpoint-md: 48rem;   // 768px - tablet
+$breakpoint-lg: 64rem;   // 1024px - desktop
+$breakpoint-xl: 80rem;   // 1280px - desktop grande
+
+// --------------------------------------------------------------------------
+// SOMBRAS
+// --------------------------------------------------------------------------
+$shadow-complete: 0 0 5px 0 rgba(0,0,0,1);
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+$shadow-glow-accent: 0 0 20px rgba(0, 184, 148, 0.3);
+$shadow-glow-accent-hover: 0 0 30px rgba(0, 184, 148, 0.5);
+$shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+
+// Sombras para efectos hover interactivos
+$shadow-hover-accent: 0 4px 12px rgba(0, 184, 148, 0.25);
+$shadow-active-accent: 0 2px 6px rgba(0, 184, 148, 0.2);
+$shadow-hover-lift: 0 4px 12px rgba(0, 184, 148, 0.25);
+
+// --------------------------------------------------------------------------
+// BORDES
+// --------------------------------------------------------------------------
+$border-thin: 0.0625rem;   // 1px
+$border-medium: 0.125rem;  // 2px
+$border-thick: 0.25rem;    // 4px
+
+// --------------------------------------------------------------------------
+// RADIOS DE BORDE
+// --------------------------------------------------------------------------
+$radius-sm: 0.125rem;      // 2px
+$radius-md: 0.25rem;       // 4px
+$radius-lg: 0.5rem;        // 8px
+$radius-xl: 1rem;          // 16px
+$radius-2xl: 1.5rem;       // 24px
+$radius-full: 9999px;
+
+// --------------------------------------------------------------------------
+// TRANSICIONES
+// --------------------------------------------------------------------------
+$transition-fast: 150ms;
+$transition-base: 300ms;
+$transition-slow: 500ms;
+$transition-ease: ease-in-out;

@@ -1,0 +1,171 @@
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// PAGINATION COMPONENT
+// Componente de paginación con botones de navegación y números de página
+// ==========================================================================
+
+.pagination {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  // --------------------------------------------------------------------------
+  // HEADER (línea separadora estilo featured-section)
+  // --------------------------------------------------------------------------
+  &__header {
+    width: 100%;
+    border-bottom: 2px solid var(--color-text-alt, #{$color-text-alt-dark});
+    margin-bottom: $spacing-2;
+  }
+
+  // --------------------------------------------------------------------------
+  // CONTENEDOR DE CONTROLES
+  // --------------------------------------------------------------------------
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-4;
+  }
+
+  // --------------------------------------------------------------------------
+  // LISTA DE NÚMEROS DE PÁGINA
+  // --------------------------------------------------------------------------
+  &__pages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-1;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+  }
+
+  // --------------------------------------------------------------------------
+  // NÚMERO DE PÁGINA INDIVIDUAL
+  // --------------------------------------------------------------------------
+  &__number {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    padding: $spacing-1;
+    
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+    @include transition(all);
+
+    &:hover:not(&--active) {
+      .pagination__number-text {
+        color: $color-text-dark;
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent-dark;
+      outline-offset: 2px;
+    }
+
+    // Estado activo (página actual) - subrayado en el texto
+    &--active {
+      cursor: default;
+
+      .pagination__number-text {
+        color: $color-text-dark;
+        font-weight: $font-weight-bold;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-thickness: 2px;
+      }
+    }
+  }
+
+  // Texto del número
+  &__number-text {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    color: $color-text-alt-dark;
+    @include transition(color);
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .pagination {
+    &__controls {
+      gap: $spacing-3;
+    }
+
+    &__pages {
+      gap: $spacing-2;
+    }
+
+    &__number-text {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// Móvil (640px)
+@media (max-width: $breakpoint-sm) {
+  .pagination {
+    &__controls {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: $spacing-2;
+    }
+
+    &__pages {
+      order: -1;
+      width: 100%;
+      justify-content: center;
+      margin-bottom: $spacing-2;
+    }
+
+    &__number-text {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// ==========================================================================
+// TEMA CLARO
+// ==========================================================================
+[data-theme='light'] {
+  .pagination {
+    &__header {
+      border-bottom-color: var(--color-text-alt, #{$color-text-alt-light});
+    }
+
+    &__number-text {
+      color: $color-text-alt-light;
+    }
+
+    &__number:hover:not(&--active) {
+      .pagination__number-text {
+        color: $color-text-light;
+      }
+    }
+
+    &__number--active {
+      .pagination__number-text {
+        color: $color-text-light;
+      }
+    }
+  }
+}

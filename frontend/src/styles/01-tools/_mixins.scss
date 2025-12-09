@@ -1,0 +1,91 @@
+@use '../00-settings/variables' as *;
+
+// ==========================================================================
+// MIXINS
+// Funciones reutilizables para estilos comunes
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// LAYOUT
+// --------------------------------------------------------------------------
+
+// Centra cualquier elemento usando flexbox
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Contenedor de pagina con padding lateral responsive
+@mixin page-container {
+  padding-left: $page-padding-x;
+  padding-right: $page-padding-x;
+  
+  @media (max-width: $breakpoint-xl) {
+    padding-left: $spacing-8;
+    padding-right: $spacing-8;
+  }
+  
+  @media (max-width: $breakpoint-lg) {
+    padding-left: $spacing-4;
+    padding-right: $spacing-4;
+  }
+  
+  @media (max-width: $breakpoint-md) {
+    padding-left: $spacing-3;
+    padding-right: $spacing-3;
+  }
+  
+  @media (max-width: $breakpoint-sm) {
+    padding-left: $spacing-2;
+    padding-right: $spacing-2;
+  }
+}
+
+// --------------------------------------------------------------------------
+// EFECTOS
+// --------------------------------------------------------------------------
+
+// Aplica una sombra al elemento
+@mixin box-shadow($shadow) {
+  box-shadow: $shadow;
+}
+
+// Transicion estandar para cualquier propiedad
+@mixin transition($property: all, $duration: 300ms, $timing: ease-in-out) {
+  transition: $property $duration $timing;
+}
+
+// --------------------------------------------------------------------------
+// RESPONSIVE HELPERS
+// --------------------------------------------------------------------------
+
+// Media query para breakpoint especifico
+@mixin respond-to($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}
+
+// Ocultar en movil
+@mixin hide-mobile {
+  @media (max-width: $breakpoint-sm) {
+    display: none !important;
+  }
+}
+
+// Ocultar en tablet y menor
+@mixin hide-tablet {
+  @media (max-width: $breakpoint-md) {
+    display: none !important;
+  }
+}
+
+// Mostrar solo en movil
+@mixin show-mobile-only {
+  display: none !important;
+  
+  @media (max-width: $breakpoint-sm) {
+    display: flex !important;
+  }
+}

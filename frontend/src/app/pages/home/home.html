@@ -1,0 +1,177 @@
+<!-- Página Home -->
+
+<section class="home">
+  <!-- Contenedor de Notificaciones (único, gestionado por servicio) -->
+  <app-notification-container />
+
+  <!-- Ejemplos de Notificaciones/Toast -->
+  <article class="home__alert-examples">
+    <h2 class="home__form-title">Ejemplos de Notificaciones (Toast)</h2>
+    
+    <!-- Botones para mostrar notificaciones -->
+    <menu class="home__alert-buttons">
+      <app-button variant="primary" (btnClick)="showNotificationSuccess()">
+        Toast Success
+      </app-button>
+      <app-button variant="danger" (btnClick)="showNotificationError()">
+        Toast Error
+      </app-button>
+      <app-button variant="secondary" (btnClick)="showNotificationWarning()">
+        Toast Warning
+      </app-button>
+      <app-button variant="ghost" (btnClick)="showNotificationInfo()">
+        Toast Info
+      </app-button>
+    </menu>
+  </article>
+
+  <!-- Ejemplos de Alertas -->
+  <article class="home__alert-examples">
+    <h2 class="home__form-title">Ejemplos de Alertas</h2>
+    
+    <!-- Botones para mostrar alertas -->
+    <menu class="home__alert-buttons">
+      <app-button variant="primary" (btnClick)="toggleSuccessAlert()">
+        Mostrar Alerta Success
+      </app-button>
+      <app-button variant="danger" (btnClick)="toggleErrorAlert()">
+        Mostrar Alerta Error
+      </app-button>
+      <app-button variant="secondary" (btnClick)="toggleWarningAlert()">
+        Mostrar Alerta Warning
+      </app-button>
+      <app-button variant="ghost" (btnClick)="toggleInfoAlert()">
+        Mostrar Alerta Info
+      </app-button>
+    </menu>
+
+    <!-- Alertas -->
+    <section class="home__alerts">
+      <app-alert 
+        type="success" 
+        title="¡Operación exitosa!" 
+        [dismissible]="true" 
+        [visible]="showSuccessAlert"
+        (closed)="showSuccessAlert = false">
+        Tu perfil ha sido actualizado correctamente.
+      </app-alert>
+
+      <app-alert 
+        type="error" 
+        title="Error" 
+        [dismissible]="true" 
+        [visible]="showErrorAlert"
+        (closed)="showErrorAlert = false">
+        No se pudo conectar con el servidor. Inténtalo de nuevo más tarde.
+      </app-alert>
+
+      <app-alert 
+        type="warning" 
+        title="Advertencia" 
+        [dismissible]="true" 
+        [visible]="showWarningAlert"
+        (closed)="showWarningAlert = false">
+        Tu sesión expirará en 5 minutos. Guarda tus cambios.
+      </app-alert>
+
+      <app-alert 
+        type="info" 
+        title="Información" 
+        [dismissible]="true" 
+        [visible]="showInfoAlert"
+        (closed)="showInfoAlert = false">
+        Hay una nueva versión disponible. Actualiza para obtener las últimas funciones.
+      </app-alert>
+    </section>
+  </article>
+
+  <!-- Ejemplos de FormTextarea y FormSelect -->
+  <article class="home__form-examples">
+    <h2 class="home__form-title">Ejemplos de Componentes de Formulario</h2>
+    
+    <fieldset class="home__form-fields">
+      <app-form-select
+        label="Plataforma favorita"
+        name="platform"
+        placeholder="Selecciona una plataforma"
+        [options]="platformOptions"
+        [(value)]="selectedPlatform"
+      />
+
+      <app-form-textarea
+        label="Reseña del juego"
+        name="review"
+        placeholder="Escribe tu opinión sobre el juego..."
+        [rows]="4"
+        [maxLength]="500"
+        [(value)]="textareaValue"
+        helpText="Máximo 500 caracteres"
+      />
+    </fieldset>
+  </article>
+
+  <!-- Ejemplo del nuevo componente GameCard -->
+  <article class="home__game-card-example">
+    <app-game-card
+      [coverSrc]="exampleGame.coverSrc"
+      [title]="exampleGame.title"
+      [releaseDate]="exampleGame.releaseDate"
+      [developer]="exampleGame.developer"
+      [developerLink]="exampleGame.developerLink"
+      [description]="exampleGame.description"
+      [platforms]="exampleGame.platforms"
+      [gameLink]="exampleGame.gameLink"
+    />
+  </article>
+  <!-- Sección de novedades -->
+  <app-featured-section title="NOVEDADES EN L4R" linkRoute="/games">
+    <ul class="home__covers">
+      @for (game of novedades; track game.alt) {
+        <app-game-cover
+          [src]="game.src"
+          [alt]="game.alt"
+          [routerLink]="game.link"
+          size="lg"
+        />
+      }
+    </ul>
+  </app-featured-section>
+
+  <!-- Sección de más valorados -->
+  <app-featured-section title="MÁS VALORADOS" linkRoute="/top-rated">
+    <ul class="home__covers">
+      @for (game of masValorados; track game.alt) {
+        <app-game-cover
+          [src]="game.src"
+          [alt]="game.alt"
+          [routerLink]="game.link"
+          size="lg"
+        />
+      }
+    </ul>
+  </app-featured-section>
+
+  <!-- Sección de próximamente -->
+  <app-featured-section title="PRÓXIMAMENTE" linkRoute="/upcoming">
+    <ul class="home__covers">
+      @for (game of proximamente; track game.alt) {
+        <app-game-cover
+          [src]="game.src"
+          [alt]="game.alt"
+          [routerLink]="game.link"
+          size="lg"
+        />
+      }
+    </ul>
+  </app-featured-section>
+
+  <!-- Ejemplo de Paginación -->
+  <article class="home__pagination-example">
+    <h2 class="home__form-title">Ejemplo de Paginación</h2>
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      (pageChange)="onPageChange($event)"
+    />
+  </article>
+</section>

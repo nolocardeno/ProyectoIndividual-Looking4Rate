@@ -1,0 +1,12 @@
+<section class="featured-section">
+  <header class="featured-section__header">
+    <h2 class="featured-section__title">{{ title }}</h2>
+    @if (linkRoute) {
+      <a [routerLink]="linkRoute" class="featured-section__link">{{ linkText }}</a>
+    }
+  </header>
+  
+  <article class="featured-section__content">
+    <ng-content />
+  </article>
+</section>

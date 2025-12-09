@@ -1,0 +1,128 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// FORM INPUT COMPONENT
+// Campo de entrada de texto con label, validacion y mensajes de error/ayuda
+// ==========================================================================
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  width: 100%;
+
+  // --------------------------------------------------------------------------
+  // LABEL
+  // --------------------------------------------------------------------------
+  &__label {
+    color: $color-text-dark;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+  }
+
+  &__required {
+    color: $color-error-dark;
+    margin-left: 0.25rem;
+  }
+
+  // --------------------------------------------------------------------------
+  // CAMPO DE ENTRADA
+  // --------------------------------------------------------------------------
+  &__field {
+    background-color: $color-secondary-dark;
+    border: none;
+    border-radius: $radius-lg;
+    color: $color-text-alt-dark;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    padding: $spacing-1 $spacing-2;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    @include transition(all);
+
+    &::placeholder {
+      color: $color-text-alt-dark;
+    }
+
+    &:hover {
+      background-color: $color-text-alt-dark;
+      color: $color-primary-dark;
+
+      &::placeholder {
+        color: $color-secondary-dark;
+      }
+    }
+
+    &:focus {
+      background-color: $color-text-dark;
+      color: $color-primary-dark;
+
+      &::placeholder {
+        color: $color-secondary-dark;
+      }
+    }
+
+    &--error {
+      box-shadow: 0 0 0 $border-thin $color-error-dark;
+
+      &:focus {
+        box-shadow: 0 0 0 $border-thin $color-error-dark;
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // MENSAJES
+  // --------------------------------------------------------------------------
+  &__error {
+    color: $color-error-dark;
+    font-family: $font-primary;
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+
+  &__help {
+    color: $color-text-alt-dark;
+    font-family: $font-primary;
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+
+  // --------------------------------------------------------------------------
+  // ESTADO DESHABILITADO
+  // --------------------------------------------------------------------------
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+
+    .form-input__field {
+      cursor: not-allowed;
+    }
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Movil (640px)
+@media (max-width: $breakpoint-sm) {
+  .form-input {
+    &__label {
+      font-size: $font-size-sm;
+    }
+
+    &__field {
+      font-size: $font-size-sm;
+      padding: $spacing-2;
+    }
+
+    &__error,
+    &__help {
+      font-size: $font-size-xs;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+<!-- Form Textarea: Textarea con label, validación y contador de caracteres -->
+
+<label class="form-textarea" [class.form-textarea--error]="errorMessage" [class.form-textarea--disabled]="disabled">
+  <span class="form-textarea__label">
+    {{ label }}
+    @if (required) {
+      <span class="form-textarea__required">*</span>
+    }
+  </span>
+
+  <textarea
+    [id]="id"
+    [name]="name"
+    [placeholder]="placeholder"
+    [required]="required"
+    [disabled]="disabled"
+    [rows]="rows"
+    [attr.maxlength]="maxLength"
+    [value]="value"
+    (input)="onInputChange($event)"
+    (blur)="onBlur()"
+    class="form-textarea__field"
+    [class.form-textarea__field--error]="errorMessage"
+    [class.form-textarea__field--no-resize]="!resizable"
+  ></textarea>
+
+  <footer class="form-textarea__footer">
+    @if (errorMessage) {
+      <p class="form-textarea__error">{{ errorMessage }}</p>
+    } @else if (helpText) {
+      <p class="form-textarea__help">{{ helpText }}</p>
+    } @else {
+      <span></span>
+    }
+
+    @if (maxLength) {
+      <span class="form-textarea__counter" [class.form-textarea__counter--limit]="characterCount >= maxLength">
+        {{ characterCount }}/{{ maxLength }}
+      </span>
+    }
+  </footer>
+</label>

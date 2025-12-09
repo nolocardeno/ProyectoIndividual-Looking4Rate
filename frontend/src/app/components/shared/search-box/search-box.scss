@@ -1,0 +1,207 @@
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// SEARCH BOX COMPONENT
+// Campo de busqueda con icono de lupa integrado
+// ==========================================================================
+
+.search-box {
+  // --------------------------------------------------------------------------
+  // Estilos base
+  // --------------------------------------------------------------------------
+  display: flex;
+  align-items: center;
+  background-color: $color-secondary-dark;
+  border: none;
+  border-radius: $radius-full;
+  overflow: hidden;
+  flex-shrink: 1;
+  min-width: 0;
+  @include transition(all);
+
+  // --------------------------------------------------------------------------
+  // VARIANTE: SOLO ICONO (estilo botón con gradiente)
+  // --------------------------------------------------------------------------
+  &--icon-only {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    justify-content: center;
+    background: linear-gradient(180deg, $color-primary-dark 0%, color.mix($color-primary-dark, $color-accent-dark, 70%) 100%);
+    border: none;
+    border-radius: $radius-lg;
+    cursor: pointer;
+    overflow: visible;
+    position: relative;
+
+    // Borde con gradiente (igual que el botón)
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      padding: $border-thin;
+      background: linear-gradient(180deg, rgba($color-text-alt-dark, 1) 0%, rgba($color-text-alt-dark, 0.1) 100%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      @include transition(all);
+    }
+
+    ::ng-deep .search-box__icon {
+      font-size: $font-size-lg;
+      color: $color-text-dark;
+
+      svg {
+        color: $color-text-dark;
+      }
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: $shadow-hover-accent;
+      background: linear-gradient(180deg, $color-primary-dark 0%, color.mix($color-primary-dark, $color-accent-dark, 70%) 100%);
+
+      &::before {
+        background: linear-gradient(180deg, rgba($color-text-dark, 1) 0%, rgba($color-text-dark, 0.1) 100%);
+      }
+
+      .search-box__icon {
+        color: var(--color-accent);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: $shadow-active-accent;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Estados interactivos
+  // --------------------------------------------------------------------------
+  &:hover:not(&--icon-only) {
+    background-color: $color-text-alt-dark;
+
+    .search-box__input {
+      color: $color-primary-dark;
+
+      &::placeholder {
+        color: $color-secondary-dark;
+      }
+    }
+
+    .search-box__icon {
+      color: $color-secondary-dark;
+    }
+  }
+
+  &:focus-within:not(&--icon-only) {
+    background-color: $color-text-dark;
+
+    .search-box__input {
+      color: $color-primary-dark;
+
+      &::placeholder {
+        color: $color-secondary-dark;
+      }
+    }
+
+    .search-box__icon {
+      color: $color-primary-dark;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ELEMENTOS
+  // --------------------------------------------------------------------------
+  &__input {
+    background-color: transparent;
+    border: none;
+    color: $color-text-alt-dark;
+    font-family: $font-primary;
+    font-size: $font-size-sm;
+    padding: 6px 14px;
+    width: 160px;
+    min-width: 0;
+    outline: none;
+    @include transition(all);
+
+    &::placeholder {
+      color: $color-text-alt-dark;
+    }
+
+    &:not(:placeholder-shown)::placeholder {
+      opacity: 0;
+    }
+  }
+
+  &__btn {
+    @include flex-center;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    padding-right: $spacing-2;
+    cursor: pointer;
+    flex-shrink: 0;
+    @include transition(transform);
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__icon {
+    font-size: 16px;
+    color: $color-text-alt-dark;
+    @include transition(all);
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Desktop grande (1024px)
+@media (max-width: $breakpoint-lg) {
+  .search-box {
+    &__input {
+      width: 140px;
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .search-box {
+    &__input {
+      width: 120px;
+      padding: 5px 12px;
+    }
+  }
+}
+
+// Movil (640px)
+@media (max-width: $breakpoint-sm) {
+  .search-box {
+    &__input {
+      width: 100px;
+      padding: 4px 10px;
+      font-size: $font-size-xs;
+    }
+
+    &__btn {
+      padding-right: $spacing-1;
+    }
+
+    &__icon {
+      font-size: 14px;
+    }
+  }
+}

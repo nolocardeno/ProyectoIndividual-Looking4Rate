@@ -1,0 +1,11 @@
+<!-- Platform Badge: Badge de plataforma con enlace opcional -->
+
+@if (routerLink) {
+  <a [routerLink]="routerLink" class="platform-badge platform-badge--link">
+    {{ name }}
+  </a>
+} @else {
+  <span class="platform-badge">
+    {{ name }}
+  </span>
+}

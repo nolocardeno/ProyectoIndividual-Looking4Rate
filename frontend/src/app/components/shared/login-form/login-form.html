@@ -1,0 +1,46 @@
+@if (isOpen) {
+  <aside class="login-modal__overlay" (click)="onOverlayClick($event)">
+    <article class="login-modal">
+      <header class="login-modal__header">
+        <h2 class="login-modal__title">Inicio de sesión</h2>
+        <button class="login-modal__close" (click)="closeModal()" aria-label="Cerrar">
+          <fa-icon [icon]="['fas', 'times']"></fa-icon>
+        </button>
+      </header>
+
+      <form class="login-modal__form" (ngSubmit)="onSubmit()">
+        <fieldset class="login-modal__fieldset">
+          <legend class="login-modal__legend">Credenciales de acceso</legend>
+
+          <app-form-input
+            label="Nombre de usuario"
+            type="text"
+            name="username"
+            placeholder=""
+            [required]="true"
+            [errorMessage]="usernameError"
+            [value]="username"
+            (valueChange)="username = $event"
+            (inputBlur)="onUsernameBlur()">
+          </app-form-input>
+
+          <app-form-input
+            label="Contraseña"
+            type="password"
+            name="password"
+            placeholder=""
+            [required]="true"
+            [errorMessage]="passwordError"
+            [value]="password"
+            (valueChange)="password = $event"
+            (inputBlur)="onPasswordBlur()">
+          </app-form-input>
+        </fieldset>
+
+        <footer class="login-modal__actions">
+          <button type="submit" class="login-modal__submit" [disabled]="!isFormValid">Iniciar</button>
+        </footer>
+      </form>
+    </article>
+  </aside>
+}

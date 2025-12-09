@@ -1,0 +1,295 @@
+// ==========================================================================
+// STYLE GUIDE PAGE
+// Catalogo visual de todos los componentes del sistema de diseno
+// ==========================================================================
+
+@use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
+@use 'styles/04-objects/grid' as *;
+
+.style-guide {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  padding: $spacing-8 0;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  // --------------------------------------------------------------------------
+  // HEADER
+  // --------------------------------------------------------------------------
+  &__header {
+    text-align: center;
+    padding: $spacing-8 $spacing-4;
+    background: linear-gradient(
+      135deg,
+      rgba($color-primary-dark, 0.1) 0%,
+      rgba($color-accent-dark, 0.1) 100%
+    );
+    border-radius: $radius-xl;
+    border: 1px solid var(--border-color);
+  }
+
+  &__title {
+    font-family: $font-primary;
+    font-size: 3rem;
+    font-weight: $font-weight-bold;
+    color: var(--text-primary);
+    margin: 0 0 $spacing-3 0;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--color-accent, #{$color-accent-dark}) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  &__subtitle {
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    color: var(--text-secondary);
+    margin: 0 0 $spacing-6 0;
+  }
+
+  // --------------------------------------------------------------------------
+  // INDICE DE NAVEGACION
+  // --------------------------------------------------------------------------
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $spacing-2;
+  }
+
+  &__nav-link {
+    display: inline-block;
+    padding: $spacing-2 $spacing-4;
+    font-family: $font-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--text-primary);
+    text-decoration: none;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: $radius-md;
+    transition: all $transition-base $transition-ease;
+
+    &:hover {
+      background-color: var(--color-accent, #{$color-accent-dark});
+      color: var(--text-dark, #{$color-text-dark});
+      border-color: var(--color-accent, #{$color-accent-dark});
+      transform: translateY(-2px);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // SECCIONES
+  // --------------------------------------------------------------------------
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+    padding: $spacing-6;
+    background-color: var(--bg-secondary);
+    border-radius: $radius-xl;
+    border: 1px solid var(--border-color);
+  }
+
+  &__section-title {
+    font-family: $font-primary;
+    font-size: 1.75rem;
+    font-weight: $font-weight-bold;
+    color: var(--text-primary);
+    margin: 0;
+    padding-bottom: $spacing-3;
+    border-bottom: 3px solid var(--color-accent, #{$color-accent-dark});
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-accent, #{$color-accent-dark});
+      border-radius: 50%;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // SUBSECCIONES
+  // --------------------------------------------------------------------------
+  &__subsection {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+    padding: $spacing-5;
+    background-color: var(--bg-primary);
+    border-radius: $radius-lg;
+    border: 1px solid var(--border-color);
+
+    &--full-width {
+      padding: $spacing-4;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: $radius-lg;
+    }
+  }
+
+  &__subsection-title {
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--text-primary);
+    margin: 0;
+    padding-left: $spacing-3;
+    border-left: 3px solid var(--color-accent, #{$color-accent-dark});
+  }
+
+  // --------------------------------------------------------------------------
+  // FILAS Y GRIDS
+  // --------------------------------------------------------------------------
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-4;
+    align-items: flex-start;
+    padding: $spacing-3;
+    background-color: var(--bg-secondary);
+    border-radius: $radius-md;
+
+    &--no-bg {
+      background-color: transparent;
+      padding: 0;
+    }
+
+    &--align-center {
+      align-items: center;
+    }
+
+    &--align-end {
+      align-items: flex-end;
+    }
+  }
+
+  &__form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: $spacing-4;
+  }
+
+  // --------------------------------------------------------------------------
+  // GRID DE COVERS
+  // --------------------------------------------------------------------------
+  &__covers-grid {
+    @extend .grid;
+  }
+
+  // --------------------------------------------------------------------------
+  // ALERTAS
+  // --------------------------------------------------------------------------
+  &__alerts {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+  }
+
+  // --------------------------------------------------------------------------
+  // EJEMPLOS DE COVERS
+  // --------------------------------------------------------------------------
+  &__cover-example {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-3;
+    padding: $spacing-3;
+    background-color: var(--bg-secondary);
+    border-radius: $radius-md;
+  }
+
+  &__label {
+    font-family: $font-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--text-secondary);
+    padding: $spacing-1 $spacing-2;
+    background-color: var(--bg-primary);
+    border-radius: $radius-sm;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// Tablet (768px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-md) {
+  .style-guide {
+    gap: $spacing-6;
+    padding: $spacing-4;
+
+    &__header {
+      padding: $spacing-6 $spacing-3;
+    }
+
+    &__title {
+      font-size: 2rem;
+    }
+
+    &__section {
+      padding: $spacing-4;
+      gap: $spacing-4;
+    }
+
+    &__section-title {
+      font-size: 1.5rem;
+    }
+
+    &__subsection {
+      padding: $spacing-4;
+    }
+
+    &__form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// Movil (640px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-sm) {
+  .style-guide {
+    padding: $spacing-3;
+
+    &__title {
+      font-size: 1.5rem;
+    }
+
+    &__section {
+      padding: $spacing-3;
+    }
+
+    &__section-title {
+      font-size: 1.25rem;
+    }
+
+    &__subsection {
+      padding: $spacing-3;
+    }
+
+    &__subsection-title {
+      font-size: $font-size-md;
+    }
+
+    &__row {
+      padding: $spacing-2;
+
+      &--align-center,
+      &--align-end {
+        flex-wrap: wrap;
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+<!-- Pagination Component: navegación entre páginas -->
+
+<nav class="pagination" aria-label="Paginación">
+  <!-- Línea separadora superior (estilo featured-section) -->
+  <hr class="pagination__header">
+
+  <!-- Contenedor de controles -->
+  <menu class="pagination__controls">
+    <!-- Botón Primera Página (Más Nuevo) -->
+    <app-button 
+      variant="primary" 
+      size="md"
+      [disabled]="isFirstPage"
+      (btnClick)="goToFirstPage()">
+      MÁS<br>NUEVO
+    </app-button>
+
+    <!-- Números de página -->
+    <ul class="pagination__pages">
+      @for (page of visiblePages; track page) {
+        <li class="pagination__item">
+          <button 
+            type="button"
+            class="pagination__number"
+            [class.pagination__number--active]="page === currentPage"
+            [attr.aria-current]="page === currentPage ? 'page' : null"
+            (click)="goToPage(page)">
+            <span class="pagination__number-text">{{ page }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+
+    <!-- Botón Última Página (Más Antiguo) -->
+    <app-button 
+      variant="primary" 
+      size="md"
+      [disabled]="isLastPage"
+      (btnClick)="goToLastPage()">
+      MÁS<br>ANTIGUO
+    </app-button>
+  </menu>
+</nav>

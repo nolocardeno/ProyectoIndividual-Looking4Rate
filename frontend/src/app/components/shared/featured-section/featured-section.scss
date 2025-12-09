@@ -1,0 +1,50 @@
+@use 'styles/00-settings/variables' as *;
+
+// ==========================================================================
+// FEATURED SECTION COMPONENT
+// Seccion destacada con titulo, linea separadora y enlace opcional
+// ==========================================================================
+
+:host {
+  display: block;
+}
+
+.featured-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+
+  // --------------------------------------------------------------------------
+  // HEADER
+  // --------------------------------------------------------------------------
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--color-text-alt, #{$color-text-alt-dark});
+    padding-bottom: $spacing-1;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-bold;
+    color: var(--color-text-alt, #{$color-text-alt-dark});
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  &__link {
+    font-family: $font-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-alt, #{$color-text-alt-dark});
+    text-decoration: none;
+    transition: color $transition-fast $transition-ease;
+
+    &:hover {
+      color: var(--color-accent, #{$color-accent-dark});
+    }
+  }
+}

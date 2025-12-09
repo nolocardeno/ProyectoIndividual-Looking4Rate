@@ -1,0 +1,117 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// ALERT COMPONENT
+// Componente de alerta con variantes BEM para diferentes estados
+// ==========================================================================
+
+.alert {
+  // --------------------------------------------------------------------------
+  // Variables CSS locales (permiten sobrescribir por variante)
+  // --------------------------------------------------------------------------
+  --alert-bg: var(--color-info);
+  --alert-border: var(--color-info);
+  --alert-text: var(--text-primary);
+
+  // --------------------------------------------------------------------------
+  // Estilos base
+  // --------------------------------------------------------------------------
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2;
+  padding: $spacing-2;
+  border-radius: $radius-lg;
+  border-left: $border-thick solid var(--alert-border);
+  background-color: rgba(var(--alert-bg), 0.1);
+  font-family: $font-primary;
+  font-size: $font-size-md;
+  color: var(--alert-text);
+  @include transition(all);
+
+  // --------------------------------------------------------------------------
+  // Elementos BEM
+  // --------------------------------------------------------------------------
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: $font-size-md;
+    color: var(--alert-border);
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: calc($spacing-1 / 2);
+  }
+
+  &__title {
+    font-weight: $font-weight-semibold;
+    color: var(--alert-border);
+  }
+
+  &__message {
+    color: var(--text-secondary);
+    line-height: $line-height-normal;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: none;
+    border-radius: $radius-md;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: $font-size-md;
+    cursor: pointer;
+    @include transition(all);
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      color: var(--text-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--alert-border);
+      outline-offset: 2px;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // VARIANTES (Modificadores BEM)
+  // --------------------------------------------------------------------------
+
+  // Success - Verde para confirmaciones
+  &--success {
+    --alert-border: var(--color-success);
+    background-color: color-mix(in srgb, var(--color-success) 10%, transparent);
+  }
+
+  // Error - Rojo para errores
+  &--error {
+    --alert-border: var(--color-error);
+    background-color: color-mix(in srgb, var(--color-error) 10%, transparent);
+  }
+
+  // Warning - Naranja para advertencias
+  &--warning {
+    --alert-border: var(--color-warning);
+    background-color: color-mix(in srgb, var(--color-warning) 10%, transparent);
+  }
+
+  // Info - Azul para información
+  &--info {
+    --alert-border: var(--color-info);
+    background-color: color-mix(in srgb, var(--color-info) 10%, transparent);
+  }
+}

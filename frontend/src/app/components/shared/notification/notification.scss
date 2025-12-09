@@ -1,0 +1,320 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// NOTIFICATION/TOAST COMPONENT
+// Componente de notificación con posición fixed y animaciones
+// ==========================================================================
+
+// Host del componente - no debe afectar al layout de la página
+:host {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none; // El contenedor no bloquea clicks
+  overflow: visible;
+}
+
+// Animaciones
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes progressShrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.notification {
+  // --------------------------------------------------------------------------
+  // Variables CSS locales
+  // --------------------------------------------------------------------------
+  --notification-bg: var(--bg-secondary);
+  --notification-border: var(--color-info);
+  --notification-text: var(--text-primary);
+
+  // --------------------------------------------------------------------------
+  // Estilos base
+  // --------------------------------------------------------------------------
+  position: fixed;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-1;
+  min-width: 18rem;
+  max-width: 22rem;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $radius-lg;
+  border-left: $border-thick solid var(--notification-border);
+  background-color: var(--bg-secondary);
+  box-shadow: $shadow-xl;
+  font-family: $font-primary;
+  font-size: $font-size-md;
+  color: var(--notification-text);
+  overflow: hidden;
+  pointer-events: auto; // Restaurar interactividad en la notificación
+
+  // --------------------------------------------------------------------------
+  // Posiciones
+  // --------------------------------------------------------------------------
+  &--top-right {
+    top: $spacing-3;
+    right: $spacing-3;
+  }
+
+  &--top-left {
+    top: $spacing-3;
+    left: $spacing-3;
+  }
+
+  &--bottom-right {
+    bottom: $spacing-3;
+    right: $spacing-3;
+  }
+
+  &--bottom-left {
+    bottom: $spacing-3;
+    left: $spacing-3;
+  }
+
+  &--top-center {
+    top: $spacing-3;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &--bottom-center {
+    bottom: $spacing-3;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  // --------------------------------------------------------------------------
+  // Animaciones de entrada
+  // --------------------------------------------------------------------------
+  &--entering {
+    &.notification--top-right,
+    &.notification--bottom-right {
+      animation: slideInRight $transition-base $transition-ease;
+    }
+
+    &.notification--top-left,
+    &.notification--bottom-left {
+      animation: slideInLeft $transition-base $transition-ease;
+    }
+
+    &.notification--top-center {
+      animation: slideInDown $transition-base $transition-ease;
+    }
+
+    &.notification--bottom-center {
+      animation: slideInUp $transition-base $transition-ease;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Animaciones de salida
+  // --------------------------------------------------------------------------
+  &--leaving {
+    &.notification--top-right,
+    &.notification--bottom-right {
+      animation: slideOutRight $transition-base $transition-ease forwards;
+    }
+
+    &.notification--top-left,
+    &.notification--bottom-left {
+      animation: slideOutLeft $transition-base $transition-ease forwards;
+    }
+
+    &.notification--top-center {
+      animation: slideOutUp $transition-base $transition-ease forwards;
+    }
+
+    &.notification--bottom-center {
+      animation: slideOutDown $transition-base $transition-ease forwards;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Elementos BEM
+  // --------------------------------------------------------------------------
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: $font-size-md;
+    color: var(--notification-border);
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: calc($spacing-1 / 2);
+  }
+
+  &__title {
+    font-weight: $font-weight-semibold;
+    color: var(--notification-border);
+  }
+
+  &__message {
+    color: var(--text-secondary);
+    line-height: $line-height-normal;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: none;
+    border-radius: $radius-md;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: $font-size-md;
+    cursor: pointer;
+    @include transition(all);
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      color: var(--text-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--notification-border);
+      outline-offset: 2px;
+    }
+  }
+
+  &__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: var(--notification-border);
+    animation: progressShrink linear forwards;
+    animation-duration: inherit;
+  }
+
+  // --------------------------------------------------------------------------
+  // VARIANTES (Modificadores BEM)
+  // --------------------------------------------------------------------------
+
+  // Success - Verde para confirmaciones
+  &--success {
+    --notification-border: var(--color-success);
+  }
+
+  // Error - Rojo para errores
+  &--error {
+    --notification-border: var(--color-error);
+  }
+
+  // Warning - Naranja para advertencias
+  &--warning {
+    --notification-border: var(--color-warning);
+  }
+
+  // Info - Azul para información
+  &--info {
+    --notification-border: var(--color-info);
+  }
+}

@@ -1,0 +1,281 @@
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// FOOTER COMPONENT
+// Pie de pagina con logo, informacion y enlaces sociales
+// ==========================================================================
+
+.footer {
+  background-color: var(--bg-header-footer);
+  padding: $spacing-4 0;
+  width: 100%;
+  border-top: $border-thin solid var(--border-color);
+  @include transition(background-color);
+
+  // --------------------------------------------------------------------------
+  // CONTENEDOR
+  // --------------------------------------------------------------------------
+  &__container {
+    @include page-container;
+    & {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      gap: $spacing-2;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // INFORMACION
+  // --------------------------------------------------------------------------
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+
+  &__copyright {
+    color: var(--text-secondary);
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    margin: 0;
+    @include transition(color);
+  }
+
+  &__slogan {
+    color: var(--text-secondary);
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    margin: 0;
+    @include transition(color);
+  }
+
+  &__link {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: $font-weight-medium;
+    position: relative;
+    @include transition(all);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: $color-accent-dark;
+      @include transition(width);
+    }
+
+    &:hover {
+      color: color.adjust($color-accent-dark, $lightness: 10%);
+      
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // LOGO E INFO
+  // --------------------------------------------------------------------------
+  &__logo-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    flex-wrap: wrap;
+  }
+
+  &__logo-img {
+    height: 3.5rem;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+    @include transition(all);
+
+    &:hover {
+      filter: drop-shadow(0 0 6px rgba(0, 184, 148, 0.4));
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ENLACES SOCIALES
+  // --------------------------------------------------------------------------
+  &__social {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    flex-shrink: 0;
+  }
+
+  &__social-link {
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-lg;
+    color: var(--text-secondary);
+    background-color: transparent;
+    position: relative;
+    overflow: hidden;
+    @include transition(all);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg, 
+        $color-primary-dark 0%,
+        color.mix($color-primary-dark, $color-accent-dark, 70%) 100%
+      );
+      border-radius: $radius-lg;
+      opacity: 0;
+      @include transition(opacity);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      padding: $border-thin;
+      background: linear-gradient(
+        180deg,
+        rgba($color-text-alt-dark, 1) 0%,
+        rgba($color-text-alt-dark, 0.1) 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0;
+      @include transition(opacity);
+    }
+
+    &:hover {
+      color: var(--text-primary);
+      transform: translateY(-3px);
+      box-shadow: $shadow-hover-accent;
+
+      &::before,
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    &:active {
+      transform: translateY(-1px);
+    }
+  }
+
+  &__social-icon {
+    font-size: 1.25rem;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Desktop (1024px)
+@media (max-width: $breakpoint-lg) {
+  .footer {
+    padding: $spacing-3 0;
+
+    &__logo-img {
+      height: 3rem;
+    }
+
+    &__social-link {
+      width: 36px;
+      height: 36px;
+    }
+
+    &__social-icon {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .footer {
+    padding: $spacing-3 0;
+
+    &__container {
+      flex-direction: column;
+      gap: $spacing-3;
+      text-align: center;
+    }
+
+    &__logo-info {
+      flex-direction: column;
+      gap: $spacing-2;
+    }
+
+    &__info {
+      align-items: center;
+    }
+
+    &__logo-img {
+      height: 2.75rem;
+    }
+
+    &__social {
+      gap: $spacing-3;
+    }
+
+    &__social-link {
+      width: 44px;
+      height: 44px;
+    }
+
+    &__social-icon {
+      width: 1.375rem;
+      height: 1.375rem;
+    }
+  }
+}
+
+// Movil (640px)
+@media (max-width: $breakpoint-sm) {
+  .footer {
+    padding: $spacing-2 0;
+
+    &__container {
+      gap: $spacing-2;
+    }
+
+    &__copyright,
+    &__slogan {
+      font-size: $font-size-xs;
+    }
+
+    &__logo-img {
+      height: 2.25rem;
+    }
+
+    &__social {
+      gap: $spacing-2;
+    }
+
+    &__social-link {
+      width: 40px;
+      height: 40px;
+    }
+
+    &__social-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+}

@@ -1,0 +1,40 @@
+# Node.js / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.env
+frontend/.DS_Store
+frontend/.vscode/
+
+# Java / Spring Boot
+backend/target/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.mvn/
+backend/mvnw*
+backend/.DS_Store
+backend/.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Env files
+.env
+
+# Misc
+*.swp
+*.swo
+
+# Test output
+frontend/coverage/
+backend/coverage/

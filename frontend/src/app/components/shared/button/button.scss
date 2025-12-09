@@ -1,0 +1,183 @@
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// BUTTON COMPONENT
+// Componente de botón reutilizable con variantes, tamaños y estados
+// ==========================================================================
+
+// Host del componente - bloquea clicks cuando está deshabilitado
+:host {
+  display: inline-block;
+
+  &.disabled {
+    pointer-events: none;
+  }
+}
+
+.btn {
+  // --------------------------------------------------------------------------
+  // Variables CSS locales (permiten sobrescribir por variante)
+  // --------------------------------------------------------------------------
+  --btn-bg: #{$color-primary-dark};
+  --btn-bg-end: #{color.mix($color-primary-dark, $color-accent-dark, 70%)};
+  --btn-border-start: #{rgba($color-text-alt-dark, 1)};
+  --btn-border-end: #{rgba($color-text-alt-dark, 0.1)};
+  --btn-shadow: #{$shadow-hover-accent};
+  --btn-shadow-active: #{$shadow-active-accent};
+
+  // --------------------------------------------------------------------------
+  // Estilos base
+  // --------------------------------------------------------------------------
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  font-family: $font-primary;
+  font-weight: $font-weight-medium;
+  color: $color-text-dark;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  
+  border: none;
+  border-radius: $radius-lg;
+  cursor: pointer;
+  
+  background: linear-gradient(180deg, var(--btn-bg) 0%, var(--btn-bg-end) 100%);
+  @include transition(all);
+
+  // --------------------------------------------------------------------------
+  // Borde con gradiente (pseudo-elemento)
+  // --------------------------------------------------------------------------
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-lg;
+    padding: $border-thin;
+    background: linear-gradient(180deg, var(--btn-border-start) 0%, var(--btn-border-end) 100%);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    @include transition(all);
+  }
+
+  // --------------------------------------------------------------------------
+  // Estados interactivos
+  // --------------------------------------------------------------------------
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--btn-shadow);
+
+    &::before {
+      --btn-border-start: #{rgba($color-text-dark, 1)};
+      --btn-border-end: #{rgba($color-text-dark, 0.1)};
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--btn-shadow-active);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-accent-dark;
+    outline-offset: 2px;
+  }
+
+  // --------------------------------------------------------------------------
+  // TAMAÑOS
+  // --------------------------------------------------------------------------
+  &--sm { padding: 2px 6px;  font-size: $font-size-sm; }
+  &--md { padding: 4px 8px;  font-size: $font-size-md; }
+  &--lg { padding: 8px 16px; font-size: $font-size-lg; }
+
+  // --------------------------------------------------------------------------
+  // VARIANTES
+  // --------------------------------------------------------------------------
+  
+  // Primary (default) - Verde/Accent
+  &--primary {
+    --btn-bg: #{$color-primary-dark};
+    --btn-bg-end: #{color.mix($color-primary-dark, $color-accent-dark, 70%)};
+
+    &:hover {
+      --btn-bg-end: #{color.mix($color-primary-dark, $color-accent-dark, 50%)};
+    }
+  }
+
+  // Secondary - Gris/Neutro
+  &--secondary {
+    --btn-bg: #{$color-secondary-dark};
+    --btn-bg-end: #{color.mix($color-secondary-dark, $color-text-alt-dark, 60%)};
+    --btn-shadow: #{$shadow-hover-lift};
+    --btn-shadow-active: none;
+
+    &:hover {
+      --btn-bg-end: #{$color-text-alt-dark};
+    }
+  }
+
+  // Ghost - Transparente
+  &--ghost {
+    --btn-bg: transparent;
+    --btn-bg-end: transparent;
+    --btn-border-start: #{rgba($color-text-alt-dark, 0.5)};
+    --btn-shadow: none;
+    --btn-shadow-active: none;
+
+    &:hover {
+      --btn-bg: #{rgba($color-secondary-dark, 0.3)};
+      --btn-bg-end: #{rgba($color-secondary-dark, 0.3)};
+      --btn-border-start: #{rgba($color-text-alt-dark, 0.8)};
+      --btn-border-end: #{rgba($color-text-alt-dark, 0.2)};
+    }
+
+    &:active {
+      --btn-bg: #{rgba($color-secondary-dark, 0.4)};
+      --btn-bg-end: #{rgba($color-secondary-dark, 0.4)};
+    }
+  }
+
+  // Danger - Rojo
+  &--danger {
+    --btn-bg: #{$color-error-dark};
+    --btn-bg-end: #{color.adjust($color-error-dark, $lightness: -10%)};
+    --btn-border-start: #{rgba(255, 255, 255, 0.3)};
+    --btn-border-end: #{rgba(255, 255, 255, 0.05)};
+    --btn-shadow: 0 4px 12px #{rgba($color-error-dark, 0.35)};
+    --btn-shadow-active: 0 2px 6px #{rgba($color-error-dark, 0.25)};
+
+    &:hover {
+      --btn-bg: #{color.adjust($color-error-dark, $lightness: 5%)};
+      --btn-bg-end: #{$color-error-dark};
+      --btn-border-start: #{rgba(255, 255, 255, 0.5)};
+      --btn-border-end: #{rgba(255, 255, 255, 0.1)};
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ESTADO DESHABILITADO
+  // --------------------------------------------------------------------------
+  &--disabled,
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+@media (max-width: $breakpoint-sm) {
+  .btn {
+    &--sm { padding: 2px 4px; font-size: $font-size-xs; }
+    &--md { padding: 3px 6px; font-size: $font-size-sm; }
+    &--lg { padding: 6px 12px; font-size: $font-size-md; }
+  }
+}

@@ -1,0 +1,58 @@
+<header class="header">
+  <section class="header__container">
+    <a routerLink="/" class="header__logo">
+      <img src="assets/img/logoL4R-grande.png" alt="Looking4Rate Logo" class="header__logo-img">
+    </a>
+
+    <!-- Navegación desktop -->
+    <nav class="header__actions header__actions--desktop">
+      <app-theme-toggle></app-theme-toggle>
+      <app-button variant="primary" size="md" (btnClick)="loginClick.emit()">INICIAR SESIÓN</app-button>
+      <app-button variant="primary" size="md" (btnClick)="registerClick.emit()">CREAR CUENTA</app-button>
+      <app-search-box 
+        placeholder="Buscar juegos..."
+        [(value)]="searchQuery"
+        (search)="onSearch($event)">
+      </app-search-box>
+    </nav>
+
+    <!-- Controles móvil (solo visibles en móvil) -->
+    <menu class="header__mobile-controls">
+      <!-- Toggle de tema -->
+      <app-theme-toggle></app-theme-toggle>
+      
+      <!-- Botón de búsqueda móvil (solo icono) -->
+      <app-search-box 
+        variant="icon-only"
+        (iconClick)="onSearch(searchQuery)">
+      </app-search-box>
+
+      <!-- Botón hamburguesa -->
+      <button 
+        class="header__hamburger" 
+        [class.header__hamburger--active]="isMenuOpen"
+        (click)="toggleMenu()"
+        aria-label="Menú de navegación"
+        [attr.aria-expanded]="isMenuOpen">
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+      </button>
+    </menu>
+
+    <!-- Menú móvil -->
+    <nav 
+      class="header__mobile-menu" 
+      [class.header__mobile-menu--open]="isMenuOpen">
+      <ul class="header__mobile-menu-content">
+        <li><app-button variant="primary" size="lg" (btnClick)="onLoginClick()">INICIAR SESIÓN</app-button></li>
+        <li><app-button variant="primary" size="lg" (btnClick)="onRegisterClick()">CREAR CUENTA</app-button></li>
+      </ul>
+    </nav>
+
+    <!-- Overlay para cerrar menú -->
+    @if (isMenuOpen) {
+      <aside class="header__overlay" (click)="closeMenu()" aria-hidden="true"></aside>
+    }
+  </section>
+</header>

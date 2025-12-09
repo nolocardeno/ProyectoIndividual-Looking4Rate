@@ -1,0 +1,337 @@
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// HEADER COMPONENT
+// Encabezado principal con logo, navegacion y acciones
+// ==========================================================================
+
+.header {
+  background-color: var(--bg-header-footer);
+  min-height: $spacing-header-footer;
+  width: 100%;
+  border-bottom: $border-thin solid var(--border-color);
+  position: relative;
+  z-index: 1000;
+  @include transition(background-color);
+
+  // --------------------------------------------------------------------------
+  // CONTENEDOR
+  // --------------------------------------------------------------------------
+  &__container {
+    @include flex-center;
+    @include page-container;
+    & {
+      justify-content: space-between;
+      margin: 0 auto;
+      min-height: $spacing-header-footer;
+      flex-wrap: wrap;
+      gap: $spacing-1;
+      position: relative;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // LOGO
+  // --------------------------------------------------------------------------
+  &__logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+    z-index: 1002;
+    @include transition(all);
+
+    &:hover {
+      .header__logo-img {
+        filter: brightness(1.1) contrast(1.05) drop-shadow(0 0 6px rgba($color-accent-dark, 0.4));
+      }
+    }
+
+    &-img {
+      height: 50px;
+      width: auto;
+      object-fit: contain;
+      filter: brightness(1.1) contrast(1.05);
+      @include transition(filter);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // CONTROLES MÓVIL
+  // --------------------------------------------------------------------------
+  &__mobile-controls {
+    display: none;
+    align-items: center;
+    gap: $spacing-2;
+    z-index: 1002;
+  }
+
+  // --------------------------------------------------------------------------
+  // BOTÓN HAMBURGUESA
+  // --------------------------------------------------------------------------
+  &__hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 40px;
+    height: 36px;
+    background: linear-gradient(180deg, $color-primary-dark 0%, color.mix($color-primary-dark, $color-accent-dark, 70%) 100%);
+    border: none;
+    border-radius: $radius-lg;
+    cursor: pointer;
+    padding: 6px;
+    position: relative;
+    @include transition(all);
+
+    // Borde con gradiente (igual que el botón)
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      padding: $border-thin;
+      background: linear-gradient(180deg, rgba($color-text-alt-dark, 1) 0%, rgba($color-text-alt-dark, 0.1) 100%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      @include transition(all);
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: $shadow-hover-accent;
+
+      &::before {
+        background: linear-gradient(180deg, rgba($color-text-dark, 1) 0%, rgba($color-text-dark, 0.1) 100%);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: $shadow-active-accent;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &-line {
+      width: 100%;
+      height: 3px;
+      background-color: $color-text-dark;
+      border-radius: $radius-full;
+      transition: all $transition-base $transition-ease;
+      transform-origin: center;
+    }
+
+    // Estado activo (X)
+    &--active &-line {
+      background-color: $color-text-dark;
+      
+      &:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+      }
+
+      &:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+
+      &:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ACCIONES DESKTOP
+  // --------------------------------------------------------------------------
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    &--desktop {
+      display: flex;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // MENÚ MÓVIL
+  // --------------------------------------------------------------------------
+  &__mobile-menu {
+    position: fixed;
+    top: $spacing-header-footer;
+    right: 0;
+    width: auto;
+    min-width: 200px;
+    max-width: 80vw;
+    background-color: var(--bg-primary);
+    border-left: $border-medium solid var(--border-color);
+    border-bottom: $border-medium solid var(--border-color);
+    border-radius: 0 0 0 $radius-lg;
+    box-shadow: $shadow-2xl;
+    z-index: 1001;
+    // Oculto por defecto con transform (permite transición suave)
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform $transition-base $transition-ease,
+                visibility $transition-base $transition-ease;
+
+    &--open {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    &-content {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-3;
+      padding: $spacing-3;
+      list-style: none;
+      margin: 0;
+
+      li {
+        list-style: none;
+      }
+
+      // Botones ocupan todo el ancho y son más grandes en menú móvil
+      ::ng-deep app-button {
+        display: block;
+        width: 100%;
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+          padding: $spacing-2 $spacing-3;
+          font-size: $font-size-lg;
+          min-height: 52px;
+        }
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // OVERLAY
+  // --------------------------------------------------------------------------
+  &__overlay {
+    position: fixed;
+    top: $spacing-header-footer;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - $spacing-header-footer);
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    animation: fadeIn $transition-base $transition-ease forwards;
+  }
+}
+
+// Animación para el overlay
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Desktop grande (1280px)
+@media (max-width: $breakpoint-xl) {
+  .header {
+    &__actions {
+      gap: $spacing-1;
+    }
+  }
+}
+
+// Desktop (1024px)
+@media (max-width: $breakpoint-lg) {
+  .header {
+    &__logo-img {
+      height: 40px;
+    }
+
+    &__actions {
+      gap: $spacing-1;
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .header {
+    min-height: auto;
+    padding: $spacing-1 0;
+
+    &__container {
+      min-height: auto;
+      gap: $spacing-1;
+    }
+
+    &__logo-img {
+      height: 35px;
+    }
+
+    &__actions {
+      gap: 6px;
+    }
+  }
+}
+
+// Móvil (640px) - Activar menú hamburguesa
+@media (max-width: $breakpoint-sm) {
+  .header {
+    min-height: $spacing-header-footer;
+    padding: 0;
+
+    &__container {
+      justify-content: space-between;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: $spacing-1;
+      padding-top: 0;
+      padding-bottom: 0;
+      min-height: $spacing-header-footer;
+    }
+
+    &__logo-img {
+      height: 35px;
+    }
+
+    // Mostrar controles móviles (búsqueda + hamburguesa)
+    &__mobile-controls {
+      display: flex;
+    }
+
+    // Ocultar navegación desktop
+    &__actions--desktop {
+      display: none;
+    }
+  }
+}
+
+// Desktop - Ocultar menú móvil y overlay
+@media (min-width: calc($breakpoint-sm + 1px)) {
+  .header {
+    &__mobile-controls {
+      display: none !important;
+    }
+
+    &__mobile-menu {
+      display: none !important;
+    }
+
+    &__overlay {
+      display: none !important;
+    }
+  }
+}

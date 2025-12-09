@@ -1,0 +1,58 @@
+// ==========================================================================
+// CSS CUSTOM PROPERTIES
+// Variables CSS para temas claro y oscuro
+// ==========================================================================
+
+@use 'variables' as *;
+
+// --------------------------------------------------------------------------
+// MODO OSCURO (por defecto)
+// --------------------------------------------------------------------------
+:root {
+  // Colores de fondo
+  --bg-primary: #{$color-primary-dark};
+  --bg-secondary: #{$color-secondary-dark};
+  --bg-header-footer: #{$color-header-footer-dark};
+
+  // Colores de texto
+  --text-primary: #{$color-text-dark};
+  --text-secondary: #{$color-text-alt-dark};
+
+  // Color de acento
+  --color-accent: #{$color-accent-dark};
+
+  // Colores semanticos
+  --color-error: #{$color-error-dark};
+  --color-success: #{$color-success-dark};
+  --color-warning: #{$color-warning-dark};
+  --color-info: #{$color-info-dark};
+
+  // Color de borde
+  --border-color: #{$color-secondary-dark};
+}
+
+// --------------------------------------------------------------------------
+// MODO CLARO
+// --------------------------------------------------------------------------
+[data-theme='light'] {
+  // Colores de fondo
+  --bg-primary: #{$color-primary-light};
+  --bg-secondary: #{$color-secondary-light};
+  --bg-header-footer: #{$color-header-footer-light};
+
+  // Colores de texto
+  --text-primary: #{$color-text-light};
+  --text-secondary: #{$color-text-alt-light};
+
+  // Color de acento
+  --color-accent: #{$color-accent-light};
+
+  // Colores semanticos
+  --color-error: #{$color-error-light};
+  --color-success: #{$color-success-light};
+  --color-warning: #{$color-warning-light};
+  --color-info: #{$color-info-light};
+
+  // Color de borde
+  --border-color: #{$color-secondary-light};
+}

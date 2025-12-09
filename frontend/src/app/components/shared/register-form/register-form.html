@@ -1,0 +1,58 @@
+@if (isOpen) {
+  <aside class="register-modal__overlay" (click)="onOverlayClick($event)">
+    <article class="register-modal">
+      <header class="register-modal__header">
+        <h2 class="register-modal__title">Crear cuenta</h2>
+        <button class="register-modal__close" (click)="closeModal()" aria-label="Cerrar">
+          <fa-icon [icon]="['fas', 'times']"></fa-icon>
+        </button>
+      </header>
+
+      <form class="register-modal__form" (ngSubmit)="onSubmit()">
+        <fieldset class="register-modal__fieldset">
+          <legend class="register-modal__legend">Datos de registro</legend>
+
+          <app-form-input
+            label="Email"
+            type="email"
+            name="email"
+            placeholder=""
+            [required]="true"
+            [errorMessage]="emailError"
+            [value]="email"
+            (valueChange)="email = $event"
+            (inputBlur)="onEmailBlur()">
+          </app-form-input>
+
+          <app-form-input
+            label="Nombre de usuario"
+            type="text"
+            name="username"
+            placeholder=""
+            [required]="true"
+            [errorMessage]="usernameError"
+            [value]="username"
+            (valueChange)="username = $event"
+            (inputBlur)="onUsernameBlur()">
+          </app-form-input>
+
+          <app-form-input
+            label="Contraseña"
+            type="password"
+            name="password"
+            placeholder=""
+            [required]="true"
+            [errorMessage]="passwordError"
+            [value]="password"
+            (valueChange)="password = $event"
+            (inputBlur)="onPasswordBlur()">
+          </app-form-input>
+        </fieldset>
+
+        <footer class="register-modal__actions">
+          <button type="submit" class="register-modal__submit" [disabled]="!isFormValid">Crear cuenta</button>
+        </footer>
+      </form>
+    </article>
+  </aside>
+}

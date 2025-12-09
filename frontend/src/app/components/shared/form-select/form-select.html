@@ -1,0 +1,62 @@
+<!-- Form Select: Dropdown personalizado con diseño mejorado -->
+
+<fieldset 
+  class="form-select" 
+  [class.form-select--error]="errorMessage" 
+  [class.form-select--disabled]="disabled"
+  [class.form-select--open]="isOpen"
+>
+  @if (label) {
+    <legend class="form-select__label">
+      {{ label }}
+      @if (required) {
+        <span class="form-select__required">*</span>
+      }
+    </legend>
+  }
+
+  <!-- Botón trigger del dropdown -->
+  <button
+    type="button"
+    [id]="id"
+    class="form-select__trigger"
+    [class.form-select__trigger--error]="errorMessage"
+    [class.form-select__trigger--placeholder]="!value"
+    [disabled]="disabled"
+    [attr.aria-expanded]="isOpen"
+    [attr.aria-haspopup]="'listbox'"
+    (click)="toggleDropdown()"
+  >
+    <span class="form-select__value">
+      {{ selectedLabel || placeholder }}
+    </span>
+
+    <!-- Icono de flecha -->
+    <fa-icon [icon]="['fas', 'chevron-down']" class="form-select__icon"></fa-icon>
+  </button>
+
+  <!-- Dropdown con opciones -->
+  @if (isOpen) {
+    <ul class="form-select__dropdown" role="listbox">
+      @for (option of options; track option.value) {
+        <li
+          class="form-select__option"
+          [class.form-select__option--selected]="value === option.value"
+          [class.form-select__option--disabled]="option.disabled"
+          [attr.aria-selected]="value === option.value"
+          role="option"
+          (click)="selectOption(option)"
+        >
+          {{ option.label }}
+          @if (value === option.value) {
+            <fa-icon [icon]="['fas', 'check']" class="form-select__check"></fa-icon>
+          }
+        </li>
+      }
+    </ul>
+  }
+
+  @if (errorMessage) {
+    <p class="form-select__error">{{ errorMessage }}</p>
+  }
+</fieldset>

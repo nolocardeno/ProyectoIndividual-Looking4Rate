@@ -1,0 +1,47 @@
+@use 'styles/00-settings/variables' as *;
+
+// ==========================================================================
+// PLATFORM BADGE COMPONENT
+// Badge/etiqueta para mostrar plataformas de videojuegos
+// ==========================================================================
+
+:host {
+  display: inline;
+}
+
+:host(:not(:last-child))::after {
+  content: ', ';
+  color: var(--text-secondary);
+}
+
+.platform-badge {
+  // --------------------------------------------------------------------------
+  // Estilos base
+  // --------------------------------------------------------------------------
+  display: inline;
+  font-family: $font-primary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color $transition-base $transition-ease;
+
+  // --------------------------------------------------------------------------
+  // Modificador para enlaces
+  // --------------------------------------------------------------------------
+  &--link {
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.125rem;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: $border-medium solid var(--color-accent);
+      outline-offset: 0.125rem;
+      border-radius: $radius-sm;
+    }
+  }
+}

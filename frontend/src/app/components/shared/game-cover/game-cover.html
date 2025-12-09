@@ -1,0 +1,11 @@
+<!-- Game Cover: Carátula de videojuego con borde y efecto hover -->
+
+@if (routerLink) {
+  <a [routerLink]="routerLink" [class]="classes">
+    <img [src]="src" [alt]="alt" class="game-cover__image" loading="lazy" />
+  </a>
+} @else {
+  <figure [class]="classes">
+    <img [src]="src" [alt]="alt" class="game-cover__image" loading="lazy" />
+  </figure>
+}

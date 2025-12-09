@@ -1,0 +1,187 @@
+@use 'styles/00-settings/variables' as *;
+
+// ==========================================================================
+// GAME CARD COMPONENT
+// Card de detalle de videojuego con caratula e informacion
+// ==========================================================================
+
+:host {
+  display: block;
+}
+
+.game-card {
+  display: flex;
+  gap: $spacing-3;
+  max-width: 48.75rem;
+  border-radius: $radius-lg;
+
+  // --------------------------------------------------------------------------
+  // CARATULA
+  // --------------------------------------------------------------------------
+  &__cover {
+    flex-shrink: 0;
+    width: 12.5rem;
+    margin: 0;
+
+    app-game-cover {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // INFORMACION
+  // --------------------------------------------------------------------------
+  &__info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    align-self: stretch;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--text-primary);
+    line-height: $line-height-tight;
+  }
+
+  &__date {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-regular;
+    color: var(--text-secondary);
+    line-height: $line-height-tight;
+  }
+
+  &__label {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-regular;
+    color: var(--text-secondary);
+  }
+
+  // --------------------------------------------------------------------------
+  // DESARROLLADOR
+  // --------------------------------------------------------------------------
+  &__developer {
+    margin: 0;
+    margin-top: $spacing-1;
+    display: flex;
+    gap: $spacing-1;
+    align-items: baseline;
+  }
+
+  &__developer-link {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.125rem;
+    transition: color $transition-base $transition-ease;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: $border-medium solid var(--color-accent);
+      outline-offset: 0.125rem;
+      border-radius: $radius-sm;
+    }
+  }
+
+  &__developer-name {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: var(--text-primary);
+  }
+
+  // --------------------------------------------------------------------------
+  // DESCRIPCION
+  // --------------------------------------------------------------------------
+  &__description {
+    margin: 0;
+    margin-top: $spacing-3;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-regular;
+    color: var(--text-primary);
+    line-height: $line-height-normal;
+  }
+
+  // --------------------------------------------------------------------------
+  // PLATAFORMAS
+  // --------------------------------------------------------------------------
+  &__platforms {
+    display: flex;
+    gap: $spacing-1;
+    align-items: baseline;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+
+  &__platforms-list {
+    display: inline;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .game-card {
+    flex-direction: column;
+    align-items: center;
+
+    &__cover {
+      width: 10rem;
+    }
+
+    &__info {
+      text-align: center;
+    }
+
+    &__header {
+      justify-content: center;
+    }
+
+    &__developer {
+      justify-content: center;
+    }
+
+    &__platforms {
+      justify-content: center;
+      margin-top: $spacing-1;
+    }
+  }
+}
+
+// Movil (640px)
+@media (max-width: $breakpoint-sm) {
+  .game-card {
+    gap: $spacing-2;
+
+    &__cover {
+      width: 8.75rem;
+    }
+
+    &__title {
+      font-size: $font-size-md;
+    }
+  }
+}

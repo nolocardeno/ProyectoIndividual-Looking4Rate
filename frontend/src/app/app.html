@@ -1,0 +1,22 @@
+<app-header 
+  (loginClick)="openLoginModal()"
+  (registerClick)="openRegisterModal()">
+</app-header>
+
+<app-main>
+  <router-outlet />
+</app-main>
+
+<app-footer></app-footer>
+
+<!-- Modal de Login -->
+<app-login-form 
+  [isOpen]="showLoginModal" 
+  (close)="closeLoginModal()">
+</app-login-form>
+
+<!-- Modal de Registro -->
+<app-register-form 
+  [isOpen]="showRegisterModal" 
+  (close)="closeRegisterModal()">
+</app-register-form>

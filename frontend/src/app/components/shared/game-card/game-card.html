@@ -1,0 +1,60 @@
+<!-- Game Card: Card de detalle de videojuego con carátula e información -->
+
+<article class="game-card">
+  <!-- Carátula del juego (componente reutilizable) -->
+  <figure class="game-card__cover">
+    <app-game-cover
+      [src]="coverSrc"
+      [alt]="title"
+      [routerLink]="gameLink"
+      size="lg"
+    />
+  </figure>
+
+  <!-- Información del juego -->
+  <section class="game-card__info">
+    <!-- Cabecera: Título y fecha -->
+    <header class="game-card__header">
+      <h2 class="game-card__title">{{ title }}</h2>
+      @if (releaseDate) {
+        <time class="game-card__date" [attr.datetime]="releaseDate">
+          {{ releaseDate }}
+        </time>
+      }
+    </header>
+
+    <!-- Desarrollador -->
+    @if (developer) {
+      <p class="game-card__developer">
+        <span class="game-card__label">Desarrollado por</span>
+        @if (developerLink) {
+          <a [routerLink]="developerLink" class="game-card__developer-link">
+            {{ developer }}
+          </a>
+        } @else {
+          <span class="game-card__developer-name">{{ developer }}</span>
+        }
+      </p>
+    }
+
+    <!-- Descripción -->
+    @if (description) {
+      <p class="game-card__description">{{ description }}</p>
+    }
+
+    <!-- Plataformas -->
+    @if (platforms.length > 0) {
+      <footer class="game-card__platforms">
+        <span class="game-card__label">Plataformas:</span>
+        <span class="game-card__platforms-list">
+          @for (platform of platforms; track platform.name) {
+            <app-platform-badge
+              [name]="platform.name"
+              [routerLink]="platform.routerLink ?? null"
+            />
+          }
+        </span>
+      </footer>
+    }
+  </section>
+</article>

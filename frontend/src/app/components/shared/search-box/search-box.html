@@ -1,0 +1,23 @@
+@if (variant === 'icon-only') {
+  <!-- Variante solo icono -->
+  <button 
+    class="search-box search-box--icon-only" 
+    (click)="onSearch()" 
+    aria-label="Buscar">
+    <fa-icon [icon]="['fas', 'search']" class="search-box__icon"></fa-icon>
+  </button>
+} @else {
+  <!-- Variante por defecto con input -->
+  <search class="search-box">
+    <input 
+      type="text" 
+      class="search-box__input" 
+      [placeholder]="placeholder"
+      [(ngModel)]="value"
+      (ngModelChange)="onInputChange()"
+      (keyup.enter)="onSearch()">
+    <button class="search-box__btn" (click)="onSearch()" aria-label="Buscar">
+      <fa-icon [icon]="['fas', 'search']" class="search-box__icon"></fa-icon>
+    </button>
+  </search>
+}

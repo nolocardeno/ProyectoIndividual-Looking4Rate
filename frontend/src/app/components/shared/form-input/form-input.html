@@ -1,0 +1,29 @@
+<label class="form-input" [class.form-input--error]="errorMessage" [class.form-input--disabled]="disabled">
+  <span class="form-input__label">
+    {{ label }}
+    @if (required) {
+      <span class="form-input__required">*</span>
+    }
+  </span>
+
+  <input
+    [id]="id"
+    [type]="type"
+    [name]="name"
+    [placeholder]="placeholder"
+    [required]="required"
+    [disabled]="disabled"
+    [value]="value"
+    (input)="onInputChange($event)"
+    (blur)="onBlur()"
+    class="form-input__field"
+    [class.form-input__field--error]="errorMessage"
+  />
+
+  @if (errorMessage) {
+    <p class="form-input__error">{{ errorMessage }}</p>
+  }
+  @if (helpText && !errorMessage) {
+    <p class="form-input__help">{{ helpText }}</p>
+  }
+</label>

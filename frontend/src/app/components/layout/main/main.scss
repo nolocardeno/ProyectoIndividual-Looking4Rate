@@ -1,0 +1,55 @@
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// MAIN COMPONENT
+// Contenedor principal del contenido de la aplicacion
+// ==========================================================================
+
+:host {
+  display: block;
+  flex: 1;
+  min-height: 100%;
+  background-color: var(--bg-primary);
+  @include transition(background-color);
+}
+
+.main {
+  @include page-container;
+  & {
+    display: block;
+    width: 100%;
+    min-height: 100%;
+    padding-top: $spacing-4;
+    padding-bottom: $spacing-4;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Desktop (1024px)
+@media (max-width: $breakpoint-lg) {
+  .main {
+    padding-top: $spacing-3;
+    padding-bottom: $spacing-3;
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .main {
+    padding-top: $spacing-2;
+    padding-bottom: $spacing-2;
+  }
+}
+
+// Movil (640px)
+@media (max-width: $breakpoint-sm) {
+  .main {
+    padding-top: $spacing-2;
+    padding-bottom: $spacing-2;
+  }
+}

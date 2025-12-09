@@ -1,0 +1,235 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// FORM SELECT COMPONENT
+// Dropdown personalizado con diseno consistente con form-input
+// ==========================================================================
+
+.form-select {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  width: 100%;
+  position: relative;
+  border: none;
+  padding: 0;
+  margin: 0;
+
+  // --------------------------------------------------------------------------
+  // LABEL
+  // --------------------------------------------------------------------------
+  &__label {
+    color: $color-text-dark;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    padding: 0;
+    margin: 0;
+    float: left;
+    width: 100%;
+  }
+
+  &__required {
+    color: $color-error-dark;
+    margin-left: 0.25rem;
+  }
+
+  // --------------------------------------------------------------------------
+  // TRIGGER (boton que abre el dropdown)
+  // --------------------------------------------------------------------------
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-2;
+    width: 100%;
+    padding: $spacing-1 $spacing-2;
+    background-color: $color-secondary-dark;
+    border: none;
+    border-radius: $radius-lg;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    color: $color-text-alt-dark;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    box-sizing: border-box;
+    @include transition(all);
+
+    &:hover {
+      background-color: $color-text-alt-dark;
+      color: $color-primary-dark;
+
+      .form-select__icon {
+        color: $color-secondary-dark;
+      }
+    }
+
+    &:focus {
+      background-color: $color-text-dark;
+      color: $color-primary-dark;
+
+      .form-select__icon {
+        color: $color-secondary-dark;
+      }
+    }
+
+    &--error {
+      box-shadow: 0 0 0 $border-thin $color-error-dark;
+    }
+  }
+
+  &__value {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // --------------------------------------------------------------------------
+  // ICONO DE FLECHA
+  // --------------------------------------------------------------------------
+  &__icon {
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    color: $color-text-alt-dark;
+    @include transition(transform);
+  }
+
+  &--open &__icon {
+    transform: rotate(180deg);
+  }
+
+  // --------------------------------------------------------------------------
+  // DROPDOWN (lista de opciones)
+  // --------------------------------------------------------------------------
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    margin: 0;
+    padding: $spacing-1 0;
+    list-style: none;
+    background-color: $color-secondary-dark;
+    border: $border-thin solid $color-text-alt-dark;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-lg;
+    max-height: 15rem;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 0.5rem;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-text-alt-dark;
+      border-radius: $radius-full;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // OPCIONES
+  // --------------------------------------------------------------------------
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-2;
+    padding: $spacing-1 $spacing-2;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    color: $color-text-alt-dark;
+    cursor: pointer;
+    @include transition(all);
+
+    &:hover {
+      background-color: $color-text-alt-dark;
+      color: $color-primary-dark;
+    }
+
+    &--selected {
+      background-color: rgba($color-accent-dark, 0.2);
+      color: $color-accent-dark;
+
+      &:hover {
+        background-color: rgba($color-accent-dark, 0.3);
+        color: $color-accent-dark;
+      }
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: transparent;
+        color: $color-text-alt-dark;
+      }
+    }
+  }
+
+  &__check {
+    flex-shrink: 0;
+    font-size: 1rem;
+    color: $color-accent-dark;
+  }
+
+  // --------------------------------------------------------------------------
+  // MENSAJES
+  // --------------------------------------------------------------------------
+  &__error {
+    color: $color-error-dark;
+    font-family: $font-primary;
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+
+  // --------------------------------------------------------------------------
+  // ESTADO DESHABILITADO
+  // --------------------------------------------------------------------------
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+
+    .form-select__trigger {
+      cursor: not-allowed;
+    }
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Movil (640px)
+@media (max-width: $breakpoint-sm) {
+  .form-select {
+    &__label {
+      font-size: $font-size-sm;
+    }
+
+    &__trigger {
+      font-size: $font-size-sm;
+      padding: $spacing-1 $spacing-2;
+    }
+
+    &__icon {
+      font-size: 1rem;
+    }
+
+    &__option {
+      font-size: $font-size-sm;
+    }
+
+    &__error {
+      font-size: $font-size-xs;
+    }
+  }
+}

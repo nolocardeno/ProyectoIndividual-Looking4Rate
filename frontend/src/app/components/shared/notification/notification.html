@@ -1,0 +1,45 @@
+@if (visible) {
+  <article 
+    [ngClass]="classes" 
+    role="alert"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()">
+    
+    <!-- Icono según el tipo -->
+    <span class="notification__icon">
+      @switch (type) {
+        @case ('success') { ✓ }
+        @case ('error') { ✕ }
+        @case ('warning') { ⚠ }
+        @case ('info') { ℹ }
+      }
+    </span>
+
+    <!-- Contenido -->
+    <section class="notification__content">
+      @if (title) {
+        <strong class="notification__title">{{ title }}</strong>
+      }
+      <span class="notification__message">{{ message }}</span>
+    </section>
+
+    <!-- Botón cerrar (opcional) -->
+    @if (dismissible) {
+      <button 
+        class="notification__close" 
+        type="button" 
+        aria-label="Cerrar notificación"
+        (click)="close()">
+        ✕
+      </button>
+    }
+
+    <!-- Barra de progreso para auto-cierre -->
+    @if (duration > 0) {
+      <progress 
+        class="notification__progress" 
+        [style.animation-duration.ms]="duration">
+      </progress>
+    }
+  </article>
+}
