@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { GameCover } from '../../components/shared/game-cover/game-cover';
 import { FeaturedSection } from '../../components/shared/featured-section/featured-section';
 import { GameCard, GamePlatform } from '../../components/shared/game-card/game-card';
@@ -6,17 +7,235 @@ import { FormTextarea } from '../../components/shared/form-textarea/form-textare
 import { FormSelect, SelectOption } from '../../components/shared/form-select/form-select';
 import { Alert } from '../../components/shared/alert/alert';
 import { Button } from '../../components/shared/button/button';
-import { NotificationContainer } from '../../components/shared/notification/notification-container';
-import { NotificationService } from '../../components/shared/notification/notification.service';
+import { Notification } from '../../components/shared/notification/notification';
+import { SpinnerComponent } from '../../components/shared/spinner/spinner';
+import { SpinnerInline } from '../../components/shared/spinner-inline/spinner-inline';
+import { Accordion, AccordionItem } from '../../components/shared/accordion/accordion';
+import { Tabs, TabItem } from '../../components/shared/tabs/tabs';
+import { Tooltip } from '../../components/shared/tooltip/tooltip';
+import { ThemeToggle } from '../../components/shared/theme-toggle/theme-toggle';
+import { SearchBox } from '../../components/shared/search-box/search-box';
+import { NotificationService, LoadingService, EventBusService } from '../../services';
 import { Pagination } from '../../components/shared/pagination/pagination';
+
+/** Interfaz para datos de juego en carátulas */
+interface GameCoverData {
+  src: string;
+  alt: string;
+  link: string;
+}
+
+/** Tipos de alerta disponibles */
+type AlertType = 'success' | 'error' | 'warning' | 'info';
+
+/** Tipos de notificación disponibles */
+type NotificationType = 'success' | 'error' | 'warning' | 'info';
 
 @Component({
   selector: 'app-home',
-  imports: [GameCover, FeaturedSection, GameCard, FormTextarea, FormSelect, Alert, Button, NotificationContainer, Pagination],
+  imports: [
+    GameCover, FeaturedSection, GameCard, FormTextarea, FormSelect,
+    Alert, Button, Notification, SpinnerComponent, SpinnerInline, Accordion, Tabs, Tooltip,
+    ThemeToggle, SearchBox, Pagination
+  ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export default class Home {
+export default class Home implements OnInit, OnDestroy {
+  // Servicios
+  private notificationService = inject(NotificationService);
+  private loadingService = inject(LoadingService);
+  private eventBus = inject(EventBusService);
+  
+  // Suscripciones
+  private subscriptions: Subscription[] = [];
+
+  // ============================================
+  // DATOS PARA EJEMPLOS INTERACTIVOS
+  // ============================================
+
+  // Accordion data (Phase 1)
+  accordionItems: AccordionItem[] = [
+    {
+      id: 'requisitos',
+      title: '📋 Requisitos del Sistema',
+      content: `<strong>Mínimos:</strong><br>
+        • SO: Windows 10<br>
+        • Procesador: Intel Core i5-8400<br>
+        • Memoria: 12 GB RAM<br>
+        • Gráficos: NVIDIA GTX 1060 6GB<br>
+        • Almacenamiento: 60 GB`
+    },
+    {
+      id: 'caracteristicas',
+      title: '🎮 Características del Juego',
+      content: `• Mundo abierto extenso<br>
+        • Sistema de combate dinámico<br>
+        • Multijugador cooperativo<br>
+        • Personalización de personajes<br>
+        • Historia no lineal con múltiples finales`
+    },
+    {
+      id: 'dlc',
+      title: '🎁 DLCs Disponibles',
+      content: `<strong>Shadow of the Erdtree</strong> - La expansión más grande<br>
+        <strong>Contenido adicional:</strong> Nuevas armas, armaduras y jefes`
+    }
+  ];
+
+  // Tabs data (Phase 1)
+  tabItems: TabItem[] = [
+    { id: 'descripcion', label: '📖 Descripción', content: 'Este es un juego de rol de acción ambientado en un mundo de fantasía oscura. Los jugadores exploran vastos territorios mientras enfrentan desafiantes enemigos y jefes épicos.' },
+    { id: 'jugabilidad', label: '🎯 Jugabilidad', content: 'Sistema de combate basado en la paciencia y la estrategia. Cada arma tiene un moveset único y el jugador puede personalizar su estilo de juego.' },
+    { id: 'historia', label: '📜 Historia', content: 'Un mundo fragmentado por la guerra y la ambición. El jugador asume el rol de un Sin Luz buscando restaurar el Círculo de Elden.' },
+    { id: 'opiniones', label: '⭐ Opiniones', content: '★★★★★ (9.5/10) - "Una obra maestra del género" - IGN\n★★★★★ (10/10) - "El mejor juego de la década" - GameSpot' }
+  ];
+
+  // Estado para demos interactivos
+  eventLog: string[] = [];
+  loadingProgress = 0;
+  isLoadingDemo = false;
+  isSimpleLoadingDemo = false;
+  isCustomLoadingDemo = false;
+  searchQuery = '';
+  searchResults: string[] = [];
+  
+  // Contador para demo de StateService
+  demoCounter = 0;
+
+  ngOnInit(): void {
+    // Suscribirse a eventos del EventBus para demo
+    this.subscriptions.push(
+      this.eventBus.on<{ message: string }>('demo:custom-event').subscribe(payload => {
+        if (payload?.message) {
+          this.eventLog.push(`[${new Date().toLocaleTimeString()}] ${payload.message}`);
+          // Mantener solo los últimos 5 eventos
+          if (this.eventLog.length > 5) {
+            this.eventLog.shift();
+          }
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  // ============================================
+  // MÉTODOS PARA DEMOS DE PHASE 1
+  // ============================================
+
+  /** Demo de SearchBox */
+  onSearchDemo(query: string): void {
+    this.searchQuery = query;
+    const mockGames = ['Elden Ring', 'Dark Souls III', 'Bloodborne', 'Sekiro', 'Demon\'s Souls', 'Armored Core VI'];
+    this.searchResults = query 
+      ? mockGames.filter(game => game.toLowerCase().includes(query.toLowerCase()))
+      : [];
+  }
+
+  /** Demo de Tooltip - contador */
+  incrementCounter(): void {
+    this.demoCounter++;
+    this.eventBus.emit('demo:counter-updated', { value: this.demoCounter });
+  }
+
+  // ============================================
+  // MÉTODOS PARA DEMOS DE PHASE 2
+  // ============================================
+
+  /** Demo de Loading con resultado visual */
+  async runLoadingDemo(): Promise<void> {
+    this.isLoadingDemo = true;
+    this.loadingProgress = 0;
+    this.loadingService.showGlobal('Cargando datos del juego...');
+    
+    // Simular progreso
+    const interval = setInterval(() => {
+      this.loadingProgress += 20;
+      // Usar el nuevo método que auto-cierra al 100%
+      this.loadingService.updateGlobalProgress(this.loadingProgress, `Cargando... ${this.loadingProgress}%`, true);
+      
+      if (this.loadingProgress >= 100) {
+        clearInterval(interval);
+        this.isLoadingDemo = false;
+        // El servicio se cierra automáticamente, solo mostrar notificación
+        setTimeout(() => {
+          this.notificationService.success('Datos cargados correctamente', '¡Completado!');
+        }, 400);
+      }
+    }, 400);
+  }
+
+  /** Demo de Spinner simple sin barra de progreso */
+  runSimpleSpinnerDemo(): void {
+    this.isSimpleLoadingDemo = true;
+    this.loadingService.showGlobal('Procesando solicitud...');
+    
+    // Simular carga de 2 segundos sin progreso
+    setTimeout(() => {
+      this.loadingService.hideGlobal();
+      this.isSimpleLoadingDemo = false;
+      this.notificationService.info('Proceso completado sin barra de progreso', 'Spinner Simple');
+    }, 2000);
+  }
+
+  /** Demo de Spinner con mensajes personalizados que cambian */
+  runCustomMessageDemo(): void {
+    this.isCustomLoadingDemo = true;
+    const messages = [
+      '🔍 Buscando servidores...',
+      '🔗 Conectando a la base de datos...',
+      '📦 Descargando recursos...',
+      '⚙️ Configurando entorno...',
+      '✅ Finalizando...'
+    ];
+    let index = 0;
+    
+    this.loadingService.showGlobal(messages[0]);
+    
+    const interval = setInterval(() => {
+      index++;
+      if (index < messages.length) {
+        this.loadingService.updateGlobalMessage(messages[index]);
+      } else {
+        clearInterval(interval);
+        this.loadingService.hideGlobal();
+        this.isCustomLoadingDemo = false;
+        this.notificationService.success('Proceso con múltiples mensajes completado', '🎉 Custom Messages');
+      }
+    }, 800);
+  }
+
+  /** Demo de EventBus con log visual */
+  emitEventDemo(): void {
+    const messages = [
+      'Usuario conectado',
+      'Juego añadido a favoritos',
+      'Reseña publicada',
+      'Logro desbloqueado',
+      'Amigo agregado'
+    ];
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    
+    this.eventBus.emit('demo:custom-event', { 
+      message: randomMessage,
+      timestamp: new Date().toISOString()
+    });
+    
+    this.notificationService.info(randomMessage, '📣 Evento emitido');
+  }
+
+  /** Demo de StateService */
+  updateStateDemo(): void {
+    this.demoCounter++;
+    // Solo mostrar notificación como demo
+    this.notificationService.info(
+      `Contador incrementado a: ${this.demoCounter}`,
+      '🔄 Estado actualizado'
+    );
+  }
   // Datos de ejemplo para las carátulas
   games = [
     {
@@ -165,53 +384,28 @@ export default class Home {
   showWarningAlert = false;
   showInfoAlert = false;
 
-  // Métodos para mostrar alertas
-  toggleSuccessAlert(): void {
-    this.showSuccessAlert = true;
+  // Método genérico para mostrar alertas
+  toggleAlert(type: AlertType): void {
+    const alertMap: Record<AlertType, keyof Pick<Home, 'showSuccessAlert' | 'showErrorAlert' | 'showWarningAlert' | 'showInfoAlert'>> = {
+      success: 'showSuccessAlert',
+      error: 'showErrorAlert',
+      warning: 'showWarningAlert',
+      info: 'showInfoAlert'
+    };
+    this[alertMap[type]] = true;
   }
 
-  toggleErrorAlert(): void {
-    this.showErrorAlert = true;
-  }
-
-  toggleWarningAlert(): void {
-    this.showWarningAlert = true;
-  }
-
-  toggleInfoAlert(): void {
-    this.showInfoAlert = true;
-  }
-
-  // Servicio de notificaciones
-  private notificationService = inject(NotificationService);
-
-  // Métodos para mostrar notificaciones (usan el servicio)
-  showNotificationSuccess(): void {
-    this.notificationService.success(
-      'El juego se ha añadido a tu lista de favoritos.',
-      '¡Éxito!'
-    );
-  }
-
-  showNotificationError(): void {
-    this.notificationService.error(
-      'No se pudo guardar la reseña. Inténtalo de nuevo.',
-      'Error'
-    );
-  }
-
-  showNotificationWarning(): void {
-    this.notificationService.warning(
-      'Tu sesión expirará pronto. Guarda tus cambios.',
-      'Atención'
-    );
-  }
-
-  showNotificationInfo(): void {
-    this.notificationService.info(
-      'Hay nuevos juegos disponibles en el catálogo.',
-      'Nueva actualización'
-    );
+  // Método genérico para mostrar notificaciones
+  showNotification(type: NotificationType): void {
+    const notificationData: Record<NotificationType, { message: string; title: string }> = {
+      success: { message: 'El juego se ha añadido a tu lista de favoritos.', title: '¡Éxito!' },
+      error: { message: 'No se pudo guardar la reseña. Inténtalo de nuevo.', title: 'Error' },
+      warning: { message: 'Tu sesión expirará pronto. Guarda tus cambios.', title: 'Atención' },
+      info: { message: 'Hay nuevos juegos disponibles en el catálogo.', title: 'Nueva actualización' }
+    };
+    
+    const { message, title } = notificationData[type];
+    this.notificationService[type](message, title);
   }
 
   // Paginación de ejemplo
@@ -220,6 +414,5 @@ export default class Home {
 
   onPageChange(page: number): void {
     this.currentPage = page;
-    console.log('Página seleccionada:', page);
   }
 }

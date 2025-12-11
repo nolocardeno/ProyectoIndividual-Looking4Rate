@@ -45,6 +45,7 @@ public class InteraccionService {
      */
     @Transactional(readOnly = true)
     public InteraccionDTO obtenerPorId(Long id) {
+        @SuppressWarnings("null")
         Interaccion interaccion = interaccionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Interaccion", id));
         return convertirADTO(interaccion);
@@ -67,9 +68,11 @@ public class InteraccionService {
         // Validar puntuación
         validarPuntuacion(dto.puntuacion(), dto.estadoJugado());
         
+        @SuppressWarnings("null")
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", usuarioId));
         
+        @SuppressWarnings("null")
         Juego juego = juegoRepository.findById(dto.juegoId())
                 .orElseThrow(() -> new ResourceNotFoundException("Juego", dto.juegoId()));
         
@@ -81,6 +84,7 @@ public class InteraccionService {
                 .estado_jugado(dto.estadoJugado())
                 .build();
         
+        @SuppressWarnings("null")
         Interaccion guardada = interaccionRepository.save(interaccion);
         return convertirADTO(guardada);
     }
@@ -93,6 +97,7 @@ public class InteraccionService {
      * - Las mismas validaciones de puntuación aplican
      */
     public InteraccionDTO actualizar(Long usuarioId, Long interaccionId, InteraccionCreacionDTO dto) {
+        @SuppressWarnings("null")
         Interaccion interaccion = interaccionRepository.findById(interaccionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Interaccion", interaccionId));
         
@@ -114,6 +119,7 @@ public class InteraccionService {
                 .fecha_interaccion(interaccion.getFecha_interaccion())
                 .build();
         
+        @SuppressWarnings("null")
         Interaccion guardada = interaccionRepository.save(actualizada);
         return convertirADTO(guardada);
     }
@@ -124,7 +130,9 @@ public class InteraccionService {
      * LÓGICA DE NEGOCIO:
      * - Solo el propietario puede eliminar su interacción
      */
+    @SuppressWarnings("null")
     public void eliminar(Long usuarioId, Long interaccionId) {
+        @SuppressWarnings("null")
         Interaccion interaccion = interaccionRepository.findById(interaccionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Interaccion", interaccionId));
         

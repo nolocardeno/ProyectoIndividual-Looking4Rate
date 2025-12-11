@@ -1,116 +1,15 @@
-<!-- Página Home -->
+﻿<!-- Página Home - Looking4Rate -->
 
 <section class="home">
-  <!-- Contenedor de Notificaciones (único, gestionado por servicio) -->
-  <app-notification-container />
+  <!-- Componentes de servicios globales -->
+  <app-notification />
+  <app-spinner />
 
-  <!-- Ejemplos de Notificaciones/Toast -->
-  <article class="home__alert-examples">
-    <h2 class="home__form-title">Ejemplos de Notificaciones (Toast)</h2>
-    
-    <!-- Botones para mostrar notificaciones -->
-    <menu class="home__alert-buttons">
-      <app-button variant="primary" (btnClick)="showNotificationSuccess()">
-        Toast Success
-      </app-button>
-      <app-button variant="danger" (btnClick)="showNotificationError()">
-        Toast Error
-      </app-button>
-      <app-button variant="secondary" (btnClick)="showNotificationWarning()">
-        Toast Warning
-      </app-button>
-      <app-button variant="ghost" (btnClick)="showNotificationInfo()">
-        Toast Info
-      </app-button>
-    </menu>
-  </article>
-
-  <!-- Ejemplos de Alertas -->
-  <article class="home__alert-examples">
-    <h2 class="home__form-title">Ejemplos de Alertas</h2>
-    
-    <!-- Botones para mostrar alertas -->
-    <menu class="home__alert-buttons">
-      <app-button variant="primary" (btnClick)="toggleSuccessAlert()">
-        Mostrar Alerta Success
-      </app-button>
-      <app-button variant="danger" (btnClick)="toggleErrorAlert()">
-        Mostrar Alerta Error
-      </app-button>
-      <app-button variant="secondary" (btnClick)="toggleWarningAlert()">
-        Mostrar Alerta Warning
-      </app-button>
-      <app-button variant="ghost" (btnClick)="toggleInfoAlert()">
-        Mostrar Alerta Info
-      </app-button>
-    </menu>
-
-    <!-- Alertas -->
-    <section class="home__alerts">
-      <app-alert 
-        type="success" 
-        title="¡Operación exitosa!" 
-        [dismissible]="true" 
-        [visible]="showSuccessAlert"
-        (closed)="showSuccessAlert = false">
-        Tu perfil ha sido actualizado correctamente.
-      </app-alert>
-
-      <app-alert 
-        type="error" 
-        title="Error" 
-        [dismissible]="true" 
-        [visible]="showErrorAlert"
-        (closed)="showErrorAlert = false">
-        No se pudo conectar con el servidor. Inténtalo de nuevo más tarde.
-      </app-alert>
-
-      <app-alert 
-        type="warning" 
-        title="Advertencia" 
-        [dismissible]="true" 
-        [visible]="showWarningAlert"
-        (closed)="showWarningAlert = false">
-        Tu sesión expirará en 5 minutos. Guarda tus cambios.
-      </app-alert>
-
-      <app-alert 
-        type="info" 
-        title="Información" 
-        [dismissible]="true" 
-        [visible]="showInfoAlert"
-        (closed)="showInfoAlert = false">
-        Hay una nueva versión disponible. Actualiza para obtener las últimas funciones.
-      </app-alert>
-    </section>
-  </article>
-
-  <!-- Ejemplos de FormTextarea y FormSelect -->
-  <article class="home__form-examples">
-    <h2 class="home__form-title">Ejemplos de Componentes de Formulario</h2>
-    
-    <fieldset class="home__form-fields">
-      <app-form-select
-        label="Plataforma favorita"
-        name="platform"
-        placeholder="Selecciona una plataforma"
-        [options]="platformOptions"
-        [(value)]="selectedPlatform"
-      />
-
-      <app-form-textarea
-        label="Reseña del juego"
-        name="review"
-        placeholder="Escribe tu opinión sobre el juego..."
-        [rows]="4"
-        [maxLength]="500"
-        [(value)]="textareaValue"
-        helpText="Máximo 500 caracteres"
-      />
-    </fieldset>
-  </article>
-
-  <!-- Ejemplo del nuevo componente GameCard -->
+  <!-- ============================================ -->
+  <!-- CATÁLOGO DE JUEGOS (SECCIÓN PRINCIPAL) -->
+  <!-- ============================================ -->
+  
+  <!-- Game Card de ejemplo destacado -->
   <article class="home__game-card-example">
     <app-game-card
       [coverSrc]="exampleGame.coverSrc"
@@ -123,16 +22,12 @@
       [gameLink]="exampleGame.gameLink"
     />
   </article>
+
   <!-- Sección de novedades -->
   <app-featured-section title="NOVEDADES EN L4R" linkRoute="/games">
     <ul class="home__covers">
       @for (game of novedades; track game.alt) {
-        <app-game-cover
-          [src]="game.src"
-          [alt]="game.alt"
-          [routerLink]="game.link"
-          size="lg"
-        />
+        <app-game-cover [src]="game.src" [alt]="game.alt" [routerLink]="game.link" size="lg" />
       }
     </ul>
   </app-featured-section>
@@ -141,12 +36,7 @@
   <app-featured-section title="MÁS VALORADOS" linkRoute="/top-rated">
     <ul class="home__covers">
       @for (game of masValorados; track game.alt) {
-        <app-game-cover
-          [src]="game.src"
-          [alt]="game.alt"
-          [routerLink]="game.link"
-          size="lg"
-        />
+        <app-game-cover [src]="game.src" [alt]="game.alt" [routerLink]="game.link" size="lg" />
       }
     </ul>
   </app-featured-section>
@@ -155,23 +45,305 @@
   <app-featured-section title="PRÓXIMAMENTE" linkRoute="/upcoming">
     <ul class="home__covers">
       @for (game of proximamente; track game.alt) {
-        <app-game-cover
-          [src]="game.src"
-          [alt]="game.alt"
-          [routerLink]="game.link"
-          size="lg"
-        />
+        <app-game-cover [src]="game.src" [alt]="game.alt" [routerLink]="game.link" size="lg" />
       }
     </ul>
   </app-featured-section>
 
-  <!-- Ejemplo de Paginación -->
-  <article class="home__pagination-example">
-    <h2 class="home__form-title">Ejemplo de Paginación</h2>
-    <app-pagination
-      [currentPage]="currentPage"
-      [totalPages]="totalPages"
-      (pageChange)="onPageChange($event)"
-    />
-  </article>
+  <!-- ============================================ -->
+  <!-- DEMOS DE COMPONENTES -->
+  <!-- ============================================ -->
+  <section class="home__demos-section">
+    <header class="home__demos-header">
+      <h2 class="home__demos-title"> Demos de Componentes</h2>
+      <p class="home__demos-subtitle">Ejemplos interactivos de los componentes del sistema</p>
+    </header>
+
+    <!-- COMPONENTES INTERACTIVOS -->
+    <section class="home__demo-group">
+      <h3 class="home__demo-group-title">Componentes Interactivos</h3>
+      
+      <!-- Accordion -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title"> Accordion</h4>
+        <section class="home__demo-content">
+          <app-accordion 
+            [items]="accordionItems" 
+            [exclusive]="true"
+          />
+        </section>
+      </article>
+
+      <!-- Tabs -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title"> Tabs</h4>
+        <section class="home__demo-content">
+          <app-tabs [tabs]="tabItems" />
+        </section>
+      </article>
+
+      <!-- Tooltip -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title"> Tooltip</h4>
+        <menu class="home__demo-content home__demo-content--row">
+          <app-tooltip content="Tooltip arriba (posición por defecto)" position="top">
+            <app-button variant="secondary" size="md"> Top</app-button>
+          </app-tooltip>
+          <app-tooltip content="Tooltip abajo del elemento" position="bottom">
+            <app-button variant="secondary" size="md"> Bottom</app-button>
+          </app-tooltip>
+          <app-tooltip content="Tooltip a la izquierda" position="left">
+            <app-button variant="secondary" size="md"> Left</app-button>
+          </app-tooltip>
+          <app-tooltip content="Tooltip a la derecha" position="right">
+            <app-button variant="secondary" size="md"> Right</app-button>
+          </app-tooltip>
+        </menu>
+      </article>
+
+      <!-- Theme Toggle + Search Box -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title"> Theme Toggle & Search</h4>
+        <section class="home__demo-content">
+          <p class="home__demo-row">
+            <app-theme-toggle />
+            <span class="home__demo-label"> Cambiar tema</span>
+          </p>
+          <p class="home__demo-row">
+            <app-search-box 
+              placeholder="Buscar juegos..."
+              [debounceMs]="300"
+              (search)="onSearchDemo($event)"
+            />
+          </p>
+          @if (searchQuery) {
+            <output class="home__search-results">
+              <strong>Búsqueda:</strong> "{{ searchQuery }}"
+              @if (searchResults.length > 0) {
+                <ul class="home__search-list">
+                  @for (result of searchResults; track result) {
+                    <li> {{ result }}</li>
+                  }
+                </ul>
+              } @else {
+                <p class="home__no-results">No se encontraron resultados</p>
+              }
+            </output>
+          }
+        </section>
+      </article>
+    </section>
+
+    <!-- SERVICIOS Y ESTADO -->
+    <section class="home__demo-group">
+      <h3 class="home__demo-group-title">Servicios y Estado</h3>
+      
+      <!-- Loading + Spinner -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title">🔄 Loading Service & Spinner</h4>
+        <section class="home__demo-content">
+          <menu class="home__button-group">
+            <!-- Spinner con progreso -->
+            <app-button variant="primary" size="md" (btnClick)="runLoadingDemo()" [disabled]="isLoadingDemo">
+              {{ isLoadingDemo ? '⏳ Cargando...' : '📊 Con Progreso' }}
+            </app-button>
+            
+            <!-- Spinner simple (sin progreso) -->
+            <app-button variant="secondary" size="md" (btnClick)="runSimpleSpinnerDemo()" [disabled]="isSimpleLoadingDemo">
+              {{ isSimpleLoadingDemo ? '⏳ Espera...' : '⚡ Sin Progreso' }}
+            </app-button>
+            
+            <!-- Spinner con mensaje personalizado -->
+            <app-button variant="ghost" size="md" (btnClick)="runCustomMessageDemo()" [disabled]="isCustomLoadingDemo">
+              {{ isCustomLoadingDemo ? '⏳ ...' : '💬 Mensaje Custom' }}
+            </app-button>
+          </menu>
+          
+          <!-- Barra de progreso visual -->
+          @if (isLoadingDemo) {
+            <figure class="home__progress-demo">
+              <meter class="home__progress-bar" [value]="loadingProgress" min="0" max="100">
+                <span class="home__progress-fill" [style.width.%]="loadingProgress"></span>
+              </meter>
+              <figcaption class="home__progress-text">{{ loadingProgress }}%</figcaption>
+            </figure>
+          }
+          
+          <p class="home__demo-hint">💡 El spinner global aparece en overlay sobre toda la página</p>
+        </section>
+      </article>
+
+      <!-- Spinners Inline -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title">🔄 Spinners Inline</h4>
+        <section class="home__demo-content">
+          
+          <!-- Tamaños -->
+          <section class="home__spinner-section">
+            <h5 class="home__spinner-subtitle">Tamaños</h5>
+            <ul class="home__spinner-row" role="list">
+              <li class="home__spinner-item">
+                <app-spinner-inline size="xs" />
+                <span>XS</span>
+              </li>
+              <li class="home__spinner-item">
+                <app-spinner-inline size="sm" />
+                <span>SM</span>
+              </li>
+              <li class="home__spinner-item">
+                <app-spinner-inline size="md" />
+                <span>MD</span>
+              </li>
+              <li class="home__spinner-item">
+                <app-spinner-inline size="lg" />
+                <span>LG</span>
+              </li>
+              <li class="home__spinner-item">
+                <app-spinner-inline size="xl" />
+                <span>XL</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- Colores -->
+          <section class="home__spinner-section">
+            <h5 class="home__spinner-subtitle">Colores</h5>
+            <ul class="home__spinner-row" role="list">
+              <li class="home__spinner-item">
+                <app-spinner-inline color="primary" size="lg" />
+                <span>Primary</span>
+              </li>
+              <li class="home__spinner-item">
+                <app-spinner-inline color="accent" size="lg" />
+                <span>Accent</span>
+              </li>
+              <li class="home__spinner-item">
+                <app-spinner-inline color="success" size="lg" />
+                <span>Success</span>
+              </li>
+              <li class="home__spinner-item">
+                <app-spinner-inline color="warning" size="lg" />
+                <span>Warning</span>
+              </li>
+              <li class="home__spinner-item">
+                <app-spinner-inline color="error" size="lg" />
+                <span>Error</span>
+              </li>
+              <li class="home__spinner-item home__spinner-item--dark">
+                <app-spinner-inline color="white" size="lg" />
+                <span>White</span>
+              </li>
+            </ul>
+          </section>
+
+          <p class="home__demo-hint">💡 Usa estos spinners dentro de botones, cards o cualquier sección</p>
+        </section>
+      </article>
+
+      <!-- EventBus -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title"> Event Bus</h4>
+        <section class="home__demo-content">
+          <app-button variant="secondary" size="lg" (btnClick)="emitEventDemo()">
+             Emitir Evento Aleatorio
+          </app-button>
+          <output class="home__event-log">
+            @if (eventLog.length === 0) {
+              <p class="home__event-empty">Sin eventos. Haz clic en el botón para emitir uno.</p>
+            } @else {
+              <ul class="home__event-list">
+                @for (event of eventLog; track event) {
+                  <li>{{ event }}</li>
+                }
+              </ul>
+            }
+          </output>
+        </section>
+      </article>
+
+      <!-- Notifications -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title"> Notificaciones</h4>
+        <menu class="home__demo-content home__demo-content--row">
+          <app-button variant="primary" size="md" (btnClick)="showNotification('success')"> Success</app-button>
+          <app-button variant="danger" size="md" (btnClick)="showNotification('error')"> Error</app-button>
+          <app-button variant="secondary" size="md" (btnClick)="showNotification('warning')"> Warning</app-button>
+          <app-button variant="ghost" size="md" (btnClick)="showNotification('info')">ℹ Info</app-button>
+        </menu>
+      </article>
+    </section>
+
+    <!-- OTROS COMPONENTES -->
+    <section class="home__demo-group">
+      <h3 class="home__demo-group-title">Otros Componentes</h3>
+      
+      <!-- Alertas -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title"> Alertas Inline</h4>
+        <section class="home__demo-content">
+          <menu class="home__demo-controls home__demo-controls--wrap">
+            <app-button variant="primary" size="md" (btnClick)="toggleAlert('success')"> Success</app-button>
+            <app-button variant="danger" size="md" (btnClick)="toggleAlert('error')"> Error</app-button>
+            <app-button variant="secondary" size="md" (btnClick)="toggleAlert('warning')"> Warning</app-button>
+            <app-button variant="ghost" size="md" (btnClick)="toggleAlert('info')">ℹ Info</app-button>
+          </menu>
+          <aside class="home__alerts" role="region" aria-label="Alertas de demostración">
+            <app-alert type="success" title="¡Éxito!" [dismissible]="true" [visible]="showSuccessAlert" (closed)="showSuccessAlert = false">
+              Perfil actualizado correctamente.
+            </app-alert>
+            <app-alert type="error" title="Error" [dismissible]="true" [visible]="showErrorAlert" (closed)="showErrorAlert = false">
+              No se pudo conectar con el servidor.
+            </app-alert>
+            <app-alert type="warning" title="Advertencia" [dismissible]="true" [visible]="showWarningAlert" (closed)="showWarningAlert = false">
+              Tu sesión expirará en 5 minutos.
+            </app-alert>
+            <app-alert type="info" title="Información" [dismissible]="true" [visible]="showInfoAlert" (closed)="showInfoAlert = false">
+              Hay una nueva versión disponible.
+            </app-alert>
+          </aside>
+        </section>
+      </article>
+
+      <!-- Paginación -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title"> Paginación</h4>
+        <section class="home__demo-content">
+          <app-pagination
+            [currentPage]="currentPage"
+            [totalPages]="totalPages"
+            (pageChange)="onPageChange($event)"
+          />
+          <p class="home__demo-label">Página actual: {{ currentPage }} de {{ totalPages }}</p>
+        </section>
+      </article>
+
+      <!-- Formularios -->
+      <article class="home__demo-box">
+        <h4 class="home__demo-title"> Formularios</h4>
+        <section class="home__demo-content">
+          <fieldset class="home__form-fields">
+            <app-form-select
+              label="Plataforma favorita"
+              name="platform"
+              placeholder="Selecciona una plataforma"
+              [options]="platformOptions"
+              [(value)]="selectedPlatform"
+            />
+            <p class="home__demo-label">Seleccionado: {{ selectedPlatform || 'Ninguno' }}</p>
+
+            <app-form-textarea
+              label="Tu reseña"
+              name="review"
+              placeholder="Escribe tu opinión sobre el juego..."
+              [rows]="3"
+              [maxLength]="200"
+              [(value)]="textareaValue"
+              helpText="Máximo 200 caracteres"
+            />
+            <p class="home__demo-label">Caracteres: {{ textareaValue.length }}/200</p>
+          </fieldset>
+        </section>
+      </article>
+    </section>
+  </section>
 </section>

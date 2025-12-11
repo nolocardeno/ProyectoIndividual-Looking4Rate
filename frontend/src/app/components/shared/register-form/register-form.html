@@ -1,14 +1,28 @@
 @if (isOpen) {
-  <aside class="register-modal__overlay" (click)="onOverlayClick($event)">
-    <article class="register-modal">
+  <aside 
+    class="register-modal__overlay" 
+    (click)="onOverlayClick($event)"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="register-modal-title">
+    <article 
+      #modalContainer
+      class="register-modal"
+      (click)="onModalClick($event)">
       <header class="register-modal__header">
-        <h2 class="register-modal__title">Crear cuenta</h2>
-        <button class="register-modal__close" (click)="closeModal()" aria-label="Cerrar">
+        <h2 id="register-modal-title" class="register-modal__title">Crear cuenta</h2>
+        <button 
+          #closeButton
+          class="register-modal__close" 
+          (click)="closeModal()"
+          (keydown)="onCloseKeyDown($event)"
+          aria-label="Cerrar modal"
+          type="button">
           <fa-icon [icon]="['fas', 'times']"></fa-icon>
         </button>
       </header>
 
-      <form class="register-modal__form" (ngSubmit)="onSubmit()">
+      <form class="register-modal__form" (ngSubmit)="onSubmit($event)">
         <fieldset class="register-modal__fieldset">
           <legend class="register-modal__legend">Datos de registro</legend>
 
@@ -50,7 +64,23 @@
         </fieldset>
 
         <footer class="register-modal__actions">
-          <button type="submit" class="register-modal__submit" [disabled]="!isFormValid">Crear cuenta</button>
+          <button 
+            type="submit" 
+            class="register-modal__submit" 
+            [disabled]="!isFormValid"
+            [attr.aria-disabled]="!isFormValid">
+            Crear cuenta
+          </button>
+          
+          <p class="register-modal__switch">
+            ¿Ya tienes cuenta? 
+            <button 
+              type="button" 
+              class="register-modal__switch-link"
+              (click)="goToLogin()">
+              Inicia sesión
+            </button>
+          </p>
         </footer>
       </form>
     </article>

@@ -1,0 +1,235 @@
+// ==========================================================================
+// TABS COMPONENT
+// Componente de pestañas accesible con animaciones
+// ==========================================================================
+
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  // --------------------------------------------------------------------------
+  // LAYOUT VERTICAL
+  // --------------------------------------------------------------------------
+  &--vertical {
+    flex-direction: row;
+    
+    .tabs__list {
+      flex-direction: column;
+      border-bottom: none;
+      border-right: $border-medium solid var(--border-color);
+      min-width: 150px;
+    }
+
+    .tabs__tab {
+      justify-content: flex-start;
+      border-bottom: none;
+      border-left: 3px solid transparent;
+      
+      &--active {
+        border-left-color: var(--color-accent);
+        border-bottom-color: transparent;
+      }
+    }
+
+    .tabs__panel {
+      flex: 1;
+      padding-left: $spacing-3;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // LISTA DE PESTAÑAS
+  // --------------------------------------------------------------------------
+  &__list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: $border-medium solid var(--border-color);
+    gap: $spacing-1;
+  }
+
+  &__item {
+    margin: 0;
+    padding: 0;
+  }
+
+  // --------------------------------------------------------------------------
+  // PESTAÑA INDIVIDUAL
+  // --------------------------------------------------------------------------
+  &__tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-1;
+    padding: $spacing-2 $spacing-3;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    @include transition(all);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--color-accent);
+      transform: scaleX(0);
+      transition: transform $transition-base $transition-ease;
+    }
+
+    &:hover:not(&--disabled) {
+      color: var(--text-primary);
+      background-color: color.change($color-accent-dark, $alpha: 0.1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    &--active {
+      color: var(--color-accent);
+      font-weight: $font-weight-semibold;
+      
+      &::after {
+        transform: scaleX(1);
+      }
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      color: var(--text-secondary);
+    }
+  }
+
+  &__tab-icon {
+    font-size: $font-size-lg;
+  }
+
+  &__tab-label {
+    white-space: nowrap;
+  }
+
+  // --------------------------------------------------------------------------
+  // PANEL DE CONTENIDO
+  // --------------------------------------------------------------------------
+  &__panel {
+    padding: $spacing-3 0;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  &__panel-content {
+    color: var(--text-primary);
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    line-height: $line-height-normal;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+// ==========================================================================
+// ANIMACIONES
+// ==========================================================================
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+@media (max-width: $breakpoint-sm) {
+  .tabs {
+    &__list {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    &__tab {
+      padding: $spacing-1 $spacing-2;
+      font-size: $font-size-sm;
+    }
+
+    &__panel {
+      padding: $spacing-2 0;
+    }
+
+    &--vertical {
+      flex-direction: column;
+      
+      .tabs__list {
+        flex-direction: row;
+        border-right: none;
+        border-bottom: $border-medium solid var(--border-color);
+        min-width: auto;
+      }
+
+      .tabs__tab {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        
+        &--active {
+          border-bottom-color: var(--color-accent);
+        }
+      }
+
+      .tabs__panel {
+        padding-left: 0;
+        padding-top: $spacing-2;
+      }
+    }
+  }
+}

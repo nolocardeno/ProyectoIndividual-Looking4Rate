@@ -1,0 +1,49 @@
+<section class="tabs" [class.tabs--vertical]="orientation === 'vertical'">
+  <!-- Lista de pestañas -->
+  <menu 
+    #tabList
+    class="tabs__list"
+    role="tablist"
+    [attr.aria-orientation]="orientation">
+    @for (tab of tabs; track tab.id) {
+      <li class="tabs__item" role="presentation">
+        <button
+          [id]="getTabButtonId(tab.id)"
+          [attr.data-tab-id]="tab.id"
+          class="tabs__tab"
+          [class.tabs__tab--active]="isActive(tab.id)"
+          [class.tabs__tab--disabled]="tab.disabled"
+          type="button"
+          role="tab"
+          [attr.aria-selected]="isActive(tab.id)"
+          [attr.aria-controls]="getTabPanelId(tab.id)"
+          [attr.aria-disabled]="tab.disabled"
+          [attr.tabindex]="isActive(tab.id) ? 0 : -1"
+          [disabled]="tab.disabled"
+          (click)="selectTab(tab, $event)"
+          (keydown)="onKeyDown($event, tab)"
+          (focus)="onTabFocus(tab)">
+          @if (tab.icon) {
+            <span class="tabs__tab-icon" aria-hidden="true">{{ tab.icon }}</span>
+          }
+          <span class="tabs__tab-label">{{ tab.label }}</span>
+        </button>
+      </li>
+    }
+  </menu>
+
+  <!-- Panel de contenido -->
+  <article
+    #tabPanel
+    class="tabs__panel"
+    role="tabpanel"
+    [id]="getTabPanelId(currentActiveId)"
+    [attr.aria-labelledby]="getTabButtonId(currentActiveId)"
+    tabindex="0">
+    @if (activeTab) {
+      <section class="tabs__panel-content">
+        <p>{{ activeTab.content }}</p>
+      </section>
+    }
+  </article>
+</section>

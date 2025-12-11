@@ -12,11 +12,19 @@
 <!-- Modal de Login -->
 <app-login-form 
   [isOpen]="showLoginModal" 
-  (close)="closeLoginModal()">
+  (close)="closeLoginModal()"
+  (switchToRegister)="switchToRegister()">
 </app-login-form>
 
 <!-- Modal de Registro -->
 <app-register-form 
   [isOpen]="showRegisterModal" 
-  (close)="closeRegisterModal()">
+  (close)="closeRegisterModal()"
+  (switchToLogin)="switchToLogin()">
 </app-register-form>
+
+<!-- Sistema de notificaciones global -->
+<app-notification></app-notification>
+
+<!-- Spinner de carga global -->
+<app-spinner></app-spinner>

@@ -42,6 +42,7 @@ public class UsuarioService {
      */
     @Transactional(readOnly = true)
     public UsuarioDTO obtenerPorId(Long id) {
+        @SuppressWarnings("null")
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
         return convertirADTO(usuario);
@@ -77,6 +78,7 @@ public class UsuarioService {
                 .activo(true)
                 .build();
         
+        @SuppressWarnings("null")
         Usuario guardado = usuarioRepository.save(usuario);
         return convertirADTO(guardado);
     }
@@ -85,6 +87,7 @@ public class UsuarioService {
      * Actualiza un usuario existente
      */
     public UsuarioDTO actualizar(Long id, UsuarioRegistroDTO dto) {
+        @SuppressWarnings("null")
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
         
@@ -108,6 +111,7 @@ public class UsuarioService {
                 .interacciones(usuario.getInteracciones())
                 .build();
         
+        @SuppressWarnings("null")
         Usuario guardado = usuarioRepository.save(actualizado);
         return convertirADTO(guardado);
     }
@@ -116,6 +120,7 @@ public class UsuarioService {
      * Actualiza el avatar de un usuario
      */
     public UsuarioDTO actualizarAvatar(Long id, String avatarUrl) {
+        @SuppressWarnings("null")
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
         
@@ -131,6 +136,7 @@ public class UsuarioService {
                 .interacciones(usuario.getInteracciones())
                 .build();
         
+        @SuppressWarnings("null")
         Usuario guardado = usuarioRepository.save(actualizado);
         return convertirADTO(guardado);
     }
@@ -138,6 +144,7 @@ public class UsuarioService {
     /**
      * Elimina un usuario
      */
+    @SuppressWarnings("null")
     public void eliminar(Long id) {
         if (!usuarioRepository.existsById(id)) {
             throw new ResourceNotFoundException("Usuario", id);
@@ -175,6 +182,7 @@ public class UsuarioService {
     /**
      * Obtiene la entidad Usuario (uso interno para relaciones)
      */
+    @SuppressWarnings("null")
     @Transactional(readOnly = true)
     public Usuario obtenerEntidadPorId(Long id) {
         return usuarioRepository.findById(id)

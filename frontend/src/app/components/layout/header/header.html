@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header" #headerContainer>
   <section class="header__container">
     <a routerLink="/" class="header__logo">
       <img src="assets/img/logoL4R-grande.png" alt="Looking4Rate Logo" class="header__logo-img">
@@ -27,32 +27,49 @@
         (iconClick)="onSearch(searchQuery)">
       </app-search-box>
 
-      <!-- Botón hamburguesa -->
+      <!-- Botón hamburguesa con manejo de eventos mejorado -->
       <button 
+        #hamburgerBtn
         class="header__hamburger" 
         [class.header__hamburger--active]="isMenuOpen"
-        (click)="toggleMenu()"
+        (click)="toggleMenu($event)"
+        (keydown)="onHamburgerKeyDown($event)"
         aria-label="Menú de navegación"
-        [attr.aria-expanded]="isMenuOpen">
+        [attr.aria-expanded]="isMenuOpen"
+        aria-controls="mobile-menu"
+        type="button">
         <span class="header__hamburger-line"></span>
         <span class="header__hamburger-line"></span>
         <span class="header__hamburger-line"></span>
       </button>
     </menu>
 
-    <!-- Menú móvil -->
+    <!-- Menú móvil con referencias para manipulación DOM -->
     <nav 
+      #mobileMenu
+      id="mobile-menu"
       class="header__mobile-menu" 
-      [class.header__mobile-menu--open]="isMenuOpen">
+      [class.header__mobile-menu--open]="isMenuOpen"
+      [attr.aria-hidden]="!isMenuOpen"
+      role="menu">
       <ul class="header__mobile-menu-content">
-        <li><app-button variant="primary" size="lg" (btnClick)="onLoginClick()">INICIAR SESIÓN</app-button></li>
-        <li><app-button variant="primary" size="lg" (btnClick)="onRegisterClick()">CREAR CUENTA</app-button></li>
+        <li role="menuitem">
+          <app-button variant="primary" size="lg" (btnClick)="onLoginClick()">INICIAR SESIÓN</app-button>
+        </li>
+        <li role="menuitem">
+          <app-button variant="primary" size="lg" (btnClick)="onRegisterClick()">CREAR CUENTA</app-button>
+        </li>
       </ul>
     </nav>
 
     <!-- Overlay para cerrar menú -->
     @if (isMenuOpen) {
-      <aside class="header__overlay" (click)="closeMenu()" aria-hidden="true"></aside>
+      <aside 
+        class="header__overlay" 
+        (click)="closeMenu()" 
+        aria-hidden="true"
+        role="presentation">
+      </aside>
     }
   </section>
 </header>

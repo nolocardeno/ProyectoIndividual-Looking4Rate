@@ -1,0 +1,45 @@
+<section 
+  #accordionContainer
+  class="accordion" 
+  role="presentation">
+  @for (item of items; track item.id; let i = $index) {
+    <article class="accordion__item" [class.accordion__item--expanded]="item.isExpanded" [class.accordion__item--disabled]="item.disabled">
+      <!-- Header del acordeón -->
+      <h3 class="accordion__header">
+        <button
+          [id]="getHeaderId(item.id)"
+          [attr.data-accordion-id]="item.id"
+          class="accordion__trigger"
+          [class.accordion__trigger--expanded]="item.isExpanded"
+          [class.accordion__trigger--disabled]="item.disabled"
+          type="button"
+          [attr.aria-expanded]="item.isExpanded"
+          [attr.aria-controls]="getPanelId(item.id)"
+          [attr.aria-disabled]="item.disabled"
+          [disabled]="item.disabled"
+          (click)="togglePanel(item, $event)"
+          (keydown)="onKeyDown($event, item, i)">
+          <span class="accordion__title">{{ item.title }}</span>
+          <span class="accordion__icon" [class.accordion__icon--rotated]="item.isExpanded" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </h3>
+      
+      <!-- Panel de contenido -->
+      <section
+        [id]="getPanelId(item.id)"
+        class="accordion__panel"
+        [class.accordion__panel--expanded]="item.isExpanded"
+        role="region"
+        [attr.aria-labelledby]="getHeaderId(item.id)"
+        [attr.aria-hidden]="!item.isExpanded">
+        <article class="accordion__panel-content">
+          <p>{{ item.content }}</p>
+        </article>
+      </section>
+    </article>
+  }
+</section>

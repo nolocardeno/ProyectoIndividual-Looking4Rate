@@ -4,17 +4,20 @@
 // ==========================================================================
 // NOTIFICATION/TOAST COMPONENT
 // Componente de notificación con posición fixed y animaciones
+// Soporta múltiples notificaciones apiladas con timers independientes
 // ==========================================================================
 
-// Host del componente - no debe afectar al layout de la página
+// Host del componente - contenedor de notificaciones apiladas
 :host {
   position: fixed;
   z-index: 9999;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  pointer-events: none; // El contenedor no bloquea clicks
+  top: $spacing-3;
+  right: $spacing-3;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  pointer-events: none;
+  max-height: calc(100vh - #{$spacing-6});
   overflow: visible;
 }
 
@@ -125,10 +128,9 @@
   --notification-text: var(--text-primary);
 
   // --------------------------------------------------------------------------
-  // Estilos base
+  // Estilos base (ya no usa position fixed individual)
   // --------------------------------------------------------------------------
-  position: fixed;
-  z-index: 9999;
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: $spacing-1;
@@ -143,87 +145,20 @@
   font-size: $font-size-md;
   color: var(--notification-text);
   overflow: hidden;
-  pointer-events: auto; // Restaurar interactividad en la notificación
+  pointer-events: auto;
 
   // --------------------------------------------------------------------------
-  // Posiciones
-  // --------------------------------------------------------------------------
-  &--top-right {
-    top: $spacing-3;
-    right: $spacing-3;
-  }
-
-  &--top-left {
-    top: $spacing-3;
-    left: $spacing-3;
-  }
-
-  &--bottom-right {
-    bottom: $spacing-3;
-    right: $spacing-3;
-  }
-
-  &--bottom-left {
-    bottom: $spacing-3;
-    left: $spacing-3;
-  }
-
-  &--top-center {
-    top: $spacing-3;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  &--bottom-center {
-    bottom: $spacing-3;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  // --------------------------------------------------------------------------
-  // Animaciones de entrada
+  // Animaciones de entrada (simplificadas para stack vertical)
   // --------------------------------------------------------------------------
   &--entering {
-    &.notification--top-right,
-    &.notification--bottom-right {
-      animation: slideInRight $transition-base $transition-ease;
-    }
-
-    &.notification--top-left,
-    &.notification--bottom-left {
-      animation: slideInLeft $transition-base $transition-ease;
-    }
-
-    &.notification--top-center {
-      animation: slideInDown $transition-base $transition-ease;
-    }
-
-    &.notification--bottom-center {
-      animation: slideInUp $transition-base $transition-ease;
-    }
+    animation: slideInRight $transition-base $transition-ease;
   }
 
   // --------------------------------------------------------------------------
   // Animaciones de salida
   // --------------------------------------------------------------------------
   &--leaving {
-    &.notification--top-right,
-    &.notification--bottom-right {
-      animation: slideOutRight $transition-base $transition-ease forwards;
-    }
-
-    &.notification--top-left,
-    &.notification--bottom-left {
-      animation: slideOutLeft $transition-base $transition-ease forwards;
-    }
-
-    &.notification--top-center {
-      animation: slideOutUp $transition-base $transition-ease forwards;
-    }
-
-    &.notification--bottom-center {
-      animation: slideOutDown $transition-base $transition-ease forwards;
-    }
+    animation: slideOutRight $transition-base $transition-ease forwards;
   }
 
   // --------------------------------------------------------------------------
@@ -288,10 +223,27 @@
     position: absolute;
     bottom: 0;
     left: 0;
+    width: 100%;
     height: 3px;
-    background-color: var(--notification-border);
+    appearance: none;
+    border: none;
+    background-color: transparent;
     animation: progressShrink linear forwards;
-    animation-duration: inherit;
+
+    // WebKit (Chrome, Safari, Edge)
+    &::-webkit-progress-bar {
+      background-color: transparent;
+    }
+
+    &::-webkit-progress-value {
+      background-color: var(--notification-border);
+      transition: none;
+    }
+
+    // Firefox
+    &::-moz-progress-bar {
+      background-color: var(--notification-border);
+    }
   }
 
   // --------------------------------------------------------------------------

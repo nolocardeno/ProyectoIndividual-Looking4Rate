@@ -37,6 +37,7 @@ public class PlataformaService {
      */
     @Transactional(readOnly = true)
     public PlataformaDTO obtenerPorId(Long id) {
+        @SuppressWarnings("null")
         Plataforma plataforma = plataformaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Plataforma", id));
         return convertirADTO(plataforma);
@@ -58,6 +59,7 @@ public class PlataformaService {
                 .imagen_logo(dto.imagenLogo())
                 .build();
         
+        @SuppressWarnings("null")
         Plataforma guardada = plataformaRepository.save(plataforma);
         return convertirADTO(guardada);
     }
@@ -66,6 +68,7 @@ public class PlataformaService {
      * Actualiza una plataforma existente
      */
     public PlataformaDTO actualizar(Long id, PlataformaDTO dto) {
+        @SuppressWarnings("null")
         Plataforma plataformaExistente = plataformaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Plataforma", id));
         
@@ -86,6 +89,7 @@ public class PlataformaService {
                 .juegos(plataformaExistente.getJuegos())
                 .build();
         
+        @SuppressWarnings("null")
         Plataforma guardada = plataformaRepository.save(actualizada);
         return convertirADTO(guardada);
     }
@@ -93,6 +97,7 @@ public class PlataformaService {
     /**
      * Elimina una plataforma
      */
+    @SuppressWarnings("null")
     public void eliminar(Long id) {
         if (!plataformaRepository.existsById(id)) {
             throw new ResourceNotFoundException("Plataforma", id);

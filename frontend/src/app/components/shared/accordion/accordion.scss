@@ -1,0 +1,184 @@
+// ==========================================================================
+// ACCORDION COMPONENT
+// Componente acordeón accesible con animaciones y bordes estilo botón
+// ==========================================================================
+
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  width: 100%;
+
+  // --------------------------------------------------------------------------
+  // ITEM - Con bordes gradiente estilo botón
+  // --------------------------------------------------------------------------
+  &__item {
+    position: relative;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    background-color: var(--bg-primary);
+    @include transition(all);
+
+    // Borde con gradiente (pseudo-elemento como en botón)
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      padding: $border-thin;
+      background: linear-gradient(180deg, #{rgba($color-text-alt-dark, 0.6)} 0%, #{rgba($color-text-alt-dark, 0.1)} 100%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      @include transition(all);
+    }
+
+    &--expanded {
+      box-shadow: $shadow-md;
+
+      &::before {
+        background: linear-gradient(180deg, #{rgba($color-accent-dark, 0.8)} 0%, #{rgba($color-accent-dark, 0.2)} 100%);
+      }
+    }
+
+    &--disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // HEADER
+  // --------------------------------------------------------------------------
+  &__header {
+    margin: 0;
+  }
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: $spacing-2 $spacing-3;
+    background: linear-gradient(
+      180deg, 
+      $color-primary-dark 0%,
+      color.mix($color-primary-dark, $color-accent-dark, 85%) 100%
+    );
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    @include transition(all);
+
+    &:hover:not(&--disabled) {
+      background: linear-gradient(
+        180deg, 
+        $color-primary-dark 0%,
+        color.mix($color-primary-dark, $color-accent-dark, 65%) 100%
+      );
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: -2px;
+    }
+
+    &--expanded {
+      background: linear-gradient(
+        180deg, 
+        color.mix($color-primary-dark, $color-accent-dark, 80%) 0%,
+        color.mix($color-primary-dark, $color-accent-dark, 60%) 100%
+      );
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  &__title {
+    color: var(--text-primary);
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+  }
+
+  // --------------------------------------------------------------------------
+  // ICONO
+  // --------------------------------------------------------------------------
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--text-secondary);
+    transition: transform $transition-base $transition-ease;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    &--rotated {
+      transform: rotate(180deg);
+      color: var(--color-accent);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // PANEL
+  // --------------------------------------------------------------------------
+  &__panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height $transition-base $transition-ease;
+
+    &--expanded {
+      max-height: none;
+    }
+  }
+
+  &__panel-content {
+    padding: $spacing-3;
+    color: var(--text-secondary);
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    line-height: $line-height-normal;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+@media (max-width: $breakpoint-sm) {
+  .accordion {
+    &__trigger {
+      padding: $spacing-1 $spacing-2;
+    }
+
+    &__title {
+      font-size: $font-size-sm;
+    }
+
+    &__panel-content {
+      padding: $spacing-2;
+      font-size: $font-size-sm;
+    }
+  }
+}

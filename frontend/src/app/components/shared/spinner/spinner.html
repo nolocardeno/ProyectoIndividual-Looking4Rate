@@ -1,0 +1,65 @@
+<!-- 
+  Spinner Global Component
+  
+  Este componente muestra un overlay con spinner de carga cuando hay
+  operaciones asíncronas en progreso. Se controla mediante LoadingService.
+  
+  Estructura:
+  - Overlay de fondo semi-transparente
+  - Contenedor centrado con spinner
+  - Mensaje de estado opcional
+  - Barra de progreso opcional
+  
+  Accesibilidad:
+  - role="alert" para anunciar a lectores de pantalla
+  - aria-busy para indicar estado de carga
+  - aria-live="polite" para actualizaciones de mensaje
+-->
+
+@if (isVisible) {
+  <aside 
+    [ngClass]="containerClasses"
+    role="alert"
+    aria-busy="true"
+    aria-live="polite"
+  >
+    <!-- Overlay de fondo (decorativo) -->
+    <span class="spinner__overlay" aria-hidden="true"></span>
+    
+    <!-- Contenedor del spinner -->
+    <figure class="spinner__container">
+      <!-- Animación del spinner (decorativa) -->
+      <span class="spinner__animation" aria-hidden="true">
+        <span class="spinner__circle">
+          <span class="spinner__circle-inner"></span>
+        </span>
+        
+        <!-- Puntos animados alternativos -->
+        <span class="spinner__dots">
+          <span class="spinner__dot"></span>
+          <span class="spinner__dot"></span>
+          <span class="spinner__dot"></span>
+        </span>
+      </span>
+      
+      <!-- Mensaje de carga -->
+      <figcaption class="spinner__message">{{ message }}</figcaption>
+      
+      <!-- Barra de progreso (si hay progreso definido) -->
+      @if (hasProgress) {
+        <meter 
+          class="spinner__progress"
+          [value]="progressPercentage"
+          min="0"
+          max="100"
+          role="progressbar"
+          [attr.aria-valuenow]="progressPercentage"
+          aria-valuemin="0"
+          aria-valuemax="100">
+          <span class="spinner__progress-bar" [style.width.%]="progressPercentage"></span>
+        </meter>
+        <output class="spinner__progress-text">{{ progressPercentage }}%</output>
+      }
+    </figure>
+  </aside>
+}

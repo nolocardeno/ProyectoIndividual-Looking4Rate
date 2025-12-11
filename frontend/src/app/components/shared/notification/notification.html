@@ -1,13 +1,13 @@
-@if (visible) {
+@for (notification of notifications; track notification.id) {
   <article 
-    [ngClass]="classes" 
+    [ngClass]="getClasses(notification)"
     role="alert"
-    (mouseenter)="onMouseEnter()"
-    (mouseleave)="onMouseLeave()">
+    (mouseenter)="onMouseEnter(notification.id)"
+    (mouseleave)="onMouseLeave(notification.id)">
     
     <!-- Icono según el tipo -->
     <span class="notification__icon">
-      @switch (type) {
+      @switch (notification.type) {
         @case ('success') { ✓ }
         @case ('error') { ✕ }
         @case ('warning') { ⚠ }
@@ -17,28 +17,30 @@
 
     <!-- Contenido -->
     <section class="notification__content">
-      @if (title) {
-        <strong class="notification__title">{{ title }}</strong>
+      @if (notification.title) {
+        <strong class="notification__title">{{ notification.title }}</strong>
       }
-      <span class="notification__message">{{ message }}</span>
+      <span class="notification__message">{{ notification.message }}</span>
     </section>
 
     <!-- Botón cerrar (opcional) -->
-    @if (dismissible) {
+    @if (notification.dismissible) {
       <button 
         class="notification__close" 
         type="button" 
         aria-label="Cerrar notificación"
-        (click)="close()">
+        (click)="close(notification.id)">
         ✕
       </button>
     }
 
-    <!-- Barra de progreso para auto-cierre -->
-    @if (duration > 0) {
+    <!-- Barra de progreso para auto-cierre - cada una con su propia duración -->
+    @if (notification.duration && notification.duration > 0 && !notification.isPaused) {
       <progress 
-        class="notification__progress" 
-        [style.animation-duration.ms]="duration">
+        class="notification__progress"
+        [style.animation-duration.ms]="notification.duration"
+        max="100"
+        value="100">
       </progress>
     }
   </article>

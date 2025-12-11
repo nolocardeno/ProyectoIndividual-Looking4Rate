@@ -1,0 +1,159 @@
+// ==========================================================================
+// TOOLTIP COMPONENT
+// Componente tooltip accesible con animaciones
+// ==========================================================================
+
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+:host {
+  display: inline-block;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-trigger {
+  display: inline-block;
+  cursor: help;
+}
+
+// --------------------------------------------------------------------------
+// TOOLTIP
+// --------------------------------------------------------------------------
+.tooltip {
+  position: absolute;
+  z-index: 1050;
+  padding: $spacing-1 $spacing-2;
+  background-color: $color-gray-900-dark;
+  color: $color-text-dark;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-normal;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+  white-space: normal;
+  word-wrap: break-word;
+  pointer-events: none;
+  
+  // Animación de entrada
+  animation: tooltipFadeIn $transition-fast $transition-ease forwards;
+
+  // --------------------------------------------------------------------------
+  // CONTENIDO
+  // --------------------------------------------------------------------------
+  &__content {
+    display: block;
+  }
+
+  // --------------------------------------------------------------------------
+  // FLECHA
+  // --------------------------------------------------------------------------
+  &__arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+  }
+
+  // --------------------------------------------------------------------------
+  // POSICIONES
+  // --------------------------------------------------------------------------
+  &--top {
+    .tooltip__arrow {
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-top-color: $color-gray-900-dark;
+      border-bottom: none;
+    }
+  }
+
+  &--bottom {
+    .tooltip__arrow {
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-color: $color-gray-900-dark;
+      border-top: none;
+    }
+  }
+
+  &--left {
+    .tooltip__arrow {
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left-color: $color-gray-900-dark;
+      border-right: none;
+    }
+  }
+
+  &--right {
+    .tooltip__arrow {
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-right-color: $color-gray-900-dark;
+      border-left: none;
+    }
+  }
+}
+
+// ==========================================================================
+// ANIMACIONES
+// ==========================================================================
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ==========================================================================
+// TEMA CLARO
+// ==========================================================================
+[data-theme='light'] {
+  .tooltip {
+    background-color: $color-gray-800-dark;
+    color: $color-text-dark;
+    box-shadow: $shadow-xl;
+
+    &--top .tooltip__arrow {
+      border-top-color: $color-gray-800-dark;
+    }
+
+    &--bottom .tooltip__arrow {
+      border-bottom-color: $color-gray-800-dark;
+    }
+
+    &--left .tooltip__arrow {
+      border-left-color: $color-gray-800-dark;
+    }
+
+    &--right .tooltip__arrow {
+      border-right-color: $color-gray-800-dark;
+    }
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+@media (max-width: $breakpoint-sm) {
+  .tooltip {
+    font-size: $font-size-xs;
+    padding: 6px $spacing-1;
+    max-width: 200px !important;
+  }
+}

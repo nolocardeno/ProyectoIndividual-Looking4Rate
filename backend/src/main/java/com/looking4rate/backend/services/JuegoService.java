@@ -57,6 +57,7 @@ public class JuegoService {
      */
     @Transactional(readOnly = true)
     public JuegoDTO obtenerPorId(Long id) {
+        @SuppressWarnings("null")
         Juego juego = juegoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Juego", id));
         return convertirADTO(juego);
@@ -65,7 +66,8 @@ public class JuegoService {
     /**
      * Crea un nuevo juego
      */
-    public JuegoDTO crear(JuegoCreacionDTO dto) {
+    @SuppressWarnings("null")
+public JuegoDTO crear(JuegoCreacionDTO dto) {
         Juego juego = Juego.builder()
                 .nombre(dto.nombre())
                 .descripcion(dto.descripcion())
@@ -73,11 +75,13 @@ public class JuegoService {
                 .fecha_salida(dto.fechaSalida())
                 .build();
         
+        @SuppressWarnings("null")
         Juego guardado = juegoRepository.save(juego);
         
         // Asociar plataformas
         if (dto.plataformaIds() != null) {
             dto.plataformaIds().forEach(plataformaId -> {
+                @SuppressWarnings("null")
                 var plataforma = plataformaRepository.findById(plataformaId)
                         .orElseThrow(() -> new ResourceNotFoundException("Plataforma", plataformaId));
                 JuegoPlataforma jp = JuegoPlataforma.builder()
@@ -91,6 +95,7 @@ public class JuegoService {
         // Asociar desarrolladoras
         if (dto.desarrolladoraIds() != null) {
             dto.desarrolladoraIds().forEach(desarrolladoraId -> {
+                @SuppressWarnings("null")
                 var desarrolladora = desarrolladoraRepository.findById(desarrolladoraId)
                         .orElseThrow(() -> new ResourceNotFoundException("Desarrolladora", desarrolladoraId));
                 JuegoDesarrolladora jd = JuegoDesarrolladora.builder()
@@ -104,6 +109,7 @@ public class JuegoService {
         // Asociar géneros
         if (dto.generoIds() != null) {
             dto.generoIds().forEach(generoId -> {
+                @SuppressWarnings("null")
                 var genero = generoRepository.findById(generoId)
                         .orElseThrow(() -> new ResourceNotFoundException("Genero", generoId));
                 JuegoGenero jg = JuegoGenero.builder()
@@ -121,7 +127,9 @@ public class JuegoService {
     /**
      * Actualiza un juego existente
      */
-    public JuegoDTO actualizar(Long id, JuegoCreacionDTO dto) {
+    @SuppressWarnings("null")
+public JuegoDTO actualizar(Long id, JuegoCreacionDTO dto) {
+        @SuppressWarnings("null")
         Juego juegoExistente = juegoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Juego", id));
         
@@ -144,6 +152,7 @@ public class JuegoService {
         // Recrear relaciones
         if (dto.plataformaIds() != null) {
             dto.plataformaIds().forEach(plataformaId -> {
+                @SuppressWarnings("null")
                 var plataforma = plataformaRepository.findById(plataformaId)
                         .orElseThrow(() -> new ResourceNotFoundException("Plataforma", plataformaId));
                 JuegoPlataforma jp = JuegoPlataforma.builder()
@@ -156,6 +165,7 @@ public class JuegoService {
         
         if (dto.desarrolladoraIds() != null) {
             dto.desarrolladoraIds().forEach(desarrolladoraId -> {
+                @SuppressWarnings("null")
                 var desarrolladora = desarrolladoraRepository.findById(desarrolladoraId)
                         .orElseThrow(() -> new ResourceNotFoundException("Desarrolladora", desarrolladoraId));
                 JuegoDesarrolladora jd = JuegoDesarrolladora.builder()
@@ -168,6 +178,7 @@ public class JuegoService {
         
         if (dto.generoIds() != null) {
             dto.generoIds().forEach(generoId -> {
+                @SuppressWarnings("null")
                 var genero = generoRepository.findById(generoId)
                         .orElseThrow(() -> new ResourceNotFoundException("Genero", generoId));
                 JuegoGenero jg = JuegoGenero.builder()
@@ -184,7 +195,8 @@ public class JuegoService {
     /**
      * Elimina un juego
      */
-    public void eliminar(Long id) {
+    @SuppressWarnings("null")
+public void eliminar(Long id) {
         if (!juegoRepository.existsById(id)) {
             throw new ResourceNotFoundException("Juego", id);
         }
@@ -248,7 +260,8 @@ public class JuegoService {
     /**
      * Obtiene la entidad Juego (uso interno para relaciones)
      */
-    @Transactional(readOnly = true)
+    @SuppressWarnings("null")
+@Transactional(readOnly = true)
     public Juego obtenerEntidadPorId(Long id) {
         return juegoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Juego", id));

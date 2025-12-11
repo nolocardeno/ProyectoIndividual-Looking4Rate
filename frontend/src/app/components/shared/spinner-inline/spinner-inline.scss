@@ -1,0 +1,104 @@
+// ==========================================================================
+// SPINNER INLINE COMPONENT
+// Spinner inline con doble círculo (igual que el global)
+// ==========================================================================
+
+@use '../../../../styles/00-settings/variables' as *;
+
+// --------------------------------------------------------------------------
+// VARIABLES
+// --------------------------------------------------------------------------
+
+$spinner-sizes: (
+  'xs': 16px,
+  'sm': 24px,
+  'md': 32px,
+  'lg': 48px,
+  'xl': 64px
+);
+
+$spinner-colors: (
+  'primary': var(--color-primary),
+  'accent': var(--color-accent),
+  'success': var(--color-success),
+  'warning': var(--color-warning),
+  'error': var(--color-error),
+  'white': #ffffff,
+  'current': currentColor
+);
+
+// --------------------------------------------------------------------------
+// ANIMACIONES
+// --------------------------------------------------------------------------
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  to { transform: rotate(-360deg); }
+}
+
+// --------------------------------------------------------------------------
+// COMPONENTE
+// --------------------------------------------------------------------------
+
+.spinner-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+
+  // ----------------------------------------
+  // Tamaños
+  // ----------------------------------------
+  @each $name, $size in $spinner-sizes {
+    &--#{$name} {
+      --spinner-size: #{$size};
+      --spinner-border-outer: #{max(3px, $size * 0.08)};
+      --spinner-border-inner: #{max(2px, $size * 0.06)};
+      --spinner-inner-offset: #{max(4px, $size * 0.12)};
+    }
+  }
+
+  // ----------------------------------------
+  // Colores
+  // ----------------------------------------
+  @each $name, $color in $spinner-colors {
+    &--#{$name} {
+      --spinner-color: #{$color};
+    }
+  }
+
+  // ----------------------------------------
+  // Círculo exterior
+  // ----------------------------------------
+  &__circle {
+    position: relative;
+    display: block;
+    width: var(--spinner-size);
+    height: var(--spinner-size);
+    border: var(--spinner-border-outer) solid transparent;
+    border-top-color: var(--spinner-color);
+    border-right-color: var(--spinner-color);
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+  }
+
+  // ----------------------------------------
+  // Círculo interior
+  // ----------------------------------------
+  &__circle-inner {
+    position: absolute;
+    top: var(--spinner-inner-offset);
+    left: var(--spinner-inner-offset);
+    right: var(--spinner-inner-offset);
+    bottom: var(--spinner-inner-offset);
+    border: var(--spinner-border-inner) solid transparent;
+    border-bottom-color: var(--spinner-color);
+    border-left-color: var(--spinner-color);
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: spin-reverse 0.9s linear infinite;
+  }
+}

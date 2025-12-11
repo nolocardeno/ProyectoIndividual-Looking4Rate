@@ -37,6 +37,7 @@ public class GeneroService {
      */
     @Transactional(readOnly = true)
     public GeneroDTO obtenerPorId(Long id) {
+        @SuppressWarnings("null")
         Genero genero = generoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Genero", id));
         return convertirADTO(genero);
@@ -56,6 +57,7 @@ public class GeneroService {
                 .descripcion(dto.descripcion())
                 .build();
         
+        @SuppressWarnings("null")
         Genero guardado = generoRepository.save(genero);
         return convertirADTO(guardado);
     }
@@ -64,6 +66,7 @@ public class GeneroService {
      * Actualiza un género existente
      */
     public GeneroDTO actualizar(Long id, GeneroDTO dto) {
+        @SuppressWarnings("null")
         Genero generoExistente = generoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Genero", id));
         
@@ -82,6 +85,7 @@ public class GeneroService {
                 .juegos(generoExistente.getJuegos())
                 .build();
         
+        @SuppressWarnings("null")
         Genero guardado = generoRepository.save(actualizado);
         return convertirADTO(guardado);
     }
@@ -89,6 +93,7 @@ public class GeneroService {
     /**
      * Elimina un género
      */
+    @SuppressWarnings("null")
     public void eliminar(Long id) {
         if (!generoRepository.existsById(id)) {
             throw new ResourceNotFoundException("Genero", id);

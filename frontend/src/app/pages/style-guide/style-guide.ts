@@ -14,8 +14,8 @@ import { SearchBox } from '../../components/shared/search-box/search-box';
 import { ThemeToggle } from '../../components/shared/theme-toggle/theme-toggle';
 import { Pagination } from '../../components/shared/pagination/pagination';
 import { FeaturedSection } from '../../components/shared/featured-section/featured-section';
-import { NotificationContainer } from '../../components/shared/notification/notification-container';
-import { NotificationService } from '../../components/shared/notification/notification.service';
+import { Notification } from '../../components/shared/notification/notification';
+import { NotificationService } from '../../services';
 
 @Component({
   selector: 'app-style-guide',
@@ -33,7 +33,7 @@ import { NotificationService } from '../../components/shared/notification/notifi
     ThemeToggle,
     Pagination,
     FeaturedSection,
-    NotificationContainer
+    Notification
   ],
   templateUrl: './style-guide.html',
   styleUrl: './style-guide.scss',

@@ -37,6 +37,7 @@ public class DesarrolladoraService {
      */
     @Transactional(readOnly = true)
     public DesarrolladoraDTO obtenerPorId(Long id) {
+        @SuppressWarnings("null")
         Desarrolladora desarrolladora = desarrolladoraRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Desarrolladora", id));
         return convertirADTO(desarrolladora);
@@ -57,6 +58,7 @@ public class DesarrolladoraService {
                 .pais(dto.pais())
                 .build();
         
+        @SuppressWarnings("null")
         Desarrolladora guardada = desarrolladoraRepository.save(desarrolladora);
         return convertirADTO(guardada);
     }
@@ -65,6 +67,7 @@ public class DesarrolladoraService {
      * Actualiza una desarrolladora existente
      */
     public DesarrolladoraDTO actualizar(Long id, DesarrolladoraDTO dto) {
+        @SuppressWarnings("null")
         Desarrolladora desarrolladoraExistente = desarrolladoraRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Desarrolladora", id));
         
@@ -84,6 +87,7 @@ public class DesarrolladoraService {
                 .juegos(desarrolladoraExistente.getJuegos())
                 .build();
         
+        @SuppressWarnings("null")
         Desarrolladora guardada = desarrolladoraRepository.save(actualizada);
         return convertirADTO(guardada);
     }
@@ -91,6 +95,7 @@ public class DesarrolladoraService {
     /**
      * Elimina una desarrolladora
      */
+    @SuppressWarnings("null")
     public void eliminar(Long id) {
         if (!desarrolladoraRepository.existsById(id)) {
             throw new ResourceNotFoundException("Desarrolladora", id);
