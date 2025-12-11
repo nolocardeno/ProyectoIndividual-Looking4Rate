@@ -39,6 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return crearUserDetails(usuario);
     }
     
+    @SuppressWarnings("null")
     @Transactional(readOnly = true)
     public UserDetails loadUserById(Long id) {
         Usuario usuario = usuarioRepository.findById(id)

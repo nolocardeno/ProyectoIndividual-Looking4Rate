@@ -1,24 +1,21 @@
 // ==========================================================================
 // TOOLTIP COMPONENT
-// Componente tooltip accesible con animaciones
+// Componente tooltip simple y funcional
 // ==========================================================================
 
 @use 'sass:color';
 @use '../../../../styles/00-settings/variables' as *;
 @use '../../../../styles/01-tools/mixins' as *;
 
+// El host es inline para no afectar el layout
 :host {
-  display: inline-block;
+  display: inline;
 }
 
-.tooltip-container {
+// Wrapper que contiene el trigger y el tooltip
+.tooltip-wrapper {
+  display: inline-block;
   position: relative;
-  display: inline-block;
-}
-
-.tooltip-trigger {
-  display: inline-block;
-  cursor: help;
 }
 
 // --------------------------------------------------------------------------
@@ -26,7 +23,7 @@
 // --------------------------------------------------------------------------
 .tooltip {
   position: absolute;
-  z-index: 1050;
+  z-index: 9999;
   padding: $spacing-1 $spacing-2;
   background-color: $color-gray-900-dark;
   color: $color-text-dark;
@@ -36,19 +33,10 @@
   line-height: $line-height-normal;
   border-radius: $radius-md;
   box-shadow: $shadow-lg;
-  white-space: normal;
-  word-wrap: break-word;
+  white-space: nowrap;
   pointer-events: none;
-  
-  // Animación de entrada
-  animation: tooltipFadeIn $transition-fast $transition-ease forwards;
-
-  // --------------------------------------------------------------------------
-  // CONTENIDO
-  // --------------------------------------------------------------------------
-  &__content {
-    display: block;
-  }
+  opacity: 0;
+  animation: tooltipFadeIn 0.15s ease forwards;
 
   // --------------------------------------------------------------------------
   // FLECHA
@@ -61,45 +49,61 @@
   }
 
   // --------------------------------------------------------------------------
-  // POSICIONES
+  // POSICIONES - Cada posición define todo lo necesario
   // --------------------------------------------------------------------------
   &--top {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+
     .tooltip__arrow {
-      bottom: -12px;
+      top: 100%;
       left: 50%;
       transform: translateX(-50%);
       border-top-color: $color-gray-900-dark;
-      border-bottom: none;
+      border-bottom-width: 0;
     }
   }
 
   &--bottom {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+
     .tooltip__arrow {
-      top: -12px;
+      bottom: 100%;
       left: 50%;
       transform: translateX(-50%);
       border-bottom-color: $color-gray-900-dark;
-      border-top: none;
+      border-top-width: 0;
     }
   }
 
   &--left {
+    right: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+
     .tooltip__arrow {
-      right: -12px;
+      left: 100%;
       top: 50%;
       transform: translateY(-50%);
       border-left-color: $color-gray-900-dark;
-      border-right: none;
+      border-right-width: 0;
     }
   }
 
   &--right {
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+
     .tooltip__arrow {
-      left: -12px;
+      right: 100%;
       top: 50%;
       transform: translateY(-50%);
       border-right-color: $color-gray-900-dark;
-      border-left: none;
+      border-left-width: 0;
     }
   }
 }
@@ -107,15 +111,12 @@
 // ==========================================================================
 // ANIMACIONES
 // ==========================================================================
-
 @keyframes tooltipFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
   }
   to {
     opacity: 1;
-    transform: scale(1);
   }
 }
 
@@ -125,35 +126,18 @@
 [data-theme='light'] {
   .tooltip {
     background-color: $color-gray-800-dark;
-    color: $color-text-dark;
-    box-shadow: $shadow-xl;
 
     &--top .tooltip__arrow {
       border-top-color: $color-gray-800-dark;
     }
-
     &--bottom .tooltip__arrow {
       border-bottom-color: $color-gray-800-dark;
     }
-
     &--left .tooltip__arrow {
       border-left-color: $color-gray-800-dark;
     }
-
     &--right .tooltip__arrow {
       border-right-color: $color-gray-800-dark;
     }
-  }
-}
-
-// ==========================================================================
-// RESPONSIVE
-// ==========================================================================
-
-@media (max-width: $breakpoint-sm) {
-  .tooltip {
-    font-size: $font-size-xs;
-    padding: 6px $spacing-1;
-    max-width: 200px !important;
   }
 }

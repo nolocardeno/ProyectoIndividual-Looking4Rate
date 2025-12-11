@@ -26,7 +26,7 @@
           @if (tab.icon) {
             <span class="tabs__tab-icon" aria-hidden="true">{{ tab.icon }}</span>
           }
-          <span class="tabs__tab-label">{{ tab.label }}</span>
+          <span class="tabs__tab-label" [attr.data-text]="tab.label">{{ tab.label }}</span>
         </button>
       </li>
     }
@@ -42,7 +42,13 @@
     tabindex="0">
     @if (activeTab) {
       <section class="tabs__panel-content">
-        <p>{{ activeTab.content }}</p>
+        <!-- Contenido proyectado con template -->
+        @if (getTabTemplate(currentActiveId); as template) {
+          <ng-container [ngTemplateOutlet]="template" />
+        } @else {
+          <!-- Fallback al contenido de texto -->
+          <p>{{ activeTab.content }}</p>
+        }
       </section>
     }
   </article>

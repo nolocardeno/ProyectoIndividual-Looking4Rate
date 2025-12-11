@@ -1,35 +1,18 @@
 <span 
-  #tooltipContainer
-  class="tooltip-container"
-  (mouseenter)="onMouseEnter()"
-  (mouseleave)="onMouseLeave()"
-  (focusin)="onFocus()"
-  (focusout)="onBlur()"
-  (keydown)="onKeyDown($event)">
-  
-  <!-- Trigger: contenido proyectado -->
-  <span 
-    #triggerWrapper 
-    class="tooltip-trigger"
-    [attr.aria-describedby]="isVisible ? tooltipId : null">
-    <ng-content></ng-content>
-  </span>
-  
-  <!-- Tooltip -->
-  @if (isVisible && (text || content) && !disabled) {
+  class="tooltip-wrapper"
+  (mouseenter)="show()"
+  (mouseleave)="hide()">
+  <ng-content></ng-content>
+  @if (isVisible && tooltipText) {
     <span
-      #tooltipElement
-      [id]="tooltipId"
       class="tooltip"
-      [class.tooltip--top]="calculatedPosition === 'top'"
-      [class.tooltip--bottom]="calculatedPosition === 'bottom'"
-      [class.tooltip--left]="calculatedPosition === 'left'"
-      [class.tooltip--right]="calculatedPosition === 'right'"
-      [ngStyle]="tooltipStyles"
-      role="tooltip"
-      aria-live="polite">
-      <span class="tooltip__content">{{ text || content }}</span>
-      <span class="tooltip__arrow" aria-hidden="true"></span>
+      [class.tooltip--top]="position === 'top'"
+      [class.tooltip--bottom]="position === 'bottom'"
+      [class.tooltip--left]="position === 'left'"
+      [class.tooltip--right]="position === 'right'"
+      role="tooltip">
+      {{ tooltipText }}
+      <span class="tooltip__arrow"></span>
     </span>
   }
 </span>

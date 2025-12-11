@@ -1,306 +1,414 @@
-<!-- Style Guide - Catálogo de componentes -->
+<!-- Style Guide - Catálogo de componentes organizado con Tabs -->
 
 <article class="style-guide">
   <header class="style-guide__header">
     <h1 class="style-guide__title">Style Guide</h1>
     <p class="style-guide__subtitle">Catálogo de componentes de Looking4Rate</p>
-    
-    <!-- Índice de navegación -->
-    <nav class="style-guide__nav">
-      <a routerLink="." fragment="botones" class="style-guide__nav-link">Botones</a>
-      <a routerLink="." fragment="formularios" class="style-guide__nav-link">Formularios</a>
-      <a routerLink="." fragment="navegacion" class="style-guide__nav-link">Navegación</a>
-      <a routerLink="." fragment="feedback" class="style-guide__nav-link">Feedback</a>
-      <a routerLink="." fragment="cards" class="style-guide__nav-link">Cards y Contenido</a>
-      <a routerLink="." fragment="layout" class="style-guide__nav-link">Layout</a>
-    </nav>
   </header>
 
   <!-- Contenedor de Notificaciones -->
   <app-notification />
 
-  <!-- ============================================ -->
-  <!-- SECCIÓN: BOTONES -->
-  <!-- ============================================ -->
-  <section id="botones" class="style-guide__section">
-    <h2 class="style-guide__section-title">Botones</h2>
-
-    <!-- Variantes -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Variantes</h3>
-      <menu class="style-guide__row style-guide__row--align-center">
-        <app-button variant="primary" (btnClick)="onButtonClick()">Primary</app-button>
-        <app-button variant="secondary" (btnClick)="onButtonClick()">Secondary</app-button>
-        <app-button variant="ghost" (btnClick)="onButtonClick()">Ghost</app-button>
-        <app-button variant="danger" (btnClick)="onButtonClick()">Danger</app-button>
-      </menu>
-    </article>
-
-    <!-- Tamaños -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Tamaños</h3>
-      <menu class="style-guide__row style-guide__row--align-center">
-        <app-button variant="primary" size="sm">Small</app-button>
-        <app-button variant="primary" size="md">Medium</app-button>
-        <app-button variant="primary" size="lg">Large</app-button>
-      </menu>
-    </article>
-
-    <!-- Estados -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Estados</h3>
-      <menu class="style-guide__row style-guide__row--align-center">
-        <app-button variant="primary">Normal</app-button>
-        <app-button variant="primary" [disabled]="true">Disabled</app-button>
-        <app-button variant="secondary" [disabled]="true">Disabled Secondary</app-button>
-      </menu>
-    </article>
-  </section>
+  <!-- Navegación principal con Tabs -->
+  <app-tabs 
+    [tabs]="mainTabs" 
+    [tabTemplates]="tabTemplates"
+    activeTabId="botones" />
 
   <!-- ============================================ -->
-  <!-- SECCIÓN: FORMULARIOS -->
+  <!-- TEMPLATE: BOTONES -->
   <!-- ============================================ -->
-  <section id="formularios" class="style-guide__section">
-    <h2 class="style-guide__section-title">Formularios</h2>
+  <ng-template #botonesTab>
+    <section class="style-guide__tab-content">
+      <h2 class="style-guide__section-title">Botones</h2>
 
-    <!-- Input -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Form Input</h3>
-      <fieldset class="style-guide__form-grid">
-        <app-form-input
-          label="Input normal"
-          name="normal"
-          placeholder="Escribe algo..."
-          [(value)]="inputValue"
-        />
-        <app-form-input
-          label="Input con ayuda"
-          name="help"
-          placeholder="Tu email"
-          helpText="Usaremos tu email para notificaciones"
-          [(value)]="inputValue"
-        />
-        <app-form-input
-          label="Input con error"
-          name="error"
-          placeholder="Campo requerido"
-          errorMessage="Este campo es obligatorio"
-          [(value)]="inputWithError"
-        />
-        <app-form-input
-          label="Input deshabilitado"
-          name="disabled"
-          [disabled]="true"
-          [(value)]="inputDisabled"
-        />
-        <app-form-input
-          label="Input tipo password"
-          name="password"
-          type="password"
-          placeholder="Tu contraseña"
-          [(value)]="inputValue"
-        />
-        <app-form-input
-          label="Input tipo email"
-          name="email"
-          type="email"
-          placeholder="ejemplo@email.com"
-          [(value)]="inputValue"
-        />
-      </fieldset>
-    </article>
+      <!-- Variantes -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Variantes</h3>
+        <menu class="style-guide__row style-guide__row--align-center">
+          <app-button variant="primary" (btnClick)="onButtonClick()">Primary</app-button>
+          <app-button variant="secondary" (btnClick)="onButtonClick()">Secondary</app-button>
+          <app-button variant="ghost" (btnClick)="onButtonClick()">Ghost</app-button>
+          <app-button variant="danger" (btnClick)="onButtonClick()">Danger</app-button>
+        </menu>
+      </article>
 
-    <!-- Textarea -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Form Textarea</h3>
-      <fieldset class="style-guide__form-grid">
-        <app-form-textarea
-          label="Textarea normal"
-          name="textarea"
-          placeholder="Escribe tu mensaje..."
-          [rows]="4"
-          [(value)]="textareaValue"
-        />
-        <app-form-textarea
-          label="Textarea con contador"
-          name="textarea-counter"
-          placeholder="Máximo 200 caracteres..."
-          [rows]="4"
-          [maxLength]="200"
-          [(value)]="textareaValue"
-        />
-      </fieldset>
-    </article>
+      <!-- Tamaños -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Tamaños</h3>
+        <menu class="style-guide__row style-guide__row--align-center">
+          <app-button variant="primary" size="sm">Small</app-button>
+          <app-button variant="primary" size="md">Medium</app-button>
+          <app-button variant="primary" size="lg">Large</app-button>
+        </menu>
+      </article>
 
-    <!-- Select -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Form Select</h3>
-      <fieldset class="style-guide__form-grid">
-        <app-form-select
-          label="Select normal"
-          name="platform"
-          placeholder="Selecciona una plataforma"
-          [options]="platformOptions"
-          [(value)]="selectedPlatform"
-        />
-        <app-form-select
-          label="Select con error"
-          name="platform-error"
-          placeholder="Selecciona una opción"
-          [options]="platformOptions"
-          errorMessage="Debes seleccionar una opción"
-          [(value)]="selectedPlatform"
-        />
-      </fieldset>
-    </article>
-  </section>
+      <!-- Estados -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Estados</h3>
+        <menu class="style-guide__row style-guide__row--align-center">
+          <app-button variant="primary">Normal</app-button>
+          <app-button variant="primary" [disabled]="true">Disabled</app-button>
+          <app-button variant="secondary" [disabled]="true">Disabled Secondary</app-button>
+        </menu>
+      </article>
+    </section>
+  </ng-template>
 
   <!-- ============================================ -->
-  <!-- SECCIÓN: BÚSQUEDA Y NAVEGACIÓN -->
+  <!-- TEMPLATE: FORMULARIOS -->
   <!-- ============================================ -->
-  <section id="navegacion" class="style-guide__section">
-    <h2 class="style-guide__section-title">Navegación</h2>
+  <ng-template #formulariosTab>
+    <section class="style-guide__tab-content">
+      <h2 class="style-guide__section-title">Formularios</h2>
 
-    <!-- Search Box -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Search Box</h3>
-      <figure class="style-guide__row style-guide__row--no-bg">
-        <app-search-box placeholder="Buscar juegos..." (search)="onSearch($event)" />
-      </figure>
-    </article>
+      <!-- Input -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Form Input</h3>
+        <fieldset class="style-guide__form-grid">
+          <app-form-input
+            label="Input normal"
+            name="normal"
+            placeholder="Escribe algo..."
+            [(value)]="inputValue"
+          />
+          <app-form-input
+            label="Input con ayuda"
+            name="help"
+            placeholder="Tu email"
+            helpText="Usaremos tu email para notificaciones"
+            [(value)]="inputValue"
+          />
+          <app-form-input
+            label="Input con error"
+            name="error"
+            placeholder="Campo requerido"
+            errorMessage="Este campo es obligatorio"
+            [(value)]="inputWithError"
+          />
+          <app-form-input
+            label="Input deshabilitado"
+            name="disabled"
+            [disabled]="true"
+            [(value)]="inputDisabled"
+          />
+          <app-form-input
+            label="Input tipo password"
+            name="password"
+            type="password"
+            placeholder="Tu contraseña"
+            [(value)]="inputValue"
+          />
+          <app-form-input
+            label="Input tipo email"
+            name="email"
+            type="email"
+            placeholder="ejemplo@email.com"
+            [(value)]="inputValue"
+          />
+        </fieldset>
+      </article>
 
-    <!-- Theme Toggle -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Theme Toggle</h3>
-      <figure class="style-guide__row">
-        <app-theme-toggle />
-      </figure>
-    </article>
+      <!-- Textarea -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Form Textarea</h3>
+        <fieldset class="style-guide__form-grid">
+          <app-form-textarea
+            label="Textarea normal"
+            name="textarea"
+            placeholder="Escribe tu mensaje..."
+            [rows]="4"
+            [(value)]="textareaValue"
+          />
+          <app-form-textarea
+            label="Textarea con contador"
+            name="textarea-counter"
+            placeholder="Máximo 200 caracteres..."
+            [rows]="4"
+            [maxLength]="200"
+            [(value)]="textareaValue"
+          />
+        </fieldset>
+      </article>
 
-    <!-- Pagination -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Paginación</h3>
-      <app-pagination
-        [currentPage]="currentPage"
-        [totalPages]="totalPages"
-        (pageChange)="onPageChange($event)"
-      />
-    </article>
-  </section>
+      <!-- Select -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Form Select</h3>
+        <fieldset class="style-guide__form-grid">
+          <app-form-select
+            label="Select normal"
+            name="platform"
+            placeholder="Selecciona una plataforma"
+            [options]="platformOptions"
+            [(value)]="selectedPlatform"
+          />
+          <app-form-select
+            label="Select con error"
+            name="platform-error"
+            placeholder="Selecciona una opción"
+            [options]="platformOptions"
+            errorMessage="Debes seleccionar una opción"
+            [(value)]="selectedPlatform"
+          />
+        </fieldset>
+      </article>
+    </section>
+  </ng-template>
 
   <!-- ============================================ -->
-  <!-- SECCIÓN: FEEDBACK -->
+  <!-- TEMPLATE: NAVEGACIÓN -->
   <!-- ============================================ -->
-  <section id="feedback" class="style-guide__section">
-    <h2 class="style-guide__section-title">Feedback</h2>
+  <ng-template #navegacionTab>
+    <section class="style-guide__tab-content">
+      <h2 class="style-guide__section-title">Navegación</h2>
 
-    <!-- Alertas -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Alertas</h3>
-      <section class="style-guide__alerts">
-        <app-alert type="success" title="Éxito" [dismissible]="true" [visible]="showSuccessAlert" (closed)="showSuccessAlert = false">
-          Operación completada correctamente.
-        </app-alert>
-        <app-alert type="error" title="Error" [dismissible]="true" [visible]="showErrorAlert" (closed)="showErrorAlert = false">
-          Ha ocurrido un error inesperado.
-        </app-alert>
-        <app-alert type="warning" title="Advertencia" [dismissible]="true" [visible]="showWarningAlert" (closed)="showWarningAlert = false">
-          Ten cuidado con esta acción.
-        </app-alert>
-        <app-alert type="info" title="Información" [dismissible]="true" [visible]="showInfoAlert" (closed)="showInfoAlert = false">
-          Aquí tienes información útil.
-        </app-alert>
-      </section>
-    </article>
-
-    <!-- Notificaciones (Toast) -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Notificaciones (Toast)</h3>
-      <menu class="style-guide__row">
-        <app-button variant="primary" (btnClick)="showSuccessNotification()">Success Toast</app-button>
-        <app-button variant="danger" (btnClick)="showErrorNotification()">Error Toast</app-button>
-        <app-button variant="secondary" (btnClick)="showWarningNotification()">Warning Toast</app-button>
-        <app-button variant="ghost" (btnClick)="showInfoNotification()">Info Toast</app-button>
-      </menu>
-    </article>
-  </section>
-
-  <!-- ============================================ -->
-  <!-- SECCIÓN: CARDS Y CONTENIDO -->
-  <!-- ============================================ -->
-  <section id="cards" class="style-guide__section">
-    <h2 class="style-guide__section-title">Cards y Contenido</h2>
-
-    <!-- Platform Badge -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Platform Badge</h3>
-      <ul class="style-guide__row">
-        <app-platform-badge name="PlayStation" routerLink="/platforms/playstation" />
-        <app-platform-badge name="Xbox" routerLink="/platforms/xbox" />
-        <app-platform-badge name="PC" routerLink="/platforms/pc" />
-        <app-platform-badge name="Nintendo Switch" routerLink="/platforms/nintendo" />
-        <app-platform-badge name="Mobile" routerLink="/platforms/mobile" />
-      </ul>
-    </article>
-
-    <!-- Game Cover - Tamaños Small y Medium -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Game Cover - Tamaños (Small y Medium)</h3>
-      <ul class="style-guide__row style-guide__row--align-end">
-        <figure class="style-guide__cover-example">
-          <span class="style-guide__label">Small (100x140)</span>
-          <app-game-cover [src]="gameCovers[0].src" [alt]="gameCovers[0].alt" size="sm" />
+      <!-- Search Box -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Search Box</h3>
+        <figure class="style-guide__row style-guide__row--no-bg">
+          <app-search-box placeholder="Buscar juegos..." (search)="onSearch($event)" />
         </figure>
-        <figure class="style-guide__cover-example">
-          <span class="style-guide__label">Medium (150x210)</span>
-          <app-game-cover [src]="gameCovers[1].src" [alt]="gameCovers[1].alt" size="md" />
+      </article>
+
+      <!-- Theme Toggle -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Theme Toggle</h3>
+        <figure class="style-guide__row">
+          <app-theme-toggle />
         </figure>
-      </ul>
-    </article>
+      </article>
 
-    <!-- Game Cover - Large (Grid de 5 juegos igual que Home) -->
-    <article class="style-guide__subsection style-guide__subsection--full-width">
-      <h3 class="style-guide__subsection-title">Game Cover - Large</h3>
-      <ul class="style-guide__covers-grid">
-        @for (cover of gameCovers; track cover.alt) {
-          <app-game-cover [src]="cover.src" [alt]="cover.alt" [routerLink]="cover.link" size="lg" />
-        }
-      </ul>
-    </article>
-
-    <!-- Game Card -->
-    <article class="style-guide__subsection">
-      <h3 class="style-guide__subsection-title">Game Card</h3>
-      <app-game-card
-        [coverSrc]="exampleGame.coverSrc"
-        [title]="exampleGame.title"
-        [releaseDate]="exampleGame.releaseDate"
-        [developer]="exampleGame.developer"
-        [developerLink]="exampleGame.developerLink"
-        [description]="exampleGame.description"
-        [platforms]="exampleGame.platforms"
-        [gameLink]="exampleGame.gameLink"
-      />
-    </article>
-  </section>
+      <!-- Pagination -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Paginación</h3>
+        <app-pagination
+          [currentPage]="currentPage"
+          [totalPages]="totalPages"
+          (pageChange)="onPageChange($event)"
+        />
+      </article>
+    </section>
+  </ng-template>
 
   <!-- ============================================ -->
-  <!-- SECCIÓN: SECCIONES DE LAYOUT -->
+  <!-- TEMPLATE: FEEDBACK -->
   <!-- ============================================ -->
-  <section id="layout" class="style-guide__section">
-    <h2 class="style-guide__section-title">Secciones de Layout</h2>
+  <ng-template #feedbackTab>
+    <section class="style-guide__tab-content">
+      <h2 class="style-guide__section-title">Feedback</h2>
 
-    <!-- Featured Section - Exactamente igual que en Home -->
-    <article class="style-guide__subsection style-guide__subsection--full-width">
-      <h3 class="style-guide__subsection-title">Featured Section</h3>
-      <app-featured-section title="JUEGOS DESTACADOS" linkText="Ver todos" linkRoute="/games">
+      <!-- Alertas -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Alertas</h3>
+        <section class="style-guide__alerts">
+          <app-alert type="success" title="Éxito" [dismissible]="true" [visible]="showSuccessAlert" (closed)="showSuccessAlert = false">
+            Operación completada correctamente.
+          </app-alert>
+          <app-alert type="error" title="Error" [dismissible]="true" [visible]="showErrorAlert" (closed)="showErrorAlert = false">
+            Ha ocurrido un error inesperado.
+          </app-alert>
+          <app-alert type="warning" title="Advertencia" [dismissible]="true" [visible]="showWarningAlert" (closed)="showWarningAlert = false">
+            Ten cuidado con esta acción.
+          </app-alert>
+          <app-alert type="info" title="Información" [dismissible]="true" [visible]="showInfoAlert" (closed)="showInfoAlert = false">
+            Aquí tienes información útil.
+          </app-alert>
+        </section>
+      </article>
+
+      <!-- Notificaciones (Toast) -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Notificaciones (Toast)</h3>
+        <menu class="style-guide__row">
+          <app-button variant="primary" (btnClick)="showSuccessNotification()">Success Toast</app-button>
+          <app-button variant="danger" (btnClick)="showErrorNotification()">Error Toast</app-button>
+          <app-button variant="secondary" (btnClick)="showWarningNotification()">Warning Toast</app-button>
+          <app-button variant="ghost" (btnClick)="showInfoNotification()">Info Toast</app-button>
+        </menu>
+      </article>
+
+      <!-- Spinner Global -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Spinner Global (Overlay)</h3>
+        <p class="style-guide__description">El spinner global muestra un overlay de carga en toda la pantalla.</p>
+        <menu class="style-guide__row">
+          <app-button variant="primary" (btnClick)="showGlobalSpinner()">Spinner Simple (2s)</app-button>
+          <app-button variant="secondary" (btnClick)="showGlobalSpinnerWithMessage()">Spinner con Mensaje</app-button>
+          <app-button variant="ghost" (btnClick)="showGlobalSpinnerWithProgress()">Spinner con Progreso</app-button>
+        </menu>
+      </article>
+
+      <!-- Spinners -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Spinner Inline</h3>
+        <menu class="style-guide__row style-guide__row--align-center">
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">XS</span>
+            <app-spinner-inline size="xs" />
+          </figure>
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">SM</span>
+            <app-spinner-inline size="sm" />
+          </figure>
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">MD</span>
+            <app-spinner-inline size="md" />
+          </figure>
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">LG</span>
+            <app-spinner-inline size="lg" />
+          </figure>
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">XL</span>
+            <app-spinner-inline size="xl" />
+          </figure>
+        </menu>
+        <menu class="style-guide__row style-guide__row--align-center">
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">Primary</span>
+            <app-spinner-inline color="primary" />
+          </figure>
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">Accent</span>
+            <app-spinner-inline color="accent" />
+          </figure>
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">Success</span>
+            <app-spinner-inline color="success" />
+          </figure>
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">Warning</span>
+            <app-spinner-inline color="warning" />
+          </figure>
+          <figure class="style-guide__spinner-example">
+            <span class="style-guide__label">Error</span>
+            <app-spinner-inline color="error" />
+          </figure>
+        </menu>
+      </article>
+
+      <!-- Tooltip -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Tooltip</h3>
+        <menu class="style-guide__row style-guide__row--align-center">
+          <app-tooltip text="Tooltip arriba" position="top">
+            <app-button variant="ghost">Top</app-button>
+          </app-tooltip>
+          <app-tooltip text="Tooltip abajo" position="bottom">
+            <app-button variant="ghost">Bottom</app-button>
+          </app-tooltip>
+          <app-tooltip text="Tooltip izquierda" position="left">
+            <app-button variant="ghost">Left</app-button>
+          </app-tooltip>
+          <app-tooltip text="Tooltip derecha" position="right">
+            <app-button variant="ghost">Right</app-button>
+          </app-tooltip>
+        </menu>
+      </article>
+    </section>
+  </ng-template>
+
+  <!-- ============================================ -->
+  <!-- TEMPLATE: CARDS -->
+  <!-- ============================================ -->
+  <ng-template #cardsTab>
+    <section class="style-guide__tab-content">
+      <h2 class="style-guide__section-title">Cards y Contenido</h2>
+
+      <!-- Platform Badge -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Platform Badge</h3>
+        <ul class="style-guide__row">
+          <app-platform-badge name="PlayStation" routerLink="/platforms/playstation" />
+          <app-platform-badge name="Xbox" routerLink="/platforms/xbox" />
+          <app-platform-badge name="PC" routerLink="/platforms/pc" />
+          <app-platform-badge name="Nintendo Switch" routerLink="/platforms/nintendo" />
+          <app-platform-badge name="Mobile" routerLink="/platforms/mobile" />
+        </ul>
+      </article>
+
+      <!-- Game Cover - Tamaños Small y Medium -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Game Cover - Tamaños (Small y Medium)</h3>
+        <ul class="style-guide__row style-guide__row--align-end">
+          <figure class="style-guide__cover-example">
+            <span class="style-guide__label">Small (100x140)</span>
+            <app-game-cover [src]="gameCovers[0].src" [alt]="gameCovers[0].alt" size="sm" />
+          </figure>
+          <figure class="style-guide__cover-example">
+            <span class="style-guide__label">Medium (150x210)</span>
+            <app-game-cover [src]="gameCovers[1].src" [alt]="gameCovers[1].alt" size="md" />
+          </figure>
+        </ul>
+      </article>
+
+      <!-- Game Cover - Large (Grid de 5 juegos igual que Home) -->
+      <article class="style-guide__subsection style-guide__subsection--full-width">
+        <h3 class="style-guide__subsection-title">Game Cover - Large</h3>
         <ul class="style-guide__covers-grid">
           @for (cover of gameCovers; track cover.alt) {
             <app-game-cover [src]="cover.src" [alt]="cover.alt" [routerLink]="cover.link" size="lg" />
           }
         </ul>
-      </app-featured-section>
-    </article>
-  </section>
+      </article>
+
+      <!-- Game Card -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Game Card</h3>
+        <app-game-card
+          [coverSrc]="exampleGame.coverSrc"
+          [title]="exampleGame.title"
+          [releaseDate]="exampleGame.releaseDate"
+          [developer]="exampleGame.developer"
+          [developerLink]="exampleGame.developerLink"
+          [description]="exampleGame.description"
+          [platforms]="exampleGame.platforms"
+          [gameLink]="exampleGame.gameLink"
+        />
+      </article>
+    </section>
+  </ng-template>
+
+  <!-- ============================================ -->
+  <!-- TEMPLATE: LAYOUT -->
+  <!-- ============================================ -->
+  <ng-template #layoutTab>
+    <section class="style-guide__tab-content">
+      <h2 class="style-guide__section-title">Secciones de Layout</h2>
+
+      <!-- Featured Section -->
+      <article class="style-guide__subsection style-guide__subsection--full-width">
+        <h3 class="style-guide__subsection-title">Featured Section</h3>
+        <app-featured-section title="JUEGOS DESTACADOS" linkText="Ver todos" linkRoute="/games">
+          <ul class="style-guide__covers-grid">
+            @for (cover of gameCovers; track cover.alt) {
+              <app-game-cover [src]="cover.src" [alt]="cover.alt" [routerLink]="cover.link" size="lg" />
+            }
+          </ul>
+        </app-featured-section>
+      </article>
+    </section>
+  </ng-template>
+
+  <!-- ============================================ -->
+  <!-- TEMPLATE: INTERACTIVOS -->
+  <!-- ============================================ -->
+  <ng-template #interactivosTab>
+    <section class="style-guide__tab-content">
+      <h2 class="style-guide__section-title">Componentes Interactivos</h2>
+
+      <!-- Tabs de ejemplo -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Tabs (Pestañas)</h3>
+        <app-tabs [tabs]="exampleTabs" activeTabId="tab-1" />
+      </article>
+
+      <!-- Accordion -->
+      <article class="style-guide__subsection">
+        <h3 class="style-guide__subsection-title">Accordion</h3>
+        <app-accordion [items]="accordionItems" [exclusive]="true" />
+      </article>
+    </section>
+  </ng-template>
 
 </article>

@@ -6,10 +6,15 @@ import {
   ViewChild, 
   ElementRef, 
   AfterViewInit,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  inject
+  inject,
+  TemplateRef
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 
 /**
  * Interfaz para las pestañas
@@ -31,15 +36,17 @@ export interface TabItem {
  * - Uso de ViewChild y ElementRef para manipulación del DOM
  * - Soporte para pestañas deshabilitadas
  * - Eventos de cambio de pestaña
+ * - Soporte para templates externos por pestaña
  */
 @Component({
   selector: 'app-tabs',
   standalone: true,
+  imports: [NgTemplateOutlet],
   templateUrl: './tabs.html',
   styleUrl: './tabs.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Tabs implements AfterViewInit {
+export class Tabs implements OnInit, OnChanges, AfterViewInit {
   /** Change detector para OnPush */
   private cdr = inject(ChangeDetectorRef);
   /** Lista de pestañas */
@@ -50,6 +57,9 @@ export class Tabs implements AfterViewInit {
   
   /** Orientación de las pestañas */
   @Input() orientation: 'horizontal' | 'vertical' = 'horizontal';
+
+  /** Templates externos para cada pestaña (objeto id -> template) */
+  @Input() tabTemplates: Record<string, TemplateRef<unknown>> = {};
 
   /** Evento emitido cuando cambia la pestaña activa */
   @Output() tabChange = new EventEmitter<{ tabId: string; tab: TabItem }>();
@@ -63,20 +73,36 @@ export class Tabs implements AfterViewInit {
   /** ID de la pestaña actualmente activa */
   currentActiveId: string = '';
 
+  ngOnInit(): void {
+    this.initializeActiveTab();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Si cambian los tabs o tabTemplates, re-renderizar
+    if (changes['tabs'] || changes['tabTemplates'] || changes['activeTabId']) {
+      if (changes['activeTabId'] && !changes['activeTabId'].firstChange) {
+        this.currentActiveId = this.activeTabId;
+      }
+      this.cdr.markForCheck();
+    }
+  }
+
   ngAfterViewInit(): void {
-    // Establecer la pestaña activa inicial
+    // Configurar atributos ARIA iniciales
+    this.updateAriaAttributes();
+    this.cdr.detectChanges();
+  }
+
+  /** Inicializa la pestaña activa */
+  private initializeActiveTab(): void {
     if (this.activeTabId) {
       this.currentActiveId = this.activeTabId;
     } else if (this.tabs.length > 0) {
-      // Seleccionar la primera pestaña no deshabilitada
       const firstEnabled = this.tabs.find(tab => !tab.disabled);
       if (firstEnabled) {
         this.currentActiveId = firstEnabled.id;
       }
     }
-    
-    // Configurar atributos ARIA iniciales
-    this.updateAriaAttributes();
   }
 
   /** Flag para evitar animaciones durante la transición */
@@ -228,5 +254,12 @@ export class Tabs implements AfterViewInit {
   onTabFocus(tab: TabItem): void {
     // No hacer nada - el cambio solo ocurre con click o Enter
     // Esto evita cambios accidentales al navegar con Tab
+  }
+
+  /**
+   * Obtiene el template para una pestaña específica
+   */
+  getTabTemplate(tabId: string): TemplateRef<unknown> | null {
+    return this.tabTemplates[tabId] ?? null;
   }
 }

@@ -46,38 +46,7 @@
     font-family: $font-primary;
     font-size: $font-size-lg;
     color: var(--text-secondary);
-    margin: 0 0 $spacing-6 0;
-  }
-
-  // --------------------------------------------------------------------------
-  // INDICE DE NAVEGACION
-  // --------------------------------------------------------------------------
-  &__nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: $spacing-2;
-  }
-
-  &__nav-link {
-    display: inline-block;
-    padding: $spacing-2 $spacing-4;
-    font-family: $font-primary;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    color: var(--text-primary);
-    text-decoration: none;
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: $radius-md;
-    transition: all $transition-base $transition-ease;
-
-    &:hover {
-      background-color: var(--color-accent, #{$color-accent-dark});
-      color: var(--text-dark, #{$color-text-dark});
-      border-color: var(--color-accent, #{$color-accent-dark});
-      transform: translateY(-2px);
-    }
+    margin: 0;
   }
 
   // --------------------------------------------------------------------------
@@ -145,6 +114,14 @@
     border-left: 3px solid var(--color-accent, #{$color-accent-dark});
   }
 
+  &__description {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: $line-height-normal;
+  }
+
   // --------------------------------------------------------------------------
   // FILAS Y GRIDS
   // --------------------------------------------------------------------------
@@ -204,6 +181,33 @@
     padding: $spacing-3;
     background-color: var(--bg-secondary);
     border-radius: $radius-md;
+  }
+
+  // --------------------------------------------------------------------------
+  // EJEMPLOS DE SPINNERS
+  // --------------------------------------------------------------------------
+  &__spinner-example {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-3;
+    background-color: var(--bg-secondary);
+    border-radius: $radius-md;
+    min-width: 80px;
+  }
+
+  // --------------------------------------------------------------------------
+  // CONTENIDO DE TABS
+  // --------------------------------------------------------------------------
+  &__tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+    padding: $spacing-6;
+    background-color: var(--bg-secondary);
+    border-radius: $radius-xl;
+    border: 1px solid var(--border-color);
   }
 
   &__label {

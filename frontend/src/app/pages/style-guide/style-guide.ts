@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, TemplateRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 // Componentes
@@ -15,7 +15,11 @@ import { ThemeToggle } from '../../components/shared/theme-toggle/theme-toggle';
 import { Pagination } from '../../components/shared/pagination/pagination';
 import { FeaturedSection } from '../../components/shared/featured-section/featured-section';
 import { Notification } from '../../components/shared/notification/notification';
-import { NotificationService } from '../../services';
+import { Tabs, TabItem } from '../../components/shared/tabs/tabs';
+import { Accordion, AccordionItem } from '../../components/shared/accordion/accordion';
+import { SpinnerInline } from '../../components/shared/spinner-inline/spinner-inline';
+import { Tooltip } from '../../components/shared/tooltip/tooltip';
+import { NotificationService, LoadingService } from '../../services';
 
 @Component({
   selector: 'app-style-guide',
@@ -33,13 +37,58 @@ import { NotificationService } from '../../services';
     ThemeToggle,
     Pagination,
     FeaturedSection,
-    Notification
+    Notification,
+    Tabs,
+    Accordion,
+    SpinnerInline,
+    Tooltip
   ],
   templateUrl: './style-guide.html',
   styleUrl: './style-guide.scss',
 })
-export default class StyleGuide {
+export default class StyleGuide implements AfterViewInit {
   private notificationService = inject(NotificationService);
+  private loadingService = inject(LoadingService);
+  private cdr = inject(ChangeDetectorRef);
+
+  // ============================================
+  // TABS PRINCIPALES
+  // ============================================
+  @ViewChild('botonesTab') botonesTab!: TemplateRef<unknown>;
+  @ViewChild('formulariosTab') formulariosTab!: TemplateRef<unknown>;
+  @ViewChild('navegacionTab') navegacionTab!: TemplateRef<unknown>;
+  @ViewChild('feedbackTab') feedbackTab!: TemplateRef<unknown>;
+  @ViewChild('cardsTab') cardsTab!: TemplateRef<unknown>;
+  @ViewChild('layoutTab') layoutTab!: TemplateRef<unknown>;
+  @ViewChild('interactivosTab') interactivosTab!: TemplateRef<unknown>;
+
+  /** Configuración de las tabs principales */
+  mainTabs: TabItem[] = [
+    { id: 'botones', label: 'Botones', content: '' },
+    { id: 'formularios', label: 'Formularios', content: '' },
+    { id: 'navegacion', label: 'Navegación', content: '' },
+    { id: 'feedback', label: 'Feedback', content: '' },
+    { id: 'cards', label: 'Cards', content: '' },
+    { id: 'layout', label: 'Layout', content: '' },
+    { id: 'interactivos', label: 'Interactivos', content: '' }
+  ];
+
+  /** Objeto de templates para las tabs */
+  tabTemplates: Record<string, TemplateRef<unknown>> = {};
+
+  ngAfterViewInit(): void {
+    // Mapear los templates a sus IDs
+    this.tabTemplates = {
+      'botones': this.botonesTab,
+      'formularios': this.formulariosTab,
+      'navegacion': this.navegacionTab,
+      'feedback': this.feedbackTab,
+      'cards': this.cardsTab,
+      'layout': this.layoutTab,
+      'interactivos': this.interactivosTab
+    };
+    this.cdr.detectChanges();
+  }
 
   // ============================================
   // DATOS PARA FORMULARIOS
@@ -74,6 +123,44 @@ export default class StyleGuide {
   onPageChange(page: number): void {
     this.currentPage = page;
   }
+
+  // ============================================
+  // DATOS PARA ACCORDION
+  // ============================================
+  accordionItems: AccordionItem[] = [
+    { 
+      id: 'acc-1', 
+      title: '¿Qué es Looking4Rate?', 
+      content: 'Looking4Rate es una plataforma para descubrir y valorar videojuegos de todas las plataformas.'
+    },
+    { 
+      id: 'acc-2', 
+      title: '¿Cómo puedo crear una cuenta?', 
+      content: 'Haz clic en el botón "Registrarse" en la esquina superior derecha y sigue los pasos del formulario.'
+    },
+    { 
+      id: 'acc-3', 
+      title: '¿Es gratis usar la plataforma?', 
+      content: 'Sí, Looking4Rate es completamente gratuito para todos los usuarios.',
+      isExpanded: true
+    },
+    { 
+      id: 'acc-4', 
+      title: 'Elemento deshabilitado', 
+      content: 'Este contenido no se puede ver.',
+      disabled: true
+    }
+  ];
+
+  // ============================================
+  // DATOS PARA TABS DE EJEMPLO
+  // ============================================
+  exampleTabs: TabItem[] = [
+    { id: 'tab-1', label: 'General', content: 'Contenido de la pestaña General. Aquí puedes ver información básica.' },
+    { id: 'tab-2', label: 'Detalles', content: 'Contenido de la pestaña Detalles con información más específica.', icon: '📋' },
+    { id: 'tab-3', label: 'Configuración', content: 'Opciones de configuración del elemento seleccionado.' },
+    { id: 'tab-4', label: 'Deshabilitada', content: 'No disponible', disabled: true }
+  ];
 
   // ============================================
   // DATOS PARA GAME CARD
@@ -141,6 +228,35 @@ export default class StyleGuide {
 
   showInfoNotification(): void {
     this.notificationService.info('Hay nuevas actualizaciones disponibles.', 'Información');
+  }
+
+  // ============================================
+  // MÉTODOS PARA SPINNER GLOBAL
+  // ============================================
+  showGlobalSpinner(): void {
+    this.loadingService.showGlobal('Cargando...');
+    setTimeout(() => {
+      this.loadingService.hideGlobal();
+    }, 2000);
+  }
+
+  showGlobalSpinnerWithMessage(): void {
+    this.loadingService.showGlobal('Procesando datos del servidor...');
+    setTimeout(() => {
+      this.loadingService.hideGlobal();
+    }, 3000);
+  }
+
+  showGlobalSpinnerWithProgress(): void {
+    this.loadingService.showGlobal('Descargando archivos...');
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      this.loadingService.updateGlobalProgress(progress, `Descargando... ${progress}%`);
+      if (progress >= 100) {
+        clearInterval(interval);
+      }
+    }, 300);
   }
 
   // ============================================
