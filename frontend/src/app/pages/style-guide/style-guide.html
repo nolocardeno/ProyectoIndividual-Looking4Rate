@@ -26,10 +26,10 @@
       <article class="style-guide__subsection">
         <h3 class="style-guide__subsection-title">Variantes</h3>
         <menu class="style-guide__row style-guide__row--align-center">
-          <app-button variant="primary" (btnClick)="onButtonClick()">Primary</app-button>
-          <app-button variant="secondary" (btnClick)="onButtonClick()">Secondary</app-button>
-          <app-button variant="ghost" (btnClick)="onButtonClick()">Ghost</app-button>
-          <app-button variant="danger" (btnClick)="onButtonClick()">Danger</app-button>
+          <app-button variant="primary" (btnClick)="onButtonClick()">PRIMARY</app-button>
+          <app-button variant="secondary" (btnClick)="onButtonClick()">SECONDARY</app-button>
+          <app-button variant="ghost" (btnClick)="onButtonClick()">GHOST</app-button>
+          <app-button variant="danger" (btnClick)="onButtonClick()">DANGER</app-button>
         </menu>
       </article>
 
@@ -37,9 +37,9 @@
       <article class="style-guide__subsection">
         <h3 class="style-guide__subsection-title">Tamaños</h3>
         <menu class="style-guide__row style-guide__row--align-center">
-          <app-button variant="primary" size="sm">Small</app-button>
-          <app-button variant="primary" size="md">Medium</app-button>
-          <app-button variant="primary" size="lg">Large</app-button>
+          <app-button variant="primary" size="sm">SMALL</app-button>
+          <app-button variant="primary" size="md">MEDIUM</app-button>
+          <app-button variant="primary" size="lg">LARGE</app-button>
         </menu>
       </article>
 
@@ -47,9 +47,9 @@
       <article class="style-guide__subsection">
         <h3 class="style-guide__subsection-title">Estados</h3>
         <menu class="style-guide__row style-guide__row--align-center">
-          <app-button variant="primary">Normal</app-button>
-          <app-button variant="primary" [disabled]="true">Disabled</app-button>
-          <app-button variant="secondary" [disabled]="true">Disabled Secondary</app-button>
+          <app-button variant="primary">NORMAL</app-button>
+          <app-button variant="primary" [disabled]="true">DISABLED</app-button>
+          <app-button variant="secondary" [disabled]="true">DISABLED SECONDARY</app-button>
         </menu>
       </article>
     </section>
@@ -70,14 +70,14 @@
             label="Input normal"
             name="normal"
             placeholder="Escribe algo..."
-            [(value)]="inputValue"
+            [(value)]="inputNormal"
           />
           <app-form-input
             label="Input con ayuda"
             name="help"
             placeholder="Tu email"
             helpText="Usaremos tu email para notificaciones"
-            [(value)]="inputValue"
+            [(value)]="inputHelp"
           />
           <app-form-input
             label="Input con error"
@@ -97,14 +97,14 @@
             name="password"
             type="password"
             placeholder="Tu contraseña"
-            [(value)]="inputValue"
+            [(value)]="inputPassword"
           />
           <app-form-input
             label="Input tipo email"
             name="email"
             type="email"
             placeholder="ejemplo@email.com"
-            [(value)]="inputValue"
+            [(value)]="inputEmail"
           />
         </fieldset>
       </article>
@@ -126,7 +126,7 @@
             placeholder="Máximo 200 caracteres..."
             [rows]="4"
             [maxLength]="200"
-            [(value)]="textareaValue"
+            [(value)]="textareaValue2"
           />
         </fieldset>
       </article>
@@ -148,7 +148,7 @@
             placeholder="Selecciona una opción"
             [options]="platformOptions"
             errorMessage="Debes seleccionar una opción"
-            [(value)]="selectedPlatform"
+            [(value)]="selectedPlatform2"
           />
         </fieldset>
       </article>
@@ -220,10 +220,10 @@
       <article class="style-guide__subsection">
         <h3 class="style-guide__subsection-title">Notificaciones (Toast)</h3>
         <menu class="style-guide__row">
-          <app-button variant="primary" (btnClick)="showSuccessNotification()">Success Toast</app-button>
-          <app-button variant="danger" (btnClick)="showErrorNotification()">Error Toast</app-button>
-          <app-button variant="secondary" (btnClick)="showWarningNotification()">Warning Toast</app-button>
-          <app-button variant="ghost" (btnClick)="showInfoNotification()">Info Toast</app-button>
+          <app-button variant="primary" (btnClick)="showSuccessNotification()">SUCCESS TOAST</app-button>
+          <app-button variant="danger" (btnClick)="showErrorNotification()">ERROR TOAST</app-button>
+          <app-button variant="secondary" (btnClick)="showWarningNotification()">WARNING TOAST</app-button>
+          <app-button variant="ghost" (btnClick)="showInfoNotification()">INFO TOAST</app-button>
         </menu>
       </article>
 
@@ -232,9 +232,9 @@
         <h3 class="style-guide__subsection-title">Spinner Global (Overlay)</h3>
         <p class="style-guide__description">El spinner global muestra un overlay de carga en toda la pantalla.</p>
         <menu class="style-guide__row">
-          <app-button variant="primary" (btnClick)="showGlobalSpinner()">Spinner Simple (2s)</app-button>
-          <app-button variant="secondary" (btnClick)="showGlobalSpinnerWithMessage()">Spinner con Mensaje</app-button>
-          <app-button variant="ghost" (btnClick)="showGlobalSpinnerWithProgress()">Spinner con Progreso</app-button>
+          <app-button variant="primary" (btnClick)="showGlobalSpinner()">SPINNER SIMPLE (2S)</app-button>
+          <app-button variant="secondary" (btnClick)="showGlobalSpinnerWithMessage()">SPINNER CON MENSAJE</app-button>
+          <app-button variant="ghost" (btnClick)="showGlobalSpinnerWithProgress()">SPINNER CON PROGRESO</app-button>
         </menu>
       </article>
 
@@ -292,16 +292,16 @@
         <h3 class="style-guide__subsection-title">Tooltip</h3>
         <menu class="style-guide__row style-guide__row--align-center">
           <app-tooltip text="Tooltip arriba" position="top">
-            <app-button variant="ghost">Top</app-button>
+            <app-button variant="ghost">TOP</app-button>
           </app-tooltip>
           <app-tooltip text="Tooltip abajo" position="bottom">
-            <app-button variant="ghost">Bottom</app-button>
+            <app-button variant="ghost">BOTTOM</app-button>
           </app-tooltip>
           <app-tooltip text="Tooltip izquierda" position="left">
-            <app-button variant="ghost">Left</app-button>
+            <app-button variant="ghost">LEFT</app-button>
           </app-tooltip>
           <app-tooltip text="Tooltip derecha" position="right">
-            <app-button variant="ghost">Right</app-button>
+            <app-button variant="ghost">RIGHT</app-button>
           </app-tooltip>
         </menu>
       </article>

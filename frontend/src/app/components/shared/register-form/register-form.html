@@ -22,54 +22,84 @@
         </button>
       </header>
 
-      <form class="register-modal__form" (ngSubmit)="onSubmit($event)">
+      <form class="register-modal__form" [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
         <fieldset class="register-modal__fieldset">
           <legend class="register-modal__legend">Datos de registro</legend>
 
-          <app-form-input
-            label="Email"
-            type="email"
-            name="email"
-            placeholder=""
-            [required]="true"
-            [errorMessage]="emailError"
-            [value]="email"
-            (valueChange)="email = $event"
-            (inputBlur)="onEmailBlur()">
-          </app-form-input>
+          <section class="register-modal__field-wrapper">
+            <app-form-input
+              label="Email"
+              type="email"
+              name="email"
+              placeholder=""
+              [required]="true"
+              [errorMessage]="emailError"
+              [value]="registerForm.get('email')?.value || ''"
+              (valueChange)="registerForm.get('email')?.setValue($event)"
+              (inputBlur)="onEmailBlur()">
+            </app-form-input>
+            @if (isEmailValidating) {
+              <span class="register-modal__validating">Verificando email...</span>
+            }
+          </section>
 
-          <app-form-input
-            label="Nombre de usuario"
-            type="text"
-            name="username"
-            placeholder=""
-            [required]="true"
-            [errorMessage]="usernameError"
-            [value]="username"
-            (valueChange)="username = $event"
-            (inputBlur)="onUsernameBlur()">
-          </app-form-input>
+          <section class="register-modal__field-wrapper">
+            <app-form-input
+              label="Nombre de usuario"
+              type="text"
+              name="username"
+              placeholder=""
+              [required]="true"
+              [errorMessage]="usernameError"
+              [value]="registerForm.get('username')?.value || ''"
+              (valueChange)="registerForm.get('username')?.setValue($event)"
+              (inputBlur)="onUsernameBlur()">
+            </app-form-input>
+            @if (isUsernameValidating) {
+              <span class="register-modal__validating">Verificando disponibilidad...</span>
+            }
+          </section>
 
-          <app-form-input
-            label="Contraseña"
-            type="password"
-            name="password"
-            placeholder=""
-            [required]="true"
-            [errorMessage]="passwordError"
-            [value]="password"
-            (valueChange)="password = $event"
-            (inputBlur)="onPasswordBlur()">
-          </app-form-input>
+          <section class="register-modal__field-wrapper">
+            <app-form-input
+              label="Contraseña"
+              type="password"
+              name="password"
+              placeholder=""
+              [required]="true"
+              [errorMessage]="passwordError"
+              [value]="registerForm.get('password')?.value || ''"
+              (valueChange)="registerForm.get('password')?.setValue($event)"
+              (inputBlur)="onPasswordBlur()">
+            </app-form-input>
+            @if (registerForm.get('password')?.value) {
+              <aside class="register-modal__strength" aria-label="Indicador de fortaleza de contraseña">
+                <progress class="register-modal__strength-bar" max="4" [value]="passwordStrength">
+                  <span 
+                    class="register-modal__strength-fill"
+                    [attr.data-strength]="passwordStrength"
+                    [style.width.%]="passwordStrength * 25">
+                  </span>
+                </progress>
+                <span class="register-modal__strength-text" [attr.data-strength]="passwordStrength">
+                  {{ passwordStrengthText }}
+                </span>
+              </aside>
+            }
+          </section>
         </fieldset>
 
         <footer class="register-modal__actions">
           <button 
             type="submit" 
             class="register-modal__submit" 
-            [disabled]="!isFormValid"
-            [attr.aria-disabled]="!isFormValid">
-            Crear cuenta
+            [disabled]="!isFormValid || isFormPending"
+            [attr.aria-disabled]="!isFormValid || isFormPending">
+            @if (isFormPending) {
+              Verificando...
+            } @else {
+              Crear cuenta
+            }
           </button>
           
           <p class="register-modal__switch">

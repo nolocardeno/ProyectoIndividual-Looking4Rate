@@ -126,6 +126,81 @@
   }
 
   // --------------------------------------------------------------------------
+  // FIELD WRAPPER Y VALIDACIÓN
+  // --------------------------------------------------------------------------
+  &__field-wrapper {
+    position: relative;
+  }
+
+  &__validating {
+    display: block;
+    font-size: $font-size-xs;
+    color: $color-accent-dark;
+    margin-top: $spacing-1;
+    animation: pulse 1.5s ease-in-out infinite;
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // PASSWORD STRENGTH INDICATOR
+  // --------------------------------------------------------------------------
+  &__strength {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    margin-top: $spacing-1;
+  }
+
+  &__strength-bar {
+    flex: 1;
+    height: 4px;
+    appearance: none;
+    border: none;
+    background-color: rgba($color-text-alt-dark, 0.3);
+    border-radius: $radius-full;
+    overflow: hidden;
+
+    &::-webkit-progress-bar {
+      background-color: rgba($color-text-alt-dark, 0.3);
+      border-radius: $radius-full;
+    }
+
+    &::-webkit-progress-value,
+    &::-moz-progress-bar {
+      border-radius: $radius-full;
+      @include transition(all);
+    }
+
+    // Fallback span dentro de progress
+    .register-modal__strength-fill {
+      display: block;
+      height: 100%;
+      border-radius: $radius-full;
+      @include transition(all);
+      
+      &[data-strength="1"] { background-color: $color-error-dark; }
+      &[data-strength="2"] { background-color: $color-warning-dark; }
+      &[data-strength="3"] { background-color: $color-success-dark; }
+      &[data-strength="4"] { background-color: $color-accent-dark; }
+    }
+  }
+
+  &__strength-text {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    min-width: 60px;
+    
+    &[data-strength="1"] { color: $color-error-dark; }
+    &[data-strength="2"] { color: $color-warning-dark; }
+    &[data-strength="3"] { color: $color-success-dark; }
+    &[data-strength="4"] { color: $color-accent-dark; }
+  }
+
+  // --------------------------------------------------------------------------
   // ACTIONS
   // --------------------------------------------------------------------------
   &__actions {

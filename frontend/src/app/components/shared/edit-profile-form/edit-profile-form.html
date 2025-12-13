@@ -1,0 +1,188 @@
+<section class="edit-profile">
+  <header class="edit-profile__header">
+    <h2 class="edit-profile__title">Editar Perfil</h2>
+    <p class="edit-profile__subtitle">Actualiza tu información personal</p>
+  </header>
+
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="edit-profile__form">
+    
+    <!-- Información básica -->
+    <fieldset class="edit-profile__section">
+      <legend class="edit-profile__section-title">Información Personal</legend>
+
+      <div class="edit-profile__row">
+        <!-- Nombre -->
+        <div class="edit-profile__field">
+          <label for="firstName" class="edit-profile__label">Nombre *</label>
+          <input
+            #firstNameInput
+            id="firstName"
+            type="text"
+            formControlName="firstName"
+            class="edit-profile__input"
+            [class.edit-profile__input--error]="hasError('firstName')"
+            placeholder="Tu nombre"
+            autocomplete="given-name"
+          />
+          @if (hasError('firstName')) {
+            <span class="edit-profile__error">{{ getErrorMessage('firstName') }}</span>
+          }
+        </div>
+
+        <!-- Apellidos -->
+        <div class="edit-profile__field">
+          <label for="lastName" class="edit-profile__label">Apellidos *</label>
+          <input
+            id="lastName"
+            type="text"
+            formControlName="lastName"
+            class="edit-profile__input"
+            [class.edit-profile__input--error]="hasError('lastName')"
+            placeholder="Tus apellidos"
+            autocomplete="family-name"
+          />
+          @if (hasError('lastName')) {
+            <span class="edit-profile__error">{{ getErrorMessage('lastName') }}</span>
+          }
+        </div>
+      </div>
+
+      <!-- Username -->
+      <div class="edit-profile__field">
+        <label for="username" class="edit-profile__label">Nombre de Usuario *</label>
+        <div class="edit-profile__input-wrapper">
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            class="edit-profile__input"
+            [class.edit-profile__input--error]="hasError('username')"
+            placeholder="usuario123"
+            autocomplete="username"
+          />
+          @if (isUsernameValidating) {
+            <span class="edit-profile__validating" aria-live="polite">
+              Verificando disponibilidad...
+            </span>
+          }
+        </div>
+        @if (hasError('username')) {
+          <span class="edit-profile__error">{{ getErrorMessage('username') }}</span>
+        }
+      </div>
+
+      <!-- Email -->
+      <div class="edit-profile__field">
+        <label for="email" class="edit-profile__label">Email *</label>
+        <div class="edit-profile__input-wrapper">
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="edit-profile__input"
+            [class.edit-profile__input--error]="hasError('email')"
+            placeholder="tu@email.com"
+            autocomplete="email"
+          />
+          @if (isEmailValidating) {
+            <span class="edit-profile__validating" aria-live="polite">
+              Verificando email...
+            </span>
+          }
+        </div>
+        @if (hasError('email')) {
+          <span class="edit-profile__error">{{ getErrorMessage('email') }}</span>
+        }
+      </div>
+
+      <!-- NIF -->
+      <div class="edit-profile__field">
+        <label for="nif" class="edit-profile__label">NIF / DNI</label>
+        <input
+          id="nif"
+          type="text"
+          formControlName="nif"
+          class="edit-profile__input"
+          [class.edit-profile__input--error]="hasError('nif')"
+          placeholder="12345678A"
+          maxlength="9"
+        />
+        @if (hasError('nif')) {
+          <span class="edit-profile__error">{{ getErrorMessage('nif') }}</span>
+        }
+        <small class="edit-profile__help">Formato: 8 dígitos + letra (ej: 12345678A)</small>
+      </div>
+    </fieldset>
+
+    <!-- FormArray: Teléfonos -->
+    <fieldset class="edit-profile__section">
+      <legend class="edit-profile__section-title">Teléfonos de Contacto</legend>
+      
+      <div #phonesContainer class="edit-profile__phones">
+        @for (phone of phones.controls; track $index) {
+          <article class="edit-profile__phone-item">
+            <div class="edit-profile__field edit-profile__field--flex">
+              <label [for]="'phone-' + $index" class="edit-profile__label">
+                Teléfono {{ $index + 1 }}
+              </label>
+              <input
+                [id]="'phone-' + $index"
+                type="tel"
+                [formControl]="$any(phone)"
+                class="edit-profile__input"
+                [class.edit-profile__input--error]="hasPhoneError($index)"
+                placeholder="+34 612345678"
+                autocomplete="tel"
+              />
+              <app-button
+                type="button"
+                variant="danger"
+                size="sm"
+                (btnClick)="removePhone($index)"
+                [attr.aria-label]="'Eliminar teléfono ' + ($index + 1)"
+              >
+                Eliminar
+              </app-button>
+            </div>
+            @if (hasPhoneError($index)) {
+              <span class="edit-profile__error">{{ getPhoneErrorMessage($index) }}</span>
+            }
+          </article>
+        }
+
+        @if (phones.length === 0) {
+          <p class="edit-profile__empty">No hay teléfonos añadidos</p>
+        }
+      </div>
+
+      <app-button
+        type="button"
+        variant="ghost"
+        size="md"
+        (btnClick)="addPhone()"
+      >
+        + Añadir Teléfono
+      </app-button>
+    </fieldset>
+
+    <!-- Acciones -->
+    <footer class="edit-profile__actions">
+      <app-button
+        type="button"
+        variant="ghost"
+        size="lg"
+        (btnClick)="onCancel()"
+      >
+        Cancelar
+      </app-button>
+      <app-button
+        type="submit"
+        variant="primary"
+        size="lg"
+        [disabled]="!profileForm.valid"
+      >
+        Guardar Cambios
+      </app-button>
+    </footer>
+  </form>
+</section>

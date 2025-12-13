@@ -1,16 +1,18 @@
-import { Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewChecked, Inject, PLATFORM_ID, inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewChecked, Inject, PLATFORM_ID, inject, OnInit, OnDestroy } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormInput } from '../form-input/form-input';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoadingService, NotificationService, EventBusService } from '../../../services';
+import { CustomValidators, AsyncValidators, ValidationService } from '../../../validators';
 
 @Component({
   selector: 'app-register-form',
-  imports: [FormInput, FontAwesomeModule],
+  imports: [FormInput, FontAwesomeModule, ReactiveFormsModule, CommonModule],
   templateUrl: './register-form.html',
   styleUrl: './register-form.scss',
 })
-export class RegisterForm implements AfterViewChecked {
+export class RegisterForm implements AfterViewChecked, OnInit, OnDestroy {
   /** Referencia al contenedor del modal para manipulación del DOM */
   @ViewChild('modalContainer') modalContainer!: ElementRef<HTMLElement>;
   
@@ -22,14 +24,8 @@ export class RegisterForm implements AfterViewChecked {
   @Output() registerSubmit = new EventEmitter<{ email: string; username: string; password: string }>();
   @Output() switchToLogin = new EventEmitter<void>();
 
-  email = '';
-  username = '';
-  password = '';
-  emailTouched = false;
-  usernameTouched = false;
-  passwordTouched = false;
+  registerForm!: FormGroup;
 
-  private readonly emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   private isBrowser: boolean;
   private previousActiveElement: HTMLElement | null = null;
   private hasSetInitialFocus = false;
@@ -38,9 +34,41 @@ export class RegisterForm implements AfterViewChecked {
   private readonly loadingService = inject(LoadingService);
   private readonly notificationService = inject(NotificationService);
   private readonly eventBus = inject(EventBusService);
+  private readonly fb = inject(FormBuilder);
+  private readonly validationService = inject(ValidationService);
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
+  }
+
+  /**
+   * Inicializa el formulario reactivo
+   */
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup si es necesario
+  }
+
+  /**
+   * Inicializa el FormGroup con validadores síncronos y asíncronos
+   */
+  private initForm(): void {
+    this.registerForm = this.fb.group({
+      email: ['', 
+        [Validators.required, Validators.email],
+        [AsyncValidators.uniqueEmail(this.validationService, 600)]
+      ],
+      username: ['',
+        [Validators.required, Validators.minLength(3), CustomValidators.username()],
+        [AsyncValidators.availableUsername(this.validationService, 600)]
+      ],
+      password: ['',
+        [Validators.required, Validators.minLength(8), CustomValidators.strongPassword()]
+      ]
+    });
   }
 
   /**
@@ -120,42 +148,108 @@ export class RegisterForm implements AfterViewChecked {
   }
 
   get emailError(): string {
-    if (!this.emailTouched) return '';
-    if (!this.email.trim()) return 'El email es obligatorio';
-    if (!this.emailRegex.test(this.email)) return 'El email no es válido';
+    const control = this.registerForm?.get('email');
+    if (!control || !control.touched) return '';
+    if (control.hasError('required')) return 'El email es obligatorio';
+    if (control.hasError('email')) return 'El email no es válido';
+    if (control.hasError('emailNotUnique')) return 'Este email ya está registrado';
     return '';
+  }
+
+  /**
+   * Indica si el email está siendo validado asíncronamente
+   */
+  get isEmailValidating(): boolean {
+    return this.registerForm?.get('email')?.status === 'PENDING';
   }
 
   get usernameError(): string {
-    if (!this.usernameTouched) return '';
-    if (!this.username.trim()) return 'El nombre de usuario es obligatorio';
-    if (this.username.trim().length < 3) return 'Mínimo 3 caracteres';
+    const control = this.registerForm?.get('username');
+    if (!control || !control.touched) return '';
+    if (control.hasError('required')) return 'El nombre de usuario es obligatorio';
+    if (control.hasError('minlength')) return 'Mínimo 3 caracteres';
+    if (control.hasError('invalidUsername')) return 'Solo letras, números, guiones y guiones bajos';
+    if (control.hasError('usernameNotAvailable')) return 'Este nombre de usuario ya está en uso';
     return '';
+  }
+
+  /**
+   * Indica si el username está siendo validado asíncronamente
+   */
+  get isUsernameValidating(): boolean {
+    return this.registerForm?.get('username')?.status === 'PENDING';
   }
 
   get passwordError(): string {
-    if (!this.passwordTouched) return '';
-    if (!this.password) return 'La contraseña es obligatoria';
-    if (this.password.length < 6) return 'Mínimo 6 caracteres';
+    const control = this.registerForm?.get('password');
+    if (!control || !control.touched) return '';
+    if (control.hasError('required')) return 'La contraseña es obligatoria';
+    if (control.hasError('minlength')) return 'Mínimo 8 caracteres';
+    
+    // Errores específicos de strongPassword
+    const strongPasswordErrors = control.getError('strongPassword');
+    if (strongPasswordErrors) {
+      if (strongPasswordErrors['minLength']) return 'Mínimo 8 caracteres';
+      if (strongPasswordErrors['noUppercase']) return 'Falta al menos una mayúscula';
+      if (strongPasswordErrors['noLowercase']) return 'Falta al menos una minúscula';
+      if (strongPasswordErrors['noNumber']) return 'Falta al menos un número';
+      if (strongPasswordErrors['noSpecialChar']) return 'Falta al menos un símbolo (.,!@#$%&*...)';
+      return 'Contraseña no cumple los requisitos';
+    }
+    
     return '';
   }
 
+  /**
+   * Calcula la fortaleza de la contraseña (0-4)
+   */
+  get passwordStrength(): number {
+    const password = this.registerForm?.get('password')?.value || '';
+    let strength = 0;
+    if (password.length >= 6) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+    return Math.min(strength, 4);
+  }
+
+  /**
+   * Devuelve el texto descriptivo de la fortaleza de la contraseña
+   */
+  get passwordStrengthText(): string {
+    const strength = this.passwordStrength;
+    switch (strength) {
+      case 0: return '';
+      case 1: return 'Muy débil';
+      case 2: return 'Débil';
+      case 3: return 'Aceptable';
+      case 4: return 'Fuerte';
+      default: return '';
+    }
+  }
+
   get isFormValid(): boolean {
-    return this.emailRegex.test(this.email) && 
-           this.username.trim().length >= 3 && 
-           this.password.length >= 6;
+    return this.registerForm?.valid ?? false;
+  }
+
+  /**
+   * Verifica si el formulario está pendiente de validaciones asíncronas
+   */
+  get isFormPending(): boolean {
+    return this.registerForm?.pending ?? false;
   }
 
   onEmailBlur(): void {
-    this.emailTouched = true;
+    this.registerForm.get('email')?.markAsTouched();
   }
 
   onUsernameBlur(): void {
-    this.usernameTouched = true;
+    this.registerForm.get('username')?.markAsTouched();
   }
 
   onPasswordBlur(): void {
-    this.passwordTouched = true;
+    this.registerForm.get('password')?.markAsTouched();
   }
 
   /**
@@ -177,32 +271,28 @@ export class RegisterForm implements AfterViewChecked {
       event.preventDefault();
     }
     
-    if (this.isFormValid) {
+    if (this.registerForm.valid) {
+      const { email, username, password } = this.registerForm.value;
+      
       // Mostrar loading global mientras se procesa el registro
       this.loadingService.showGlobal('Creando cuenta...');
       
       // Emitir evento de intento de registro
-      this.eventBus.emit('auth:register:attempt', { email: this.email, username: this.username });
+      this.eventBus.emit('auth:register:attempt', { email, username });
       
       // Emitir el evento de submit
-      this.registerSubmit.emit({ 
-        email: this.email, 
-        username: this.username, 
-        password: this.password 
-      });
+      this.registerSubmit.emit({ email, username, password });
       
       // Simular respuesta del servidor (en producción esto vendría del backend)
       setTimeout(() => {
         this.loadingService.hideGlobal();
-        this.notificationService.success('Registro exitoso', `¡Bienvenido, ${this.username}! Tu cuenta ha sido creada.`);
-        this.eventBus.emit('auth:register:success', { email: this.email, username: this.username });
+        this.notificationService.success('Registro exitoso', `¡Bienvenido, ${username}! Tu cuenta ha sido creada.`);
+        this.eventBus.emit('auth:register:success', { email, username });
         this.closeModal();
       }, 1500);
     } else {
       // Marcar todos los campos como tocados para mostrar errores
-      this.emailTouched = true;
-      this.usernameTouched = true;
-      this.passwordTouched = true;
+      this.registerForm.markAllAsTouched();
       this.notificationService.warning('Formulario incompleto', 'Por favor, completa todos los campos correctamente.');
     }
   }
@@ -242,11 +332,6 @@ export class RegisterForm implements AfterViewChecked {
   }
 
   private resetForm(): void {
-    this.email = '';
-    this.username = '';
-    this.password = '';
-    this.emailTouched = false;
-    this.usernameTouched = false;
-    this.passwordTouched = false;
+    this.registerForm.reset();
   }
 }

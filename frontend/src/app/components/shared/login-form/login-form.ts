@@ -1,40 +1,32 @@
-import { Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewChecked, Inject, PLATFORM_ID, inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewChecked, Inject, PLATFORM_ID, inject, OnInit, OnDestroy } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormInput } from '../form-input/form-input';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoadingService, NotificationService, EventBusService } from '../../../services';
 
 @Component({
   selector: 'app-login-form',
-  imports: [FormInput, FontAwesomeModule],
+  imports: [FormInput, FontAwesomeModule, ReactiveFormsModule, CommonModule],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss',
 })
-export class LoginForm implements AfterViewChecked {
-  /** Servicios inyectados */
+export class LoginForm implements AfterViewChecked, OnInit, OnDestroy {
   private notificationService = inject(NotificationService);
   private loadingService = inject(LoadingService);
   private eventBus = inject(EventBusService);
+  private fb = inject(FormBuilder);
 
-  /** Referencia al contenedor del modal para manipulación del DOM */
+  loginForm!: FormGroup;
+
   @ViewChild('modalContainer') modalContainer!: ElementRef<HTMLElement>;
-  
-  /** Referencia al campo de usuario para auto-focus */
   @ViewChild('usernameInput') usernameInput!: ElementRef;
-  
-  /** Referencia al botón de cerrar */
   @ViewChild('closeButton') closeButton!: ElementRef<HTMLButtonElement>;
 
   @Input() isOpen = false;
   @Output() close = new EventEmitter<void>();
   @Output() loginSubmit = new EventEmitter<{ username: string; password: string }>();
   @Output() switchToRegister = new EventEmitter<void>();
-
-  username = '';
-  password = '';
-  usernameTouched = false;
-  passwordTouched = false;
-  isSubmitting = false;
   
   private isBrowser: boolean;
   private previousActiveElement: HTMLElement | null = null;
@@ -42,6 +34,27 @@ export class LoginForm implements AfterViewChecked {
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
+  }
+
+  /**
+   * Inicializa el formulario reactivo con FormBuilder
+   */
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup si es necesario
+  }
+
+  /**
+   * Inicializa el FormGroup con sus controles y validadores
+   */
+  private initForm(): void {
+    this.loginForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
   }
 
   /**
@@ -127,29 +140,45 @@ export class LoginForm implements AfterViewChecked {
   }
 
   get usernameError(): string {
-    if (!this.usernameTouched) return '';
-    if (!this.username.trim()) return 'El nombre de usuario es obligatorio';
-    if (this.username.trim().length < 3) return 'Mínimo 3 caracteres';
+    const control = this.loginForm?.get('username');
+    if (!control || !control.touched) return '';
+    if (control.hasError('required')) return 'El nombre de usuario es obligatorio';
+    if (control.hasError('minlength')) return 'Mínimo 3 caracteres';
     return '';
   }
 
   get passwordError(): string {
-    if (!this.passwordTouched) return '';
-    if (!this.password) return 'La contraseña es obligatoria';
-    if (this.password.length < 6) return 'Mínimo 6 caracteres';
+    const control = this.loginForm?.get('password');
+    if (!control || !control.touched) return '';
+    if (control.hasError('required')) return 'La contraseña es obligatoria';
+    if (control.hasError('minlength')) return 'Mínimo 6 caracteres';
     return '';
   }
 
   get isFormValid(): boolean {
-    return this.username.trim().length >= 3 && this.password.length >= 6;
+    return this.loginForm?.valid ?? false;
+  }
+
+  /**
+   * Verifica si el formulario está en estado dirty (modificado)
+   */
+  get isFormDirty(): boolean {
+    return this.loginForm?.dirty ?? false;
+  }
+
+  /**
+   * Verifica si el formulario ha sido tocado
+   */
+  get isFormTouched(): boolean {
+    return this.loginForm?.touched ?? false;
   }
 
   onUsernameBlur(): void {
-    this.usernameTouched = true;
+    this.loginForm.get('username')?.markAsTouched();
   }
 
   onPasswordBlur(): void {
-    this.passwordTouched = true;
+    this.loginForm.get('password')?.markAsTouched();
   }
 
   /**
@@ -173,27 +202,28 @@ export class LoginForm implements AfterViewChecked {
       event.preventDefault();
     }
     
-    if (this.isFormValid) {
+    if (this.loginForm.valid) {
+      const { username, password } = this.loginForm.value;
+      
       // Mostrar loading global mientras se procesa el login
       this.loadingService.showGlobal('Iniciando sesión...');
       
       // Emitir evento de intento de login
-      this.eventBus.emit('auth:login:attempt', { username: this.username });
+      this.eventBus.emit('auth:login:attempt', { username });
       
       // Emitir el evento de submit
-      this.loginSubmit.emit({ username: this.username, password: this.password });
+      this.loginSubmit.emit({ username, password });
       
       // Simular respuesta del servidor (en producción esto vendría del backend)
       setTimeout(() => {
         this.loadingService.hideGlobal();
-        this.notificationService.success('Inicio de sesión exitoso', `¡Bienvenido, ${this.username}!`);
-        this.eventBus.emit('auth:login:success', { username: this.username });
+        this.notificationService.success('Inicio de sesión exitoso', `¡Bienvenido, ${username}!`);
+        this.eventBus.emit('auth:login:success', { username });
         this.closeModal();
       }, 1000);
     } else {
       // Marcar todos los campos como tocados para mostrar errores
-      this.usernameTouched = true;
-      this.passwordTouched = true;
+      this.loginForm.markAllAsTouched();
       this.notificationService.warning('Formulario incompleto', 'Por favor, completa todos los campos correctamente.');
     }
   }
@@ -234,9 +264,6 @@ export class LoginForm implements AfterViewChecked {
   }
 
   private resetForm(): void {
-    this.username = '';
-    this.password = '';
-    this.usernameTouched = false;
-    this.passwordTouched = false;
+    this.loginForm.reset();
   }
 }

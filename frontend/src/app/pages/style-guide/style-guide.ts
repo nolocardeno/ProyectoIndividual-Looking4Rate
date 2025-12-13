@@ -93,11 +93,16 @@ export default class StyleGuide implements AfterViewInit {
   // ============================================
   // DATOS PARA FORMULARIOS
   // ============================================
-  inputValue = '';
+  inputNormal = '';
+  inputHelp = '';
   inputWithError = '';
   inputDisabled = 'Valor deshabilitado';
+  inputPassword = '';
+  inputEmail = '';
   textareaValue = '';
+  textareaValue2 = '';
   selectedPlatform = '';
+  selectedPlatform2 = '';
 
   platformOptions: SelectOption[] = [
     { value: 'pc', label: 'PC' },
@@ -156,9 +161,9 @@ export default class StyleGuide implements AfterViewInit {
   // DATOS PARA TABS DE EJEMPLO
   // ============================================
   exampleTabs: TabItem[] = [
-    { id: 'tab-1', label: 'General', content: 'Contenido de la pestaña General. Aquí puedes ver información básica.' },
-    { id: 'tab-2', label: 'Detalles', content: 'Contenido de la pestaña Detalles con información más específica.', icon: '📋' },
-    { id: 'tab-3', label: 'Configuración', content: 'Opciones de configuración del elemento seleccionado.' },
+    { id: 'tab-1', label: 'General', content: 'Contenido de la pestaña General.' },
+    { id: 'tab-2', label: 'Detalles', content: 'Contenido de la pestaña Detalles.' },
+    { id: 'tab-3', label: 'Configuración', content: 'Opciones de configuración.' },
     { id: 'tab-4', label: 'Deshabilitada', content: 'No disponible', disabled: true }
   ];
 
