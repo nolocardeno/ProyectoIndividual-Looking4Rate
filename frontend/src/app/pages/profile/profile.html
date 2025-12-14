@@ -1,0 +1,19 @@
+<section class="profile">
+  <article class="profile__container">
+    <h1 class="profile__title">👤 Página de Perfil de Usuario</h1>
+    
+    @if (userId) {
+      <p class="profile__id">ID del usuario: <strong>{{ userId }}</strong></p>
+    }
+
+    <p class="profile__info">
+      Esta es la página de perfil de un usuario.
+      <br>Aquí se mostrará la información del usuario, sus juegos y reviews.
+    </p>
+
+    <!-- Outlet para rutas hijas (tabs) -->
+    <router-outlet></router-outlet>
+
+    <a routerLink="/" class="profile__back">← Volver al inicio</a>
+  </article>
+</section>

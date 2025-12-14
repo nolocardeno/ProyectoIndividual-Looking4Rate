@@ -8,6 +8,7 @@ import { LoginForm } from './components/shared/login-form/login-form';
 import { RegisterForm } from './components/shared/register-form/register-form';
 import { Notification } from './components/shared/notification/notification';
 import { SpinnerComponent } from './components/shared/spinner/spinner';
+import Breadcrumbs from './components/shared/breadcrumbs/breadcrumbs';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { configureFontAwesome } from './fontawesome.config';
 import { EventBusService, StateService, LoadingService } from './services';
@@ -22,7 +23,8 @@ import { EventBusService, StateService, LoadingService } from './services';
     LoginForm, 
     RegisterForm,
     Notification,
-    SpinnerComponent
+    SpinnerComponent,
+    Breadcrumbs
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'

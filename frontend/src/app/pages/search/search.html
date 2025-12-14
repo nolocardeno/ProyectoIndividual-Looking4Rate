@@ -1,0 +1,27 @@
+<section class="search-page">
+  <article class="search-page__container">
+    <h1 class="search-page__title">🔍 Página de Búsqueda</h1>
+    
+    @if (searchQuery) {
+      <p class="search-page__query">Buscando: <strong>"{{ searchQuery }}"</strong></p>
+    } @else {
+      <p class="search-page__empty">No se ha introducido ningún término de búsqueda.</p>
+    }
+
+    <p class="search-page__info">
+      Esta es la página de resultados de búsqueda.
+      <br>Aquí se mostrarán los juegos encontrados.
+    </p>
+
+    <aside class="search-page__demo-results">
+      <h2>Resultados de ejemplo:</h2>
+      <ul>
+        <li><a [routerLink]="['/juego', 1]">Elden Ring</a></li>
+        <li><a [routerLink]="['/juego', 2]">Dark Souls III</a></li>
+        <li><a [routerLink]="['/juego', 3]">Bloodborne</a></li>
+      </ul>
+    </aside>
+
+    <a routerLink="/" class="search-page__back">← Volver al inicio</a>
+  </article>
+</section>

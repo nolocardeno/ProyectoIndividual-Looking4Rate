@@ -1,9 +1,11 @@
 import { Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewChecked, Inject, PLATFORM_ID, inject, OnInit, OnDestroy } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FormInput } from '../form-input/form-input';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoadingService, NotificationService, EventBusService } from '../../../services';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -16,6 +18,8 @@ export class LoginForm implements AfterViewChecked, OnInit, OnDestroy {
   private loadingService = inject(LoadingService);
   private eventBus = inject(EventBusService);
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   loginForm!: FormGroup;
 
@@ -211,16 +215,37 @@ export class LoginForm implements AfterViewChecked, OnInit, OnDestroy {
       // Emitir evento de intento de login
       this.eventBus.emit('auth:login:attempt', { username });
       
-      // Emitir el evento de submit
-      this.loginSubmit.emit({ username, password });
+      // Intentar login con AuthService
+      this.authService.login(username, password).subscribe({
+        next: (success) => {
+          this.loadingService.hideGlobal();
+          
+          if (success) {
+            this.notificationService.success('Inicio de sesión exitoso', `¡Bienvenido, ${username}!`);
+            this.eventBus.emit('auth:login:success', { username });
+            
+            // Obtener URL de redirección o ir al home
+            const redirectUrl = this.authService.getRedirectUrl() || '/';
+            this.authService.clearRedirectUrl();
+            
+            // Cerrar modal
+            this.closeModal();
+            
+            // Navegar a la página de destino
+            this.router.navigateByUrl(redirectUrl);
+          } else {
+            this.notificationService.error('Error de autenticación', 'Usuario o contraseña incorrectos');
+          }
+        },
+        error: (error) => {
+          this.loadingService.hideGlobal();
+          this.notificationService.error('Error de conexión', 'No se pudo conectar con el servidor');
+          console.error('Login error:', error);
+        }
+      });
       
-      // Simular respuesta del servidor (en producción esto vendría del backend)
-      setTimeout(() => {
-        this.loadingService.hideGlobal();
-        this.notificationService.success('Inicio de sesión exitoso', `¡Bienvenido, ${username}!`);
-        this.eventBus.emit('auth:login:success', { username });
-        this.closeModal();
-      }, 1000);
+      // Emitir el evento de submit (para compatibilidad)
+      this.loginSubmit.emit({ username, password });
     } else {
       // Marcar todos los campos como tocados para mostrar errores
       this.loginForm.markAllAsTouched();

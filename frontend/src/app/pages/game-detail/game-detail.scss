@@ -1,0 +1,41 @@
+.game-detail {
+  min-height: 100vh;
+  padding: 2rem;
+  
+  &__container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  &__title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  &__id {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  &__info {
+    margin: 2rem 0;
+    color: var(--color-text-secondary, #666);
+  }
+  
+  &__links {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  &__link {
+    color: var(--color-primary, #007bff);
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

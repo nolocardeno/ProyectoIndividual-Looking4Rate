@@ -1,0 +1,19 @@
+<section class="game-detail">
+  <article class="game-detail__container">
+    <h1 class="game-detail__title">🎮 Página de Detalle del Juego</h1>
+    
+    @if (gameId) {
+      <p class="game-detail__id">ID del juego: <strong>{{ gameId }}</strong></p>
+    }
+
+    <p class="game-detail__info">
+      Esta es la página de detalle de un juego.
+      <br>Aquí se mostrará toda la información del juego seleccionado.
+    </p>
+
+    <nav class="game-detail__links" aria-label="Navegación de retorno">
+      <a routerLink="/buscar" class="game-detail__link">← Volver a búsqueda</a>
+      <a routerLink="/" class="game-detail__link">← Volver al inicio</a>
+    </nav>
+  </article>
+</section>

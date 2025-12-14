@@ -1,0 +1,29 @@
+<nav class="user-dropdown" aria-label="Menú de usuario">
+  <button 
+    class="user-dropdown__button"
+    aria-haspopup="true"
+    type="button">
+    {{ userName }}
+    <span class="user-dropdown__arrow">▼</span>
+  </button>
+  
+  <menu class="user-dropdown__menu">
+    <button class="user-dropdown__item" (click)="onHomeClick()" type="button">
+      <fa-icon [icon]="['fas', 'home']" class="user-dropdown__icon"></fa-icon>
+      Inicio
+    </button>
+    <button class="user-dropdown__item" (click)="onProfileClick()" type="button">
+      <fa-icon [icon]="['fas', 'user-circle']" class="user-dropdown__icon"></fa-icon>
+      Perfil
+    </button>
+    <button class="user-dropdown__item" (click)="onSettingsClick()" type="button">
+      <fa-icon [icon]="['fas', 'cog']" class="user-dropdown__icon"></fa-icon>
+      Ajustes
+    </button>
+    <hr class="user-dropdown__divider">
+    <button class="user-dropdown__item user-dropdown__item--logout" (click)="onLogoutClick()" type="button">
+      <fa-icon [icon]="['fas', 'sign-out-alt']" class="user-dropdown__icon"></fa-icon>
+      Cerrar sesión
+    </button>
+  </menu>
+</nav>

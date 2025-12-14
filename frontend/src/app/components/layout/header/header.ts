@@ -1,17 +1,27 @@
-import { Component, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Component, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewInit, Inject, PLATFORM_ID, inject, OnInit, OnDestroy } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SearchBox } from '../../shared/search-box/search-box';
 import { Button } from '../../shared/button/button';
 import { ThemeToggle } from '../../shared/theme-toggle/theme-toggle';
+import { UserDropdown } from '../../shared/user-dropdown/user-dropdown';
+import { AuthService, AuthState } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, SearchBox, Button, ThemeToggle],
+  imports: [CommonModule, RouterLink, FontAwesomeModule, SearchBox, Button, ThemeToggle, UserDropdown],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header implements AfterViewInit {
+export class Header implements AfterViewInit, OnInit, OnDestroy {
+  /** Router para navegación */
+  private router = inject(Router);
+  
+  /** Servicio de autenticación */
+  private authService = inject(AuthService);
+  
   /** Referencia al menú móvil para manipulación del DOM */
   @ViewChild('mobileMenu') mobileMenu!: ElementRef<HTMLElement>;
   
@@ -23,13 +33,35 @@ export class Header implements AfterViewInit {
 
   searchQuery = '';
   isMenuOpen = false;
+  isUserDropdownOpen = false;
   private isBrowser: boolean;
+  
+  // Estado de autenticación
+  authState: AuthState = {
+    isAuthenticated: false,
+    user: null,
+    token: null,
+    loading: false
+  };
+  
+  private authSubscription?: Subscription;
 
   @Output() loginClick = new EventEmitter<void>();
   @Output() registerClick = new EventEmitter<void>();
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
+  }
+
+  ngOnInit(): void {
+    // Suscribirse al estado de autenticación
+    this.authSubscription = this.authService.authState$.subscribe(state => {
+      this.authState = state;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.authSubscription?.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -69,16 +101,26 @@ export class Header implements AfterViewInit {
    */
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (!this.isMenuOpen || !this.isBrowser) return;
-
     const target = event.target as HTMLElement;
     
-    // Verificar si el click fue dentro del menú móvil o el botón hamburguesa
-    const clickedInsideMenu = this.mobileMenu?.nativeElement?.contains(target);
-    const clickedHamburger = this.hamburgerBtn?.nativeElement?.contains(target);
+    // Cerrar menú móvil si está abierto y el click fue fuera
+    if (this.isMenuOpen && this.isBrowser) {
+      const clickedInsideMenu = this.mobileMenu?.nativeElement?.contains(target);
+      const clickedHamburger = this.hamburgerBtn?.nativeElement?.contains(target);
+      
+      if (!clickedInsideMenu && !clickedHamburger) {
+        this.closeMenu();
+      }
+    }
     
-    if (!clickedInsideMenu && !clickedHamburger) {
-      this.closeMenu();
+    // Cerrar dropdown de usuario si está abierto y el click fue fuera
+    if (this.isUserDropdownOpen && this.isBrowser) {
+      const clickedInsideDropdown = target.closest('.header__user-dropdown');
+      const clickedUserButton = target.closest('.header__user-button');
+      
+      if (!clickedInsideDropdown && !clickedUserButton) {
+        this.isUserDropdownOpen = false;
+      }
     }
   }
 
@@ -172,12 +214,12 @@ export class Header implements AfterViewInit {
   }
 
   /**
-   * Maneja la búsqueda
+   * Maneja la búsqueda - navega a la página de resultados
    */
   onSearch(query: string): void {
     if (query.trim()) {
-      // TODO: Implementar navegación a búsqueda
-      console.log('Buscar:', query);
+      this.router.navigate(['/buscar'], { queryParams: { q: query.trim() } });
+      this.searchQuery = ''; // Limpiar el input después de buscar
     }
   }
 
@@ -189,5 +231,50 @@ export class Header implements AfterViewInit {
       event.preventDefault();
       this.toggleMenu();
     }
+  }
+
+  /**
+   * Alterna el dropdown del usuario
+   */
+  toggleUserDropdown(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.isUserDropdownOpen = !this.isUserDropdownOpen;
+  }
+
+  /**
+   * Navega al perfil del usuario
+   */
+  goToProfile(): void {
+    if (this.authState.user) {
+      this.router.navigate(['/usuario', this.authState.user.id]);
+      this.isUserDropdownOpen = false;
+    }
+  }
+
+  /**
+   * Navega a ajustes
+   */
+  goToSettings(): void {
+    this.router.navigate(['/ajustes']);
+    this.isUserDropdownOpen = false;
+  }
+
+  /**
+   * Navega al inicio
+   */
+  goToHome(): void {
+    this.router.navigate(['/']);
+    this.isUserDropdownOpen = false;
+  }
+
+  /**
+   * Cierra sesión
+   */
+  logout(): void {
+    this.authService.logout();
+    this.isUserDropdownOpen = false;
+    this.router.navigate(['/']);
   }
 }

@@ -1,9 +1,11 @@
 import { Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewChecked, Inject, PLATFORM_ID, inject, OnInit, OnDestroy } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FormInput } from '../form-input/form-input';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoadingService, NotificationService, EventBusService } from '../../../services';
+import { AuthService } from '../../../services/auth.service';
 import { CustomValidators, AsyncValidators, ValidationService } from '../../../validators';
 
 @Component({
@@ -36,6 +38,8 @@ export class RegisterForm implements AfterViewChecked, OnInit, OnDestroy {
   private readonly eventBus = inject(EventBusService);
   private readonly fb = inject(FormBuilder);
   private readonly validationService = inject(ValidationService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -280,16 +284,33 @@ export class RegisterForm implements AfterViewChecked, OnInit, OnDestroy {
       // Emitir evento de intento de registro
       this.eventBus.emit('auth:register:attempt', { email, username });
       
-      // Emitir el evento de submit
-      this.registerSubmit.emit({ email, username, password });
+      // Registrar con AuthService
+      this.authService.register(email, username, password).subscribe({
+        next: (success) => {
+          this.loadingService.hideGlobal();
+          
+          if (success) {
+            this.notificationService.success('Registro exitoso', `¡Bienvenido, ${username}! Tu cuenta ha sido creada.`);
+            this.eventBus.emit('auth:register:success', { email, username });
+            
+            // Cerrar modal
+            this.closeModal();
+            
+            // Navegar al home (ya logueado)
+            this.router.navigate(['/']);
+          } else {
+            this.notificationService.error('Error de registro', 'No se pudo crear la cuenta');
+          }
+        },
+        error: (error) => {
+          this.loadingService.hideGlobal();
+          this.notificationService.error('Error de conexión', 'No se pudo conectar con el servidor');
+          console.error('Register error:', error);
+        }
+      });
       
-      // Simular respuesta del servidor (en producción esto vendría del backend)
-      setTimeout(() => {
-        this.loadingService.hideGlobal();
-        this.notificationService.success('Registro exitoso', `¡Bienvenido, ${username}! Tu cuenta ha sido creada.`);
-        this.eventBus.emit('auth:register:success', { email, username });
-        this.closeModal();
-      }, 1500);
+      // Emitir el evento de submit (para compatibilidad)
+      this.registerSubmit.emit({ email, username, password });
     } else {
       // Marcar todos los campos como tocados para mostrar errores
       this.registerForm.markAllAsTouched();

@@ -1,0 +1,188 @@
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// USER DROPDOWN COMPONENT
+// Dropdown de usuario con estilo de botón integrado
+// ==========================================================================
+
+.user-dropdown {
+  position: relative;
+
+  // Al hacer hover en todo el menú (botón + dropdown)
+  &:hover {
+    .user-dropdown__menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .user-dropdown__arrow {
+      transform: rotate(180deg);
+    }
+
+    // Mantener estilo hover del botón mientras se navega el dropdown
+    .user-dropdown__button {
+      transform: translateY(-1px);
+      box-shadow: $shadow-hover-accent;
+
+      &::before {
+        background: linear-gradient(180deg, rgba($color-text-dark, 1) 0%, rgba($color-text-dark, 0.1) 100%);
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // BOTÓN PRINCIPAL
+  // --------------------------------------------------------------------------
+  &__button {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    padding: 4px 8px;
+    font-family: $font-primary;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-md;
+    color: $color-text-dark;
+    letter-spacing: 0.05em;
+    text-transform: uppercase; // Siempre en mayúsculas
+    white-space: nowrap;
+    border: none;
+    border-radius: $radius-lg;
+    cursor: pointer;
+    position: relative;
+    background: linear-gradient(180deg, $color-primary-dark 0%, color.mix($color-primary-dark, $color-accent-dark, 70%) 100%);
+    @include transition(all);
+
+    // Borde con gradiente
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      padding: $border-thin;
+      background: linear-gradient(180deg, rgba($color-text-alt-dark, 1) 0%, rgba($color-text-alt-dark, 0.1) 100%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      @include transition(all);
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: $shadow-hover-accent;
+
+      &::before {
+        background: linear-gradient(180deg, rgba($color-text-dark, 1) 0%, rgba($color-text-dark, 0.1) 100%);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: $shadow-active-accent;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // FLECHA
+  // --------------------------------------------------------------------------
+  &__arrow {
+    font-size: $font-size-sm;
+    @include transition(transform);
+    margin-left: 2px;
+  }
+
+  // --------------------------------------------------------------------------
+  // MENÚ DESPLEGABLE
+  // --------------------------------------------------------------------------
+  &__menu {
+    position: absolute;
+    top: calc(100% + 6px); // Separado del botón
+    right: 0;
+    min-width: 160px; // Ancho mínimo fijo para que quepa todo el contenido
+    border-radius: $radius-lg; // Todas las esquinas redondeadas
+    padding: 4px;
+    z-index: 1100;
+    overflow: hidden;
+    
+    // Oculto por defecto, se muestra con hover
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    @include transition(all);
+    
+    // Mismo gradiente exacto que los botones
+    background: linear-gradient(180deg, $color-primary-dark 0%, color.mix($color-primary-dark, $color-accent-dark, 70%) 100%);
+    box-shadow: $shadow-lg, 0 0 20px rgba($color-accent-dark, 0.15);
+
+    // Borde con gradiente completo como los botones
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      padding: $border-thin;
+      background: linear-gradient(180deg, rgba($color-text-alt-dark, 1) 0%, rgba($color-text-alt-dark, 0.1) 100%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ITEMS DEL MENÚ
+  // --------------------------------------------------------------------------
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+    width: 100%;
+    padding: 8px 10px;
+    background: transparent;
+    border: none;
+    color: $color-text-dark;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    text-align: left;
+    cursor: pointer;
+    @include transition(all);
+    border-radius: $radius-md;
+    white-space: nowrap;
+    position: relative;
+
+    &:hover {
+      background: rgba($color-accent-dark, 0.25);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &--logout {
+      &:hover {
+        background: rgba($color-error-dark, 0.25);
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ICONO
+  // --------------------------------------------------------------------------
+  &__icon {
+    font-size: $font-size-md;
+    width: 18px;
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+
+  // --------------------------------------------------------------------------
+  // DIVISOR
+  // --------------------------------------------------------------------------
+  &__divider {
+    margin: 4px 0;
+    border: none;
+    border-top: $border-thin solid rgba($color-text-alt-dark, 0.3);
+  }
+}

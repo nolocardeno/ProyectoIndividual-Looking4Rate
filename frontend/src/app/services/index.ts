@@ -54,3 +54,23 @@ export {
   type NotificationType,
   type NotificationPosition
 } from './notification.service';
+
+// ============================================
+// Servicios de navegación
+// ============================================
+
+export {
+  NavigationService,
+  type NavigationState,
+  type BreadcrumbItem
+} from './navigation.service';
+
+// ============================================
+// Servicios de autenticación
+// ============================================
+
+export {
+  AuthService,
+  type AuthUser,
+  type AuthState
+} from './auth.service';

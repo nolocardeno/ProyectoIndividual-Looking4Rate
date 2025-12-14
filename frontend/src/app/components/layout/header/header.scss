@@ -228,6 +228,44 @@
     z-index: 999;
     animation: fadeIn $transition-base $transition-ease forwards;
   }
+
+  // --------------------------------------------------------------------------
+  // MOBILE MENU ITEM (Authenticated)
+  // --------------------------------------------------------------------------
+  &__mobile-menu-item {
+    width: 100%;
+    padding: $spacing-3;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: $font-size-md;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    @include transition(all);
+    border-radius: $radius-sm;
+
+    &:hover {
+      background-color: var(--bg-surface);
+      color: var(--color-accent);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &--logout {
+      color: var(--color-error);
+      margin-top: $spacing-2;
+      border-top: $border-thin solid var(--border-color);
+      padding-top: $spacing-3;
+
+      &:hover {
+        background-color: rgba($color-error-dark, 0.1);
+        color: var(--color-error);
+      }
+    }
+  }
 }
 
 // Animación para el overlay
@@ -333,5 +371,17 @@
     &__overlay {
       display: none !important;
     }
+  }
+}
+
+// Animación para dropdown
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

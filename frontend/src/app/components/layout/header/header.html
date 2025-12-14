@@ -7,8 +7,24 @@
     <!-- Navegación desktop -->
     <nav class="header__actions header__actions--desktop">
       <app-theme-toggle></app-theme-toggle>
-      <app-button variant="primary" size="md" (btnClick)="loginClick.emit()">INICIAR SESIÓN</app-button>
-      <app-button variant="primary" size="md" (btnClick)="registerClick.emit()">CREAR CUENTA</app-button>
+      
+      <!-- Mostrar botones de login/registro si NO está autenticado -->
+      @if (!authState.isAuthenticated) {
+        <app-button variant="primary" size="md" (btnClick)="loginClick.emit()">INICIAR SESIÓN</app-button>
+        <app-button variant="primary" size="md" (btnClick)="registerClick.emit()">CREAR CUENTA</app-button>
+      }
+      
+      <!-- Mostrar dropdown de usuario si SÍ está autenticado -->
+      @if (authState.isAuthenticated && authState.user) {
+        <app-user-dropdown
+          [userName]="authState.user.nombre"
+          (navigateHome)="goToHome()"
+          (navigateProfile)="goToProfile()"
+          (navigateSettings)="goToSettings()"
+          (logoutClick)="logout()">
+        </app-user-dropdown>
+      }
+      
       <app-search-box 
         placeholder="Buscar juegos..."
         [(value)]="searchQuery"
@@ -53,12 +69,37 @@
       [attr.aria-hidden]="!isMenuOpen"
       role="menu">
       <ul class="header__mobile-menu-content">
-        <li role="menuitem">
-          <app-button variant="primary" size="lg" (btnClick)="onLoginClick()">INICIAR SESIÓN</app-button>
-        </li>
-        <li role="menuitem">
-          <app-button variant="primary" size="lg" (btnClick)="onRegisterClick()">CREAR CUENTA</app-button>
-        </li>
+        @if (!authState.isAuthenticated) {
+          <li role="menuitem">
+            <app-button variant="primary" size="lg" (btnClick)="onLoginClick()">INICIAR SESIÓN</app-button>
+          </li>
+          <li role="menuitem">
+            <app-button variant="primary" size="lg" (btnClick)="onRegisterClick()">CREAR CUENTA</app-button>
+          </li>
+        }
+        
+        @if (authState.isAuthenticated && authState.user) {
+          <li role="menuitem">
+            <button class="header__mobile-menu-item" (click)="goToHome()" type="button">
+              <fa-icon [icon]="['fas', 'home']"></fa-icon> Inicio
+            </button>
+          </li>
+          <li role="menuitem">
+            <button class="header__mobile-menu-item" (click)="goToProfile()" type="button">
+              <fa-icon [icon]="['fas', 'user-circle']"></fa-icon> Perfil
+            </button>
+          </li>
+          <li role="menuitem">
+            <button class="header__mobile-menu-item" (click)="goToSettings()" type="button">
+              <fa-icon [icon]="['fas', 'cog']"></fa-icon> Ajustes
+            </button>
+          </li>
+          <li role="menuitem">
+            <button class="header__mobile-menu-item header__mobile-menu-item--logout" (click)="logout()" type="button">
+              🚪 Cerrar sesión
+            </button>
+          </li>
+        }
       </ul>
     </nav>
 
