@@ -1,382 +1,145 @@
 @use 'styles/00-settings/variables' as *;
-@use 'styles/04-objects/grid' as *;
 
 // ==========================================================================
 // HOME PAGE - LOOKING4RATE
-// Página principal con catálogo de juegos y demos de componentes
+// Página principal con hero y secciones de juegos
 // ==========================================================================
 
 .home {
   display: flex;
   flex-direction: column;
   gap: $spacing-6;
-  padding: $spacing-6 0;
+  
+  // Eliminar padding superior para que el hero llegue al header
+  padding-top: 0;
+}
 
-  // --------------------------------------------------------------------------
-  // GRID DE CARÁTULAS
-  // --------------------------------------------------------------------------
-  &__covers {
-    @extend .grid;
+// ==========================================================================
+// HERO SECTION
+// ==========================================================================
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 85vh;
+  padding: 0 $spacing-4 0 $spacing-4;
+  overflow: visible;
+  // Extender más allá de los márgenes
+  margin: calc(-1 * $spacing-6) calc(-1 * $spacing-8) 0;
+  width: calc(100% + 2 * $spacing-8);
+  
+  // Imagen de fondo centrada
+  background: url('https://wallpapercave.com/wp/wp1874165.jpg') center center / cover no-repeat;
+  
+  // Overlay con gradientes laterales para efecto Letterboxd
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    // Gradientes que se desvanecen desde el centro hacia los lados
+    background: 
+      // Gradiente izquierdo
+      linear-gradient(to right, $color-primary-dark 0%, transparent 30%),
+      // Gradiente derecho  
+      linear-gradient(to left, $color-primary-dark 0%, transparent 30%),
+      // Gradiente inferior
+      linear-gradient(to top, $color-primary-dark 0%, transparent 50%);
   }
-
-  &__game-card-example {
-    margin-bottom: $spacing-4;
-  }
-
-  // --------------------------------------------------------------------------
-  // SECCIÓN DE DEMOS
-  // --------------------------------------------------------------------------
-  &__demos-section {
-    margin-top: $spacing-6;
-    padding-top: $spacing-6;
-    border-top: 2px solid var(--border-color);
-  }
-
-  &__demos-header {
+  
+  // Contenido centrado con padding
+  &__content {
+    position: relative;
+    z-index: 2;
     text-align: center;
-    margin-bottom: $spacing-5;
+    max-width: 900px;
+    padding: 0 $spacing-6;
+    margin-bottom: -$spacing-6; // Sobresale por debajo de la imagen
   }
-
-  &__demos-title {
-    font-family: $font-primary;
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: var(--color-accent);
-    margin: 0 0 $spacing-2 0;
-  }
-
-  &__demos-subtitle {
-    font-size: $font-size-md;
-    color: var(--text-secondary);
-    margin: 0;
-  }
-
-  // --------------------------------------------------------------------------
-  // GRUPOS DE DEMOS
-  // --------------------------------------------------------------------------
-  &__demo-group {
-    margin-bottom: $spacing-5;
-  }
-
-  &__demo-group-title {
-    font-family: $font-primary;
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
+  
+  // Texto principal (todo junto como Letterboxd)
+  &__text {
+    font-family: $font-secondary; // Playfair Display
+    font-size: $font-size-xl; // 32px
+    font-weight: 900;
     color: var(--text-primary);
-    padding: $spacing-2 $spacing-3;
-    background: var(--bg-secondary);
-    border-left: 3px solid var(--color-accent);
-    margin: 0 0 $spacing-3 0;
+    margin: 0 0 $spacing-4 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: $line-height-normal;
   }
-
-  // --------------------------------------------------------------------------
-  // CAJAS DE DEMO
-  // --------------------------------------------------------------------------
-  &__demo-box {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: $radius-lg;
-    padding: $spacing-4;
-    margin-bottom: $spacing-3;
-    transition: border-color $transition-fast ease;
-
-    &:hover {
-      border-color: var(--color-accent);
+  
+  // Botón CTA
+  &__cta {
+    display: inline-block;
+    text-decoration: none;
+    
+    // Hacer el texto más negrita
+    button {
+      font-weight: $font-weight-bold;
     }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  &__demo-title {
-    font-family: $font-primary;
-    font-size: $font-size-md;
-    font-weight: $font-weight-bold;
-    color: var(--text-primary);
-    margin: 0 0 $spacing-2 0;
-  }
-
-  &__demo-content {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-3;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    &--row {
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: $spacing-2;
-    }
-  }
-
-  &__demo-row {
-    display: flex;
-    align-items: center;
-    gap: $spacing-2;
-  }
-
-  &__demo-controls {
-    display: flex;
-    gap: $spacing-2;
-    flex-wrap: wrap;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    &--wrap {
-      flex-wrap: wrap;
-    }
-  }
-
-  &__button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $spacing-2;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  &__demo-hint {
-    font-size: $font-size-sm;
-    color: var(--text-muted);
-    margin: 0;
-    font-style: italic;
-  }
-
-  &__demo-label {
-    font-size: $font-size-sm;
-    color: var(--text-secondary);
-    margin: $spacing-2 0 0 0;
-  }
-
-  // --------------------------------------------------------------------------
-  // BARRA DE PROGRESO
-  // --------------------------------------------------------------------------
-  &__progress-demo {
-    display: flex;
-    align-items: center;
-    gap: $spacing-3;
-    margin-top: $spacing-2;
-  }
-
-  &__progress-bar {
-    flex: 1;
-    height: 8px;
-    background: var(--bg-tertiary);
-    border-radius: $radius-full;
-    overflow: hidden;
-    appearance: none;
-    border: none;
-
-    // Estilos para navegadores WebKit (Chrome, Safari, Edge)
-    &::-webkit-meter-bar {
-      background: var(--bg-tertiary);
-      border-radius: $radius-full;
-      border: none;
-    }
-
-    &::-webkit-meter-optimum-value {
-      background: var(--color-accent);
-      border-radius: $radius-full;
-    }
-
-    // Estilos para Firefox
-    &::-moz-meter-bar {
-      background: var(--color-accent);
-      border-radius: $radius-full;
-    }
-  }
-
-  &__progress-fill {
-    height: 100%;
-    background: var(--color-accent);
-    border-radius: $radius-full;
-    transition: width $transition-fast ease;
-  }
-
-  &__progress-text {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: var(--text-primary);
-    min-width: 3rem;
-    text-align: right;
-  }
-
-  // --------------------------------------------------------------------------
-  // SPINNERS INLINE
-  // --------------------------------------------------------------------------
-  &__spinner-section {
-    padding: $spacing-3;
-    background: var(--bg-tertiary);
-    border-radius: $radius-md;
-
-    &:not(:last-child) {
-      margin-bottom: $spacing-3;
-    }
-  }
-
-  &__spinner-subtitle {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: var(--text-secondary);
-    margin: 0 0 $spacing-3 0;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  &__spinner-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $spacing-4;
-    align-items: flex-end;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  &__spinner-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $spacing-2;
-    min-width: 60px;
-    margin: 0;
-
-    span {
-      font-size: $font-size-xs;
-      color: var(--text-muted);
-    }
-
-    &--dark {
-      background: var(--bg-inverse);
-      padding: $spacing-2;
-      border-radius: $radius-sm;
-
-      span {
-        color: var(--text-inverse);
-      }
-    }
-  }
-
-  // --------------------------------------------------------------------------
-  // LOG DE EVENTOS
-  // --------------------------------------------------------------------------
-  &__event-log {
-    display: block;
-    background: var(--bg-tertiary);
-    border-radius: $radius-md;
-    padding: $spacing-3;
-    font-size: $font-size-sm;
-    margin-top: $spacing-2;
-  }
-
-  &__event-empty {
-    color: var(--text-secondary);
-    font-style: italic;
-    margin: 0;
-  }
-
-  &__event-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-1;
-
-    li {
-      padding: $spacing-1 $spacing-2;
-      background: var(--bg-secondary);
-      border-radius: $radius-sm;
-      color: var(--text-primary);
-      font-family: monospace;
-      font-size: $font-size-xs;
-    }
-  }
-
-  // --------------------------------------------------------------------------
-  // RESULTADOS DE BÚSQUEDA
-  // --------------------------------------------------------------------------
-  &__search-results {
-    display: block;
-    background: var(--bg-tertiary);
-    border-radius: $radius-md;
-    padding: $spacing-3;
-    margin-top: $spacing-2;
-  }
-
-  &__search-list {
-    list-style: none;
-    padding: 0;
-    margin: $spacing-2 0 0 0;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-1;
-
-    li {
-      padding: $spacing-1 $spacing-2;
-      background: var(--bg-secondary);
-      border-radius: $radius-sm;
-      color: var(--text-primary);
-    }
-  }
-
-  &__no-results {
-    color: var(--text-secondary);
-    font-style: italic;
-    margin: $spacing-2 0 0 0;
-  }
-
-  // --------------------------------------------------------------------------
-  // ALERTAS
-  // --------------------------------------------------------------------------
-  &__alerts {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-2;
-    margin-top: $spacing-2;
-  }
-
-  // --------------------------------------------------------------------------
-  // FORMULARIOS
-  // --------------------------------------------------------------------------
-  &__form-fields {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-3;
-    border: none;
-    padding: 0;
-    margin: 0;
   }
 }
 
 // ==========================================================================
-// RESPONSIVE
+// SECCIONES DE CONTENIDO
 // ==========================================================================
 
-@media (max-width: $breakpoint-md) {
-  .home {
-    &__demos-title {
-      font-size: $font-size-xl;
-    }
-
-    &__demo-group-title {
-      font-size: $font-size-md;
-    }
-
-    &__demo-content--row {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    &__covers {
-      justify-content: center;
-    }
+// Grid de carátulas
+.home__covers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: $spacing-4;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  @media (min-width: $breakpoint-sm) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
+  
+  @media (min-width: $breakpoint-md) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: $spacing-3;
+  }
+}
+
+.home__cover-item {
+  // El componente game-cover maneja sus propios estilos
+  display: block;
+}
+
+// Estado de carga
+.home__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-3;
+  padding: $spacing-6;
+  color: var(--text-secondary);
+  
+  p {
+    margin: 0;
+    font-size: $font-size-sm;
+  }
+}
+
+// Estado de error
+.home__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-4;
+}
+
+// Estado vacío
+.home__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: $font-size-sm;
+  padding: $spacing-6;
+  margin: 0;
 }

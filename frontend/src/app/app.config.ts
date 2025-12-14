@@ -7,9 +7,11 @@ import {
   withRouterConfig,
   PreloadAllModules
 } from '@angular/router';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { httpInterceptors } from './core/interceptors';
 
 /**
  * Configuración principal de la aplicación Angular
@@ -19,11 +21,16 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
  * - Scroll automático con anclas y restauración de posición
  * - Input binding para parámetros de ruta
  * - Hydration del cliente para SSR
+ * - HttpClient con interceptores para comunicación API
  */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    
+    // ========================================
+    // ROUTER
+    // ========================================
     provideRouter(
       routes,
       // Estrategia de precarga: carga todos los módulos después de la carga inicial
@@ -41,6 +48,20 @@ export const appConfig: ApplicationConfig = {
         paramsInheritanceStrategy: 'always'
       })
     ),
+    
+    // ========================================
+    // HTTP CLIENT
+    // ========================================
+    provideHttpClient(
+      // Usar Fetch API para mejor rendimiento en SSR
+      withFetch(),
+      // Interceptores en orden: logging -> loading -> auth -> error
+      withInterceptors(httpInterceptors)
+    ),
+    
+    // ========================================
+    // HYDRATION (SSR)
+    // ========================================
     provideClientHydration(withEventReplay())
   ]
 };

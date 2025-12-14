@@ -2450,3 +2450,817 @@ src/app/
 - [Route Guards](https://angular.dev/guide/routing/router-guards)
 - [Preloading Strategies](https://angular.dev/guide/routing/preloading-modules)
 - [Resolvers](https://angular.dev/guide/routing/resolver)
+
+---
+
+<br><br>
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📡 FASE 5: COMUNICACIÓN HTTP CON BACKEND
+# ═══════════════════════════════════════════════════════════════════════════════
+
+> **Objetivo:** Implementar comunicación HTTP completa con el backend Spring Boot,
+> incluyendo operaciones CRUD, interceptores, manejo de errores y estados de carga.
+
+---
+
+## 🔧 Configuración de HttpClient
+
+### Configuración en app.config.ts
+
+HttpClient se configura en el archivo de configuración principal de la aplicación:
+
+```typescript
+// app.config.ts
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { httpInterceptors } from './core/interceptors';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ... otros providers
+    
+    // HTTP Client con interceptores
+    provideHttpClient(
+      withFetch(),                        // Usar Fetch API
+      withInterceptors(httpInterceptors)  // Interceptores en orden
+    )
+  ]
+};
+```
+
+### Constantes de Configuración
+
+Las constantes de la API se centralizan en `core/constants.ts`:
+
+```typescript
+// URL base del API
+export const API_URL = 'http://localhost:8080/api';
+
+// Endpoints organizados por recurso
+export const ENDPOINTS = {
+  AUTH: {
+    LOGIN: '/auth/login',
+    REGISTRO: '/auth/registro',
+    ME: '/auth/me'
+  },
+  JUEGOS: {
+    BASE: '/juegos',
+    BY_ID: (id: number) => `/juegos/${id}`,
+    BUSCAR: '/juegos/buscar',
+    TOP: '/juegos/top'
+  },
+  // ... más endpoints
+};
+
+// Configuración HTTP
+export const HTTP_CONFIG = {
+  DEFAULT_TIMEOUT: 30000,
+  RETRY_COUNT: 3,
+  RETRY_DELAY: 1000,
+  RETRYABLE_STATUS_CODES: [408, 500, 502, 503, 504]
+};
+```
+
+---
+
+## 📦 Servicio Base HTTP
+
+### HttpBaseService
+
+Servicio abstracto con operaciones CRUD genéricas:
+
+```typescript
+// services/http-base.service.ts
+@Injectable({ providedIn: 'root' })
+export class HttpBaseService {
+  protected http = inject(HttpClient);
+
+  // GET - Obtener recurso(s)
+  get<T>(endpoint: string, options?: HttpOptions): Observable<T> {
+    return this.http.get<T>(this.buildUrl(endpoint), this.buildHttpOptions(options)).pipe(
+      timeout(options?.timeout ?? HTTP_CONFIG.DEFAULT_TIMEOUT),
+      this.retryOnError(options?.retries ?? HTTP_CONFIG.RETRY_COUNT),
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  // POST - Crear recurso
+  post<T>(endpoint: string, body: unknown, options?: HttpOptions): Observable<T>;
+
+  // PUT - Actualizar recurso completo
+  put<T>(endpoint: string, body: unknown, options?: HttpOptions): Observable<T>;
+
+  // PATCH - Actualizar recurso parcialmente
+  patch<T>(endpoint: string, body: unknown, options?: HttpOptions): Observable<T>;
+
+  // DELETE - Eliminar recurso
+  delete<T>(endpoint: string, options?: HttpOptions): Observable<T>;
+
+  // Upload con FormData
+  uploadFile<T>(endpoint: string, file: File, fieldName?: string): Observable<T>;
+
+  // Upload con progreso
+  uploadFileWithProgress<T>(
+    endpoint: string, 
+    file: File, 
+    onProgress?: (progress: UploadProgress) => void
+  ): Observable<T>;
+}
+```
+
+### Opciones de Petición
+
+```typescript
+export interface HttpOptions {
+  headers?: Record<string, string>;    // Headers adicionales
+  params?: Record<string, any>;        // Query params
+  timeout?: number;                     // Timeout personalizado
+  retries?: number;                     // Número de reintentos
+  showLoading?: boolean;               // Mostrar loading global
+  suppressError?: boolean;             // Suprimir manejo de error global
+  responseType?: 'json' | 'text' | 'blob';
+}
+```
+
+---
+
+## 🔐 Interceptores HTTP
+
+### Orden de Interceptores
+
+Los interceptores se ejecutan en orden específico:
+
+```typescript
+// core/interceptors.ts
+export const httpInterceptors = [
+  loggingInterceptor,   // 1. Log de petición original
+  loadingInterceptor,   // 2. Mostrar/ocultar spinner
+  authInterceptor,      // 3. Añadir token JWT
+  errorInterceptor      // 4. Manejar errores (último)
+];
+```
+
+### Auth Interceptor
+
+Añade automáticamente el token JWT a las peticiones:
+
+```typescript
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  // Solo añadir token para peticiones al API
+  if (!req.url.startsWith(API_URL)) {
+    return next(req);
+  }
+
+  const token = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+
+  if (token) {
+    const authReq = req.clone({
+      setHeaders: { Authorization: `Bearer ${token}` }
+    });
+    return next(authReq);
+  }
+
+  return next(req);
+};
+```
+
+### Error Interceptor
+
+Manejo centralizado de errores HTTP:
+
+```typescript
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router);
+  const notificationService = inject(NotificationService);
+
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      switch (error.status) {
+        case 401:
+          // Token expirado - limpiar sesión y redirigir
+          handleUnauthorized(router);
+          break;
+        case 403:
+          notificationService.error('No tienes permisos');
+          break;
+        case 422:
+          // Errores de validación
+          notificationService.warning(extractValidationMessage(error));
+          break;
+        case 0:
+          notificationService.error('Error de conexión');
+          break;
+        default:
+          if (error.status >= 500) {
+            notificationService.error('Error del servidor');
+          }
+      }
+      return throwError(() => error);
+    })
+  );
+};
+```
+
+### Logging Interceptor
+
+Registro de peticiones para debugging:
+
+```typescript
+export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
+  const startTime = Date.now();
+
+  console.log(`[HTTP] ${req.method} ${req.url}`);
+
+  return next(req).pipe(
+    tap({
+      next: (event) => {
+        if (event instanceof HttpResponse) {
+          const duration = Date.now() - startTime;
+          console.log(`[HTTP] ✓ ${req.method} ${req.url} - ${event.status} (${duration}ms)`);
+        }
+      },
+      error: (error) => {
+        const duration = Date.now() - startTime;
+        console.log(`[HTTP] ✗ ${req.method} ${req.url} - ${error.status} (${duration}ms)`);
+      }
+    })
+  );
+};
+```
+
+### Loading Interceptor
+
+Muestra/oculta spinner durante peticiones:
+
+```typescript
+export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
+  const loadingService = inject(LoadingService);
+
+  // Saltar si tiene header especial
+  if (req.headers.has('X-Skip-Loading')) {
+    return next(req);
+  }
+
+  const loadingId = `http_${Date.now()}`;
+  loadingService.show(loadingId);
+
+  return next(req).pipe(
+    finalize(() => loadingService.hide(loadingId))
+  );
+};
+```
+
+---
+
+## 📋 Catálogo de Endpoints
+
+### Autenticación
+
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/auth/login` | Iniciar sesión | No |
+| POST | `/api/auth/registro` | Registrar usuario | No |
+| GET | `/api/auth/me` | Usuario actual | Sí |
+| POST | `/api/auth/validar` | Validar token | No |
+
+### Usuarios
+
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/usuarios` | Listar todos | ADMIN |
+| GET | `/api/usuarios/{id}` | Obtener por ID | Owner/ADMIN |
+| PUT | `/api/usuarios/{id}` | Actualizar | Owner/ADMIN |
+| PUT | `/api/usuarios/{id}/avatar` | Actualizar avatar | Owner/ADMIN |
+| DELETE | `/api/usuarios/{id}` | Eliminar | ADMIN |
+| GET | `/api/usuarios/buscar?nombre=x` | Buscar por nombre | ADMIN |
+
+### Juegos
+
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/juegos` | Listar todos (resumen) | No |
+| GET | `/api/juegos/{id}` | Detalle completo | No |
+| POST | `/api/juegos` | Crear juego | ADMIN |
+| PUT | `/api/juegos/{id}` | Actualizar | ADMIN |
+| DELETE | `/api/juegos/{id}` | Eliminar | ADMIN |
+| GET | `/api/juegos/buscar?nombre=x` | Buscar | No |
+| GET | `/api/juegos/novedades` | Juegos recientes | No |
+| GET | `/api/juegos/proximos` | Próximos lanzamientos | No |
+| GET | `/api/juegos/top?limite=10` | Mejor valorados | No |
+| GET | `/api/juegos/populares?limite=10` | Más reviewados | No |
+
+### Interacciones (Reviews)
+
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/interacciones` | Listar todas | ADMIN |
+| GET | `/api/interacciones/{id}` | Obtener por ID | No |
+| GET | `/api/interacciones/usuario/{id}` | Por usuario | No |
+| GET | `/api/interacciones/juego/{id}` | Por juego | No |
+| GET | `/api/interacciones/usuario/{uId}/juego/{jId}` | Específica | No |
+| POST | `/api/interacciones/usuario/{id}` | Crear | Owner/ADMIN |
+| PUT | `/api/interacciones/{id}/usuario/{uId}` | Actualizar | Owner/ADMIN |
+| DELETE | `/api/interacciones/{id}/usuario/{uId}` | Eliminar | Owner/ADMIN |
+
+### Catálogos
+
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/plataformas` | Listar plataformas | No |
+| GET | `/api/generos` | Listar géneros | No |
+| GET | `/api/desarrolladoras` | Listar desarrolladoras | No |
+
+---
+
+## 📊 Estructura de Datos (Interfaces)
+
+### Modelos de Usuario
+
+```typescript
+// models/usuario.model.ts
+
+interface UsuarioDTO {
+  id: number;
+  nombre: string;
+  email: string;
+  fechaRegistro: string;
+  avatar: string | null;
+  rol: 'USER' | 'ADMIN';
+}
+
+interface AuthResponse {
+  token: string;
+  usuario: UsuarioDTO;
+  mensaje: string;
+}
+
+interface UsuarioLoginDTO {
+  email: string;
+  contrasenia: string;
+}
+
+interface UsuarioRegistroDTO {
+  nombre: string;
+  email: string;
+  contrasenia: string;
+}
+```
+
+### Modelos de Juego
+
+```typescript
+// models/juego.model.ts
+
+interface JuegoDTO {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  imagenPortada: string;
+  fechaSalida: string;
+  plataformas: string[];
+  desarrolladoras: string[];
+  generos: string[];
+  puntuacionMedia: number | null;
+  totalReviews: number;
+}
+
+interface JuegoResumenDTO {
+  id: number;
+  nombre: string;
+  imagenPortada: string;
+  fechaSalida: string;
+  puntuacionMedia: number | null;
+}
+
+interface JuegoCreacionDTO {
+  nombre: string;
+  descripcion: string;
+  imagenPortada: string;
+  fechaSalida: string;
+  plataformaIds: number[];
+  desarrolladoraIds: number[];
+  generoIds: number[];
+}
+```
+
+### Modelos de Interacción
+
+```typescript
+// models/interaccion.model.ts
+
+interface InteraccionDTO {
+  id: number;
+  usuarioId: number;
+  nombreUsuario: string;
+  avatarUsuario?: string;
+  juegoId: number;
+  nombreJuego: string;
+  puntuacion: number | null;
+  review: string | null;
+  estadoJugado: boolean;
+  fechaInteraccion: string;
+}
+
+interface InteraccionCreacionDTO {
+  juegoId: number;
+  puntuacion?: number | null;
+  review?: string | null;
+  estadoJugado: boolean;
+}
+```
+
+### Modelos de Catálogo
+
+```typescript
+// models/catalogo.model.ts
+
+interface PlataformaDTO {
+  id: number;
+  nombre: string;
+  anioLanzamiento: number;
+  fabricante: string;
+  imagenLogo: string | null;
+}
+
+interface GeneroDTO {
+  id: number;
+  nombre: string;
+  descripcion: string | null;
+}
+
+interface DesarrolladoraDTO {
+  id: number;
+  nombre: string;
+  fechaCreacion: string;
+  pais: string;
+}
+```
+
+### Modelos de Respuesta API
+
+```typescript
+// models/api-response.model.ts
+
+interface PaginatedResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+}
+
+interface ApiError {
+  status: number;
+  error: string;
+  message: string;
+  path?: string;
+  validationErrors?: ValidationError[];
+}
+
+interface NormalizedError {
+  type: ErrorType;           // 'network' | 'unauthorized' | 'validation' | etc.
+  userMessage: string;       // Mensaje para el usuario
+  technicalMessage: string;  // Mensaje técnico (logs)
+  statusCode?: number;
+  retryable: boolean;
+}
+
+type RequestStatus = 'idle' | 'loading' | 'success' | 'error';
+```
+
+---
+
+## 🔄 Servicios de Dominio
+
+### JuegosService
+
+```typescript
+// services/juegos.service.ts
+@Injectable({ providedIn: 'root' })
+export class JuegosService extends HttpBaseService {
+  
+  // Obtener todos los juegos
+  getAll(): Observable<JuegoResumenDTO[]>;
+  
+  // Obtener detalle de un juego
+  getById(id: number): Observable<JuegoDTO>;
+  
+  // Buscar juegos
+  buscar(nombre: string): Observable<JuegoResumenDTO[]>;
+  
+  // Novedades
+  getNovedades(): Observable<JuegoResumenDTO[]>;
+  
+  // Mejor valorados
+  getTopRated(limite?: number): Observable<JuegoResumenDTO[]>;
+  
+  // Más populares
+  getPopulares(limite?: number): Observable<JuegoResumenDTO[]>;
+  
+  // CRUD (ADMIN)
+  crear(juego: JuegoCreacionDTO): Observable<JuegoDTO>;
+  actualizar(id: number, juego: JuegoCreacionDTO): Observable<JuegoDTO>;
+  eliminar(id: number): Observable<void>;
+}
+```
+
+### InteraccionesService
+
+```typescript
+// services/interacciones.service.ts
+@Injectable({ providedIn: 'root' })
+export class InteraccionesService extends HttpBaseService {
+  
+  // Obtener interacciones
+  getByUsuario(usuarioId: number): Observable<InteraccionDTO[]>;
+  getByJuego(juegoId: number): Observable<InteraccionDTO[]>;
+  getByUsuarioYJuego(usuarioId: number, juegoId: number): Observable<InteraccionDTO | null>;
+  
+  // Crear/Actualizar
+  crear(usuarioId: number, interaccion: InteraccionCreacionDTO): Observable<InteraccionDTO>;
+  actualizar(id: number, usuarioId: number, interaccion: InteraccionCreacionDTO): Observable<InteraccionDTO>;
+  eliminar(id: number, usuarioId: number): Observable<void>;
+  
+  // Métodos convenientes
+  marcarComoJugado(usuarioId: number, juegoId: number): Observable<InteraccionDTO>;
+  puntuar(usuarioId: number, juegoId: number, puntuacion: number): Observable<InteraccionDTO>;
+  escribirReview(usuarioId: number, juegoId: number, review: string): Observable<InteraccionDTO>;
+  
+  // Estadísticas
+  getGameStats(juegoId: number): Observable<GameStats>;
+  getUserStats(usuarioId: number): Observable<UserGameStats>;
+}
+```
+
+### CatalogoService
+
+```typescript
+// services/catalogo.service.ts
+@Injectable({ providedIn: 'root' })
+export class CatalogoService extends HttpBaseService {
+  
+  // Con caché automático
+  getPlataformas(): Observable<PlataformaDTO[]>;
+  getGeneros(): Observable<GeneroDTO[]>;
+  getDesarrolladoras(): Observable<DesarrolladoraDTO[]>;
+  
+  // Para selects
+  getPlataformasOptions(): Observable<CatalogoOption[]>;
+  getGenerosOptions(): Observable<CatalogoOption[]>;
+  getDesarrolladorasOptions(): Observable<CatalogoOption[]>;
+  
+  // Invalidar caché
+  invalidateAllCache(): void;
+}
+```
+
+---
+
+## 🎨 Estados de UI
+
+### Componente RequestState
+
+Wrapper para manejar todos los estados de una petición:
+
+```typescript
+// components/shared/request-state/request-state.ts
+<app-request-state
+  [status]="requestStatus"
+  [error]="error"
+  [isEmpty]="items.length === 0"
+  loadingMessage="Cargando juegos..."
+  emptyIcon="games"
+  emptyTitle="No hay juegos disponibles"
+  emptyMessage="Vuelve más tarde para ver nuevos juegos"
+  [showRetry]="true"
+  (retry)="loadData()">
+  
+  <!-- Contenido cuando hay datos -->
+  @for (item of items; track item.id) {
+    <app-game-card [game]="item"></app-game-card>
+  }
+</app-request-state>
+```
+
+### Componente EmptyState
+
+Estado vacío reutilizable:
+
+```typescript
+// components/shared/empty-state/empty-state.ts
+<app-empty-state
+  icon="search"
+  title="No se encontraron resultados"
+  message="Intenta con otros términos de búsqueda"
+  [showAction]="true"
+  actionText="Limpiar búsqueda"
+  (action)="limpiarBusqueda()">
+</app-empty-state>
+```
+
+**Iconos disponibles:**
+- `search` - Sin resultados de búsqueda
+- `games` - Sin juegos
+- `reviews` - Sin reviews
+- `users` - Sin usuarios
+- `library` - Biblioteca vacía
+- `error` - Error genérico
+- `network` - Error de red
+- `empty` - Estado vacío genérico
+
+---
+
+## 🛡️ Estrategia de Manejo de Errores
+
+### Niveles de Manejo
+
+1. **Interceptor Global**: Errores comunes (401, 403, red)
+2. **Servicio Base**: Normalización de errores
+3. **Componente**: Decisión de UI
+
+### Flujo de Error
+
+```
+Error HTTP → Error Interceptor → Normalización → Componente
+     ↓               ↓                ↓              ↓
+   Log         Notificación      NormalizedError   UI Específica
+```
+
+### Error Normalizado
+
+```typescript
+interface NormalizedError {
+  type: 'network' | 'timeout' | 'unauthorized' | 'forbidden' | 
+        'not_found' | 'validation' | 'server' | 'unknown';
+  userMessage: string;       // "Error de conexión. Verifica tu internet."
+  technicalMessage: string;  // "HttpErrorResponse: 0 Unknown Error"
+  statusCode?: number;
+  validationErrors?: ValidationError[];
+  retryable: boolean;        // true para errores transitorios
+}
+```
+
+### Retry Logic
+
+```typescript
+// Se reintenta automáticamente para:
+// - 408: Request Timeout
+// - 500: Internal Server Error
+// - 502: Bad Gateway
+// - 503: Service Unavailable
+// - 504: Gateway Timeout
+
+// Configuración:
+HTTP_CONFIG = {
+  RETRY_COUNT: 3,              // 3 intentos
+  RETRY_DELAY: 1000,           // 1 segundo inicial
+  // Delay exponencial: 1s, 2s, 4s
+}
+```
+
+---
+
+## 📁 Estructura de Archivos - Fase 5
+
+```
+src/app/
+├── core/
+│   ├── index.ts                     # Exportaciones centralizadas
+│   ├── constants.ts                 # API_URL, ENDPOINTS, HTTP_CONFIG
+│   └── interceptors.ts              # Auth, Error, Logging, Loading
+│
+├── models/
+│   ├── index.ts                     # Exportaciones centralizadas
+│   ├── usuario.model.ts             # UsuarioDTO, AuthResponse, etc.
+│   ├── juego.model.ts               # JuegoDTO, JuegoResumenDTO, etc.
+│   ├── interaccion.model.ts         # InteraccionDTO, ReviewDTO, etc.
+│   ├── catalogo.model.ts            # PlataformaDTO, GeneroDTO, etc.
+│   └── api-response.model.ts        # ApiError, NormalizedError, etc.
+│
+├── services/
+│   ├── index.ts                     # Exportaciones actualizadas
+│   ├── http-base.service.ts         # Servicio base HTTP
+│   ├── auth-http.service.ts         # Autenticación HTTP
+│   ├── juegos.service.ts            # CRUD de juegos
+│   ├── interacciones.service.ts     # CRUD de interacciones
+│   ├── usuarios.service.ts          # CRUD de usuarios
+│   └── catalogo.service.ts          # Plataformas, géneros, desarrolladoras
+│
+├── components/shared/
+│   ├── empty-state/
+│   │   └── empty-state.ts           # Componente empty state
+│   ├── request-state/
+│   │   └── request-state.ts         # Wrapper de estados de petición
+│   ├── spinner/                     # Spinner global (existente)
+│   └── spinner-inline/              # Spinner inline (existente)
+│
+└── app.config.ts                    # Configuración con HttpClient
+```
+
+---
+
+## 📝 Ejemplo de Uso Completo
+
+### En un Componente
+
+```typescript
+@Component({
+  selector: 'app-game-list',
+  template: `
+    <app-request-state
+      [status]="status"
+      [error]="error"
+      [isEmpty]="juegos.length === 0"
+      emptyIcon="games"
+      emptyTitle="No hay juegos"
+      (retry)="cargarJuegos()">
+      
+      <section class="game-grid">
+        @for (juego of juegos; track juego.id) {
+          <app-game-card [game]="juego"></app-game-card>
+        }
+      </section>
+    </app-request-state>
+  `
+})
+export class GameListComponent implements OnInit {
+  private juegosService = inject(JuegosService);
+  private notificationService = inject(NotificationService);
+
+  juegos: JuegoResumenDTO[] = [];
+  status: RequestStatus = 'idle';
+  error: NormalizedError | null = null;
+
+  ngOnInit() {
+    this.cargarJuegos();
+  }
+
+  cargarJuegos(): void {
+    this.status = 'loading';
+    this.error = null;
+
+    this.juegosService.getNovedades().subscribe({
+      next: (juegos) => {
+        this.juegos = juegos;
+        this.status = 'success';
+      },
+      error: (error: NormalizedError) => {
+        this.error = error;
+        this.status = 'error';
+      }
+    });
+  }
+}
+```
+
+---
+
+## 🎯 Resumen de Cumplimiento - Fase 5
+
+| Requisito | Estado | Implementación |
+|-----------|--------|----------------|
+| **Configuración HttpClient** | ✅ | |
+| - Importar HttpClientModule | ✅ | `provideHttpClient()` en app.config.ts |
+| - Crear servicio base | ✅ | HttpBaseService con CRUD genérico |
+| - Configurar interceptores | ✅ | Auth, Error, Logging, Loading |
+| **Operaciones CRUD** | ✅ | |
+| - GET listados e individuales | ✅ | `get<T>()`, `getPaginated<T>()` |
+| - POST crear recursos | ✅ | `post<T>()` |
+| - PUT/PATCH actualizar | ✅ | `put<T>()`, `patch<T>()` |
+| - DELETE eliminar | ✅ | `delete<T>()` |
+| **Manejo de respuestas** | ✅ | |
+| - Tipado con interfaces | ✅ | Modelos en `/models` |
+| - Transformación con map | ✅ | En servicios de dominio |
+| - Manejo con catchError | ✅ | `handleError()` en base |
+| - Retry logic | ✅ | `retryOnError()` con delay exponencial |
+| **Diferentes formatos** | ✅ | |
+| - JSON (principal) | ✅ | Default en todas las peticiones |
+| - FormData para uploads | ✅ | `uploadFile()`, `uploadFileWithProgress()` |
+| **Query params** | ✅ | |
+| - Para filtros | ✅ | Vía `HttpOptions.params` |
+| - Para paginación | ✅ | `getPaginated()` |
+| - Headers personalizados | ✅ | Vía `HttpOptions.headers` |
+| **Estados de UI** | ✅ | |
+| - Loading state | ✅ | LoadingInterceptor + Spinner |
+| - Error state | ✅ | ErrorInterceptor + Alert |
+| - Empty state | ✅ | EmptyStateComponent |
+| - Success feedback | ✅ | NotificationService |
+| **Interceptores HTTP** | ✅ | |
+| - Token de autenticación | ✅ | authInterceptor |
+| - Manejo global de errores | ✅ | errorInterceptor |
+| - Logging de requests | ✅ | loggingInterceptor |
+| **Documentación** | ✅ | |
+| - Catálogo de endpoints | ✅ | Este documento |
+| - Estructura de datos | ✅ | Este documento |
+| - Estrategia de errores | ✅ | Este documento |
+
+---
+
+## 📖 Recursos Adicionales - Fase 5
+
+- [Angular HttpClient Guide](https://angular.dev/guide/http)
+- [HTTP Interceptors](https://angular.dev/guide/http/interceptors)
+- [RxJS Error Handling](https://rxjs.dev/guide/operators#error-handling-operators)
+- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)

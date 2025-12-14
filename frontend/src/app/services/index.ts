@@ -14,7 +14,7 @@
  * import { EventBusService, StateService, LoadingService } from './services';
  * 
  * @author Looking4Rate Team
- * @version 2.0.0
+ * @version 3.0.0
  */
 
 // ============================================
@@ -74,3 +74,32 @@ export {
   type AuthUser,
   type AuthState
 } from './auth.service';
+
+// ============================================
+// Servicios HTTP - Fase 5
+// ============================================
+
+export {
+  HttpBaseService,
+  type HttpOptions
+} from './http-base.service';
+
+export {
+  AuthHttpService
+} from './auth-http.service';
+
+export {
+  JuegosService
+} from './juegos.service';
+
+export {
+  InteraccionesService
+} from './interacciones.service';
+
+export {
+  UsuariosService
+} from './usuarios.service';
+
+export {
+  CatalogoService
+} from './catalogo.service';
