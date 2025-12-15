@@ -1,0 +1,39 @@
+# Node modules
+node_modules/
+npm-debug.log*
+
+# Build outputs
+dist/
+.angular/
+.cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+coverage/
+.nyc_output/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Otros
+README.md
+.git/
+.gitignore
+docs/
+*.md

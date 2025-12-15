@@ -2,7 +2,7 @@
 
 Documentación resumida del proyecto Angular.
 
-## 🚀 Comandos Rápidos
+## Comandos Rápidos
 
 ```bash
 # Desarrollo
@@ -14,7 +14,7 @@ ng build
 
 ---
 
-## 📘 FASE 1: Arquitectura de Eventos del Cliente
+## FASE 1: Arquitectura de Eventos del Cliente
 
 ### Manipulación del DOM
 - **ViewChild y ElementRef** para acceso directo a elementos DOM
@@ -40,7 +40,7 @@ ng build
 
 ---
 
-## 📗 FASE 2: Servicios y Comunicación
+## FASE 2: Servicios y Comunicación
 
 ### Servicios Principales
 
@@ -78,7 +78,7 @@ ng build
 
 ---
 
-## 📙 FASE 3: Formularios Reactivos
+## FASE 3: Formularios Reactivos
 
 ### Formularios Implementados
 
@@ -122,7 +122,7 @@ removeTelefono(index: number): void {
 
 ---
 
-## 📕 FASE 4: Enrutamiento y Guards
+## FASE 4: Enrutamiento y Guards
 
 ### Configuración de Rutas
 
@@ -314,7 +314,7 @@ retryOnError(maxRetries: number = 3) {
 
 ---
 
-## 🛠️ Tecnologías
+## Tecnologías
 
 - **Angular 19:** Standalone components, Signals
 - **TypeScript:** Tipado estático
@@ -326,7 +326,7 @@ retryOnError(maxRetries: number = 3) {
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 frontend/

@@ -16,14 +16,14 @@
 /**
  * URL base del API backend
  * En desarrollo: http://localhost:8080/api
- * En producción: cambiar por la URL del servidor
+ * En producción (Docker): /api (rutas relativas para usar el proxy de Nginx)
  */
-export const API_URL = 'http://localhost:8080/api';
+export const API_URL = '/api';
 
 /**
  * URL base del backend (sin /api)
  */
-export const BASE_URL = 'http://localhost:8080';
+export const BASE_URL = '';
 
 /**
  * Versión actual del API

@@ -2,7 +2,7 @@
 
 Este proyecto fue generado usando [Angular CLI](https://github.com/angular/angular-cli) versión 20.3.9.
 
-## 🚀 Inicio Rápido
+## Inicio Rápido
 
 ### Servidor de desarrollo
 
@@ -25,16 +25,16 @@ Los artefactos de compilación se almacenarán en el directorio `dist/`.
 <br><br>
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 📘 FASE 1: ARQUITECTURA DE EVENTOS DEL CLIENTE
+# FASE 1: ARQUITECTURA DE EVENTOS DEL CLIENTE
 # ═══════════════════════════════════════════════════════════════════════════════
 
 > **Objetivo:** Manipulación del DOM, sistema de eventos y componentes interactivos.
 
 ---
 
-## 📐 Arquitectura de Eventos del Cliente
+## Arquitectura de Eventos del Cliente
 
-### 🔧 Manipulación del DOM
+### Manipulación del DOM
 
 #### ViewChild y ElementRef
 
@@ -182,7 +182,7 @@ onModalClick(event: MouseEvent): void {
 
 ---
 
-### 📊 Diagrama de Flujo de Eventos Principales
+### Diagrama de Flujo de Eventos Principales
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -342,7 +342,7 @@ onModalClick(event: MouseEvent): void {
 
 ---
 
-### 🌐 Tabla de Compatibilidad de Navegadores
+### Tabla de Compatibilidad de Navegadores
 
 | Evento/API | Chrome | Firefox | Safari | Edge | IE11 |
 |------------|--------|---------|--------|------|------|
@@ -377,7 +377,7 @@ onModalClick(event: MouseEvent): void {
 
 ---
 
-### 🛠️ APIs y Métodos del DOM Utilizados
+### APIs y Métodos del DOM Utilizados
 
 ```typescript
 // Selección de elementos
@@ -426,7 +426,7 @@ element.appendChild()                       // Agregar hijo
 
 ---
 
-### 📚 Estructura de Componentes Interactivos
+### Estructura de Componentes Interactivos
 
 ```
 src/app/components/
@@ -480,7 +480,7 @@ src/app/components/
 
 ---
 
-## 🔄 Arquitectura de Servicios
+## Arquitectura de Servicios
 
 ### 📡 EventBusService - Comunicación entre Componentes
 
@@ -808,7 +808,7 @@ export class App {}
 
 ---
 
-### 📁 Estructura de Servicios
+### Estructura de Servicios
 
 ```
 src/app/
@@ -903,7 +903,7 @@ src/app/
 
 ---
 
-## 📋 Formularios Reactivos Implementados
+## Formularios Reactivos Implementados
 
 La aplicación cuenta con **3 formularios reactivos completos**:
 
@@ -944,7 +944,7 @@ export class LoginForm implements OnInit {
 
 ---
 
-## 🔐 Catálogo de Validadores Personalizados
+## Catálogo de Validadores Personalizados
 
 ### Validadores Síncronos (13 implementados)
 
@@ -1143,7 +1143,7 @@ password: ['', [CustomValidators.passwordComplexity({
 
 ---
 
-## 🔄 Validadores Asíncronos (2 implementados)
+## Validadores Asíncronos (2 implementados)
 
 Los validadores asíncronos simulan llamadas a API y están en `src/app/components/shared/validators/async.validators.ts`
 
@@ -1227,7 +1227,7 @@ static availableUsername(
 
 ---
 
-## 📚 Guía de Uso de FormArray
+## Guía de Uso de FormArray
 
 ### ¿Qué es FormArray?
 
@@ -1758,7 +1758,7 @@ get passwordStrengthText(): string {
 
 ---
 
-## 📁 Estructura de Archivos - Fase 3
+## Estructura de Archivos - Fase 3
 
 ```
 src/app/
@@ -1851,13 +1851,13 @@ Los siguientes componentes utilizan `OnPush` para mejor rendimiento:
 - **Lazy Loading**: Componentes de páginas cargados bajo demanda
 - **Bordes con gradiente**: Usando `mask-composite` en lugar de múltiples elementos
 
-## 🧪 Ejecutar Tests
+## Ejecutar Tests
 
 ```bash
 ng test
 ```
 
-## 📖 Recursos Adicionales
+## Recursos Adicionales
 
 ### Fase 1 - DOM y Eventos
 - [MDN Web Docs - DOM](https://developer.mozilla.org/es/docs/Web/API/Document_Object_Model)
@@ -1933,7 +1933,7 @@ ng test
 
 ---
 
-## 🔧 Configuración de Rutas
+## Configuración de Rutas
 
 ### Archivo Principal: `app.routes.ts`
 
@@ -2010,7 +2010,7 @@ export const routes: Routes = [
 
 ---
 
-## 🚀 Lazy Loading
+## Lazy Loading
 
 ### Estrategia Implementada
 
@@ -2069,7 +2069,7 @@ dist/looking4rate/browser/
 
 ---
 
-## 🔐 Route Guards
+## Route Guards
 
 ### Guards Implementados
 
@@ -2150,7 +2150,7 @@ export class SettingsPage implements CanComponentDeactivate {
 
 ---
 
-## 📦 Resolvers
+## Resolvers
 
 ### GameResolver
 
@@ -2362,7 +2362,7 @@ Los breadcrumbs se generan automáticamente desde los datos de ruta:
 
 ---
 
-## 📁 Estructura de Archivos - Fase 4
+## Estructura de Archivos - Fase 4
 
 ```
 src/app/
@@ -2443,7 +2443,7 @@ src/app/
 
 ---
 
-## 📖 Recursos Adicionales - Fase 4
+## Recursos Adicionales - Fase 4
 
 - [Angular Router Guide](https://angular.dev/guide/routing)
 - [Lazy Loading Feature Modules](https://angular.dev/guide/routing/lazy-loading-ngmodules)
@@ -2464,7 +2464,7 @@ src/app/
 
 ---
 
-## 🔧 Configuración de HttpClient
+## Configuración de HttpClient
 
 ### Configuración en app.config.ts
 
@@ -2523,7 +2523,7 @@ export const HTTP_CONFIG = {
 
 ---
 
-## 📦 Servicio Base HTTP
+## Servicio Base HTTP
 
 ### HttpBaseService
 
@@ -2584,7 +2584,7 @@ export interface HttpOptions {
 
 ---
 
-## 🔐 Interceptores HTTP
+## Interceptores HTTP
 
 ### Orden de Interceptores
 
@@ -2712,7 +2712,7 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
 
 ---
 
-## 📋 Catálogo de Endpoints
+## Catálogo de Endpoints
 
 ### Autenticación
 
@@ -2772,7 +2772,7 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
 
 ---
 
-## 📊 Estructura de Datos (Interfaces)
+## Estructura de Datos (Interfaces)
 
 ### Modelos de Usuario
 
@@ -2932,7 +2932,7 @@ type RequestStatus = 'idle' | 'loading' | 'success' | 'error';
 
 ---
 
-## 🔄 Servicios de Dominio
+## Servicios de Dominio
 
 ### JuegosService
 
@@ -3122,7 +3122,7 @@ HTTP_CONFIG = {
 
 ---
 
-## 📁 Estructura de Archivos - Fase 5
+## Estructura de Archivos - Fase 5
 
 ```
 src/app/
@@ -3161,7 +3161,7 @@ src/app/
 
 ---
 
-## 📝 Ejemplo de Uso Completo
+## Ejemplo de Uso Completo
 
 ### En un Componente
 
@@ -3258,7 +3258,7 @@ export class GameListComponent implements OnInit {
 
 ---
 
-## 📖 Recursos Adicionales - Fase 5
+## Recursos Adicionales - Fase 5
 
 - [Angular HttpClient Guide](https://angular.dev/guide/http)
 - [HTTP Interceptors](https://angular.dev/guide/http/interceptors)
