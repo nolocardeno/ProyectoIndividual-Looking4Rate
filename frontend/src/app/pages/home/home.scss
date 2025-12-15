@@ -8,10 +8,9 @@
 .home {
   display: flex;
   flex-direction: column;
-  gap: $spacing-6;
-  
-  // Eliminar padding superior para que el hero llegue al header
+  gap: $spacing-header-footer; // 60px
   padding-top: 0;
+  padding-bottom: $spacing-header-footer; // 60px antes del footer
 }
 
 // ==========================================================================
@@ -27,11 +26,11 @@
   padding: 0 $spacing-4 0 $spacing-4;
   overflow: visible;
   // Extender más allá de los márgenes
-  margin: calc(-1 * $spacing-6) calc(-1 * $spacing-8) 0;
-  width: calc(100% + 2 * $spacing-8);
+  margin: calc(-1 * $spacing-6) calc(-1 * $spacing-12) 0;
+  width: calc(100% + 2 * $spacing-12);
   
   // Imagen de fondo centrada
-  background: url('https://wallpapercave.com/wp/wp1874165.jpg') center center / cover no-repeat;
+  background: url('/assets/img/hero-background.jpg') center center / cover no-repeat;
   
   // Overlay con gradientes laterales para efecto Letterboxd
   &__overlay {
@@ -55,14 +54,14 @@
     text-align: center;
     max-width: 900px;
     padding: 0 $spacing-6;
-    margin-bottom: -$spacing-6; // Sobresale por debajo de la imagen
+    margin-bottom: 0;
   }
   
   // Texto principal (todo junto como Letterboxd)
   &__text {
     font-family: $font-secondary; // Playfair Display
     font-size: $font-size-xl; // 32px
-    font-weight: 900;
+    font-weight: 950;
     color: var(--text-primary);
     margin: 0 0 $spacing-4 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);

@@ -70,22 +70,22 @@
 // Ocultar en movil
 @mixin hide-mobile {
   @media (max-width: $breakpoint-sm) {
-    display: none !important;
+    display: none;
   }
 }
 
 // Ocultar en tablet y menor
 @mixin hide-tablet {
   @media (max-width: $breakpoint-md) {
-    display: none !important;
+    display: none;
   }
 }
 
 // Mostrar solo en movil
 @mixin show-mobile-only {
-  display: none !important;
+  display: none;
   
   @media (max-width: $breakpoint-sm) {
-    display: flex !important;
+    display: flex;
   }
 }

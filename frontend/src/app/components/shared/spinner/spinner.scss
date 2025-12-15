@@ -293,7 +293,7 @@ $spinner-transition-duration: 0.3s;
     }
 
     &__container {
-      animation: none !important;
+      animation: none;
       transform: translate(-50%, -50%);
     }
   }

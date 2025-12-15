@@ -361,15 +361,15 @@
 @media (min-width: calc($breakpoint-sm + 1px)) {
   .header {
     &__mobile-controls {
-      display: none !important;
+      display: none;
     }
 
     &__mobile-menu {
-      display: none !important;
+      display: none;
     }
 
     &__overlay {
-      display: none !important;
+      display: none;
     }
   }
 }

@@ -5,9 +5,10 @@
  * Muestra hero section y secciones de juegos del backend.
  */
 
-import { Component, OnInit, inject, signal, computed, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 import { GameCover } from '../../components/shared/game-cover/game-cover';
 import { FeaturedSection } from '../../components/shared/featured-section/featured-section';
@@ -40,10 +41,11 @@ interface SectionState {
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export default class Home implements OnInit {
+export default class Home implements OnInit, OnDestroy {
   private juegosService = inject(JuegosService);
   private eventBus = inject(EventBusService);
   private platformId = inject(PLATFORM_ID);
+  private destroy$ = new Subject<void>();
 
   // ============================================
   // ESTADO REACTIVO CON SIGNALS
@@ -88,28 +90,35 @@ export default class Home implements OnInit {
   // CARGA DE DATOS
   // ============================================
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   /**
    * Carga los juegos novedades del backend
    */
   cargarNovedades(): void {
     this.novedades.update(state => ({ ...state, loading: true, error: null }));
 
-    this.juegosService.getNovedades().subscribe({
-      next: (juegos) => {
-        this.novedades.set({
-          loading: false,
-          error: null,
-          data: juegos.slice(0, 5) // Limitar a 5 juegos
-        });
-      },
-      error: (error) => {
-        this.novedades.set({
-          loading: false,
-          error: error.userMessage || 'Error al cargar novedades',
-          data: []
-        });
-      }
-    });
+    this.juegosService.getNovedades()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (juegos) => {
+          this.novedades.set({
+            loading: false,
+            error: null,
+            data: juegos.slice(0, 5) // Limitar a 5 juegos
+          });
+        },
+        error: (error) => {
+          this.novedades.set({
+            loading: false,
+            error: error.userMessage || 'Error al cargar novedades',
+            data: []
+          });
+        }
+      });
   }
 
   /**
@@ -119,24 +128,26 @@ export default class Home implements OnInit {
   cargarProximosLanzamientos(): void {
     this.proximosLanzamientos.update(state => ({ ...state, loading: true, error: null }));
 
-    this.juegosService.getAll().subscribe({
-      next: (juegos) => {
-        // Tomar los últimos 5 juegos como próximos lanzamientos
-        const ultimosJuegos = juegos.slice(-5).reverse();
-        this.proximosLanzamientos.set({
-          loading: false,
-          error: null,
-          data: ultimosJuegos
-        });
-      },
-      error: (error) => {
-        this.proximosLanzamientos.set({
-          loading: false,
-          error: error.userMessage || 'Error al cargar próximos lanzamientos',
-          data: []
-        });
-      }
-    });
+    this.juegosService.getAll()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (juegos) => {
+          // Tomar los últimos 5 juegos como próximos lanzamientos
+          const ultimosJuegos = juegos.slice(-5).reverse();
+          this.proximosLanzamientos.set({
+            loading: false,
+            error: null,
+            data: ultimosJuegos
+          });
+        },
+        error: (error) => {
+          this.proximosLanzamientos.set({
+            loading: false,
+            error: error.userMessage || 'Error al cargar próximos lanzamientos',
+            data: []
+          });
+        }
+      });
   }
 
   /**
@@ -154,7 +165,6 @@ export default class Home implements OnInit {
    * Abre el modal de registro
    */
   openRegister(): void {
-    console.log('openRegister llamado desde home');
     this.eventBus.emit('openRegisterModal', null);
   }
 }

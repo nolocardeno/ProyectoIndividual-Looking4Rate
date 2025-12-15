@@ -164,6 +164,46 @@ A continuación se documentan todas las variables utilizadas:
 **Paleta de grises:**
 - `$color-gray-50-dark` a `$color-gray-900-dark`: Diferentes tonos de gris para fondos, bordes y separadores
 
+### CSS Custom Properties
+
+Además de las variables SCSS, el proyecto utiliza **CSS Custom Properties** (variables CSS nativas) para implementar el sistema de temas dinámico. Estas variables se definen en el archivo `00-settings/_css-variables.scss` y permiten cambiar entre modo claro y oscuro sin recargar la página.
+
+**Variables CSS para temas:**
+
+En **modo oscuro** (por defecto en `:root`):
+- `--bg-primary`: Fondo principal (#16181C)
+- `--bg-secondary`: Fondo secundario (#384A5B)
+- `--bg-header-footer`: Fondo de header y footer (#0D0E11)
+- `--text-primary`: Texto principal (#F2F4F8)
+- `--text-secondary`: Texto secundario (#AAB4C0)
+- `--color-accent`: Color de acento (#00B894)
+- `--color-error`: Color de error (#D46363)
+- `--color-success`: Color de éxito (#B5D366)
+- `--color-warning`: Color de advertencia (#F59E42)
+- `--color-info`: Color de información (#3B82F6)
+- `--border-color`: Color de bordes (#384A5B)
+
+En **modo claro** (`[data-theme='light']`):
+- Las mismas variables pero con valores del modo claro
+- Ejemplo: `--bg-primary: #EDEDED`, `--text-primary: #1A1A1A`, etc.
+
+**Ventajas de CSS Custom Properties:**
+- Cambio dinámico de tema sin recarga de página
+- Mejor rendimiento que recompilar SCSS
+- Cascada natural de CSS permite sobrescribir valores por contexto
+- Compatible con JavaScript para cambios programáticos
+
+**Uso en componentes:**
+```scss
+.component {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+```
+
+El componente `ThemeToggle` cambia el atributo `data-theme` del elemento `<html>`, lo que activa automáticamente las variables del tema correspondiente.
+
 ### Tipografía
 
 Se utiliza la fuente principal 'Outfit' por su legibilidad y estilo contemporáneo, y 'Playfair Display' como secundaria para títulos elegantes.  
@@ -287,50 +327,166 @@ A continuación se documentan los mixins creados en el proyecto, su utilidad y e
 **Definición:**
 ```scss
 @mixin flex-center {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 ```
 **Ejemplo de uso:**
 ```scss
 .contenedor {
-	@include flex-center;
-	height: 200px;
+  @include flex-center;
+  height: 200px;
 }
 ```
 
-### 2. box-shadow
+### 2. page-container
+**Descripción:** Aplica padding lateral responsive que se adapta a diferentes tamaños de pantalla. Útil para contenedores de página principales.
+**Definición:**
+```scss
+@mixin page-container {
+  padding-left: $page-padding-x;
+  padding-right: $page-padding-x;
+  
+  @media (max-width: $breakpoint-xl) {
+    padding-left: $spacing-8;
+    padding-right: $spacing-8;
+  }
+  
+  @media (max-width: $breakpoint-lg) {
+    padding-left: $spacing-4;
+    padding-right: $spacing-4;
+  }
+  
+  @media (max-width: $breakpoint-md) {
+    padding-left: $spacing-3;
+    padding-right: $spacing-3;
+  }
+  
+  @media (max-width: $breakpoint-sm) {
+    padding-left: $spacing-2;
+    padding-right: $spacing-2;
+  }
+}
+```
+**Ejemplo de uso:**
+```scss
+.main-content {
+  @include page-container;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+```
+
+### 3. box-shadow
 **Descripción:** Aplica una sombra al elemento. Permite personalizar el nivel de sombra.
 **Definición:**
 ```scss
-@mixin box-shadow($shadow: $shadow-md) {
-	box-shadow: $shadow;
+@mixin box-shadow($shadow) {
+  box-shadow: $shadow;
 }
 ```
 **Ejemplo de uso:**
 ```scss
 .tarjeta {
-	@include box-shadow($shadow-lg);
+  @include box-shadow($shadow-lg);
 }
 ```
 
-### 3. transition
+### 4. transition
 **Descripción:** Aplica una transición estándar a cualquier propiedad CSS, con duración y timing configurables.
 **Definición:**
 ```scss
-@mixin transition($property: all, $duration: $transition-base, $timing: $transition-ease) {
-	transition: $property $duration $timing;
+@mixin transition($property: all, $duration: 300ms, $timing: ease-in-out) {
+  transition: $property $duration $timing;
 }
 ```
 **Ejemplo de uso:**
 ```scss
 .boton {
-	@include transition(background);
+  @include transition(background, 200ms);
 }
 ```
 
-Estos mixins permiten escribir estilos más limpios, reutilizables y consistentes en todo el proyecto.
+### 5. respond-to
+**Descripción:** Media query helper para aplicar estilos en un breakpoint específico. Facilita el desarrollo responsive.
+**Definición:**
+```scss
+@mixin respond-to($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}
+```
+**Ejemplo de uso:**
+```scss
+.elemento {
+  font-size: 24px;
+  
+  @include respond-to($breakpoint-md) {
+    font-size: 18px;
+  }
+  
+  @include respond-to($breakpoint-sm) {
+    font-size: 16px;
+  }
+}
+```
+
+### 6. hide-mobile
+**Descripción:** Oculta un elemento en pantallas móviles (max-width: 640px).
+**Definición:**
+```scss
+@mixin hide-mobile {
+  @media (max-width: $breakpoint-sm) {
+    display: none;
+  }
+}
+```
+**Ejemplo de uso:**
+```scss
+.desktop-only {
+  @include hide-mobile;
+}
+```
+
+### 7. hide-tablet
+**Descripción:** Oculta un elemento en tablets y pantallas menores (max-width: 768px).
+**Definición:**
+```scss
+@mixin hide-tablet {
+  @media (max-width: $breakpoint-md) {
+    display: none;
+  }
+}
+```
+**Ejemplo de uso:**
+```scss
+.desktop-feature {
+  @include hide-tablet;
+}
+```
+
+### 8. show-mobile-only
+**Descripción:** Muestra un elemento solo en móviles. Por defecto está oculto y se muestra en pantallas pequeñas.
+**Definición:**
+```scss
+@mixin show-mobile-only {
+  display: none;
+  
+  @media (max-width: $breakpoint-sm) {
+    display: flex;
+  }
+}
+```
+**Ejemplo de uso:**
+```scss
+.mobile-menu {
+  @include show-mobile-only;
+}
+```
+
+Estos mixins permiten escribir estilos más limpios, reutilizables y consistentes en todo el proyecto, siguiendo principios DRY (Don't Repeat Yourself) y facilitando el mantenimiento.
 
 ## 1.6 ViewEncapsulation en Angular
 
@@ -1087,6 +1243,298 @@ platformOptions: SelectOption[] = [
 
 ---
 
+### Accordion (`app-accordion`)
+
+**Propósito:** Componente de acordeón que permite expandir y colapsar secciones de contenido. Soporta navegación por teclado y modo exclusivo (solo un panel abierto a la vez).
+
+**Características:**
+- Expansión/colapso con animación suave
+- Navegación con teclado (Enter, Space, flechas)
+- Modo exclusivo opcional (un panel a la vez)
+- Soporte para expandir todos los paneles inicialmente
+- ARIA labels para accesibilidad
+
+**Estados que maneja:**
+- Panel expandido: Contenido visible
+- Panel colapsado: Solo título visible
+- Panel deshabilitado: No interactivo
+- Enfoque por teclado: Outline visible
+
+**Ejemplo de uso:**
+```typescript
+accordionItems: AccordionItem[] = [
+  { id: '1', title: 'Especificaciones técnicas', content: 'Contenido...' },
+  { id: '2', title: 'Requisitos del sistema', content: 'Contenido...' },
+  { id: '3', title: 'DLCs disponibles', content: 'Contenido...', disabled: true }
+];
+```
+
+```html
+<app-accordion
+  [items]="accordionItems"
+  [exclusive]="true"
+  (panelToggle)="onPanelChange($event)">
+</app-accordion>
+```
+
+---
+
+### Tabs (`app-tabs`)
+
+**Propósito:** Sistema de pestañas para organizar contenido en diferentes vistas. Soporta navegación por teclado (flechas, Home, End) y orientación horizontal/vertical.
+
+**Características:**
+- Pestañas horizontales o verticales
+- Navegación con teclado completa
+- Pestañas deshabilitadas
+- Animaciones de transición
+- Soporte para templates externos
+
+**Estados que maneja:**
+- Pestaña activa: Resaltada visualmente
+- Pestaña inactiva: Estilo por defecto
+- Pestaña deshabilitada: No clicable
+- Hover: Indicador visual
+
+**Ejemplo de uso:**
+```typescript
+tabs: TabItem[] = [
+  { id: 'info', label: 'Información', content: 'Contenido de info...' },
+  { id: 'reviews', label: 'Reseñas', content: 'Contenido de reseñas...' },
+  { id: 'media', label: 'Multimedia', content: 'Contenido de media...', disabled: true }
+];
+```
+
+```html
+<app-tabs
+  [tabs]="tabs"
+  [activeTabId]="'info'"
+  [orientation]="'horizontal'"
+  (tabChange)="onTabChange($event)">
+</app-tabs>
+```
+
+---
+
+### Tooltip (`app-tooltip`)
+
+**Propósito:** Muestra información contextual al pasar el cursor sobre un elemento. Cierre con tecla ESC.
+
+**Posiciones disponibles:**
+- `top`, `bottom`, `left`, `right`
+
+**Estados que maneja:**
+- Oculto: Por defecto
+- Visible al hover: Aparece suavemente
+- Cierre con ESC: Se oculta inmediatamente
+
+**Ejemplo de uso:**
+```html
+<app-tooltip text="Esta es información adicional" position="top">
+  <button>Botón con tooltip</button>
+</app-tooltip>
+```
+
+---
+
+### Breadcrumbs (`app-breadcrumbs`)
+
+**Propósito:** Navegación de migas de pan que muestra la ruta actual del usuario en la jerarquía de la aplicación. Se genera automáticamente desde las rutas de Angular.
+
+**Características:**
+- Generación automática desde configuración de rutas
+- Separador personalizable
+- Último elemento sin enlace (página actual)
+- Actualización automática al navegar
+
+**Ejemplo de uso:**
+```html
+<app-breadcrumbs></app-breadcrumbs>
+```
+
+El breadcrumb lee la propiedad `data: { breadcrumb }` de cada ruta:
+```typescript
+{
+  path: 'juego/:id',
+  data: { breadcrumb: 'Detalle del Juego' }
+}
+```
+
+---
+
+### UserDropdown (`app-user-dropdown`)
+
+**Propósito:** Dropdown del perfil de usuario con avatar, nombre y opciones (perfil, ajustes, cerrar sesión).
+
+**Estados que maneja:**
+- Cerrado: Solo muestra avatar/nombre
+- Abierto: Despliega menú de opciones
+- Hover en opciones: Resaltado
+- Click fuera: Se cierra automáticamente
+
+**Ejemplo de uso:**
+```html
+<app-user-dropdown
+  [userName]="currentUser.name"
+  [userAvatar]="currentUser.avatar"
+  (logout)="onLogout()">
+</app-user-dropdown>
+```
+
+---
+
+### SpinnerInline (`app-spinner-inline`)
+
+**Propósito:** Spinner de carga inline para operaciones asíncronas locales (botones, secciones específicas). Versión pequeña y ligera del spinner global.
+
+**Tamaños disponibles:**
+- `sm`: 16px
+- `md` (default): 24px
+- `lg`: 32px
+
+**Colores disponibles:**
+- `primary`: Color accent
+- `secondary`: Gris
+- `white`: Blanco (para fondos oscuros)
+
+**Ejemplo de uso:**
+```html
+<!-- En un botón -->
+<button [disabled]="loading">
+  @if (loading) {
+    <app-spinner-inline size="sm" color="white"></app-spinner-inline>
+  } @else {
+    Guardar
+  }
+</button>
+
+<!-- En una sección -->
+<div class="section">
+  @if (loading) {
+    <app-spinner-inline size="lg"></app-spinner-inline>
+  } @else {
+    <p>Contenido cargado</p>
+  }
+</div>
+```
+
+---
+
+### Spinner (`app-spinner`)
+
+**Propósito:** Spinner de carga global con overlay que bloquea la interacción durante operaciones asíncronas importantes. Se integra con `LoadingService`.
+
+**Características:**
+- Overlay de pantalla completa
+- Mensaje personalizable
+- Soporte para barra de progreso
+- Animaciones suaves de entrada/salida
+- Bloquea scroll del body
+
+**Estados que maneja:**
+- Oculto: No visible
+- Entrando: Animación de aparición
+- Visible: Mostrado con spinner girando
+- Saliendo: Animación de desaparición
+
+**Ejemplo de uso:**
+```html
+<!-- En app.html -->
+<app-spinner></app-spinner>
+
+<!-- Se controla desde el servicio -->
+<script>
+loadingService.showGlobal('Cargando datos del usuario...');
+await fetchUserData();
+loadingService.hideGlobal();
+</script>
+```
+
+---
+
+### EditProfileForm (`app-edit-profile-form`)
+
+**Propósito:** Formulario avanzado de edición de perfil con FormArray para teléfonos múltiples. Demuestra validación síncrona, asíncrona y manejo de arrays dinámicos.
+
+**Características:**
+- FormArray para teléfonos (agregar/eliminar dinámicamente)
+- Validación síncrona (required, minLength, custom validators)
+- Validación asíncrona (username único, email único)
+- Indicadores visuales de validación en tiempo real
+- Auto-focus en primer campo con ViewChild
+
+**Campos incluidos:**
+- Nombre
+- Apellido
+- Username (con validación asíncrona)
+- Email (con validación asíncrona)
+- NIF (con validador personalizado)
+- Teléfonos (FormArray con validador de teléfono español)
+
+**Ejemplo de uso:**
+```html
+<app-edit-profile-form
+  (formSubmit)="onProfileUpdate($event)"
+  (formCancel)="onCancel()">
+</app-edit-profile-form>
+```
+
+---
+
+### EmptyState (`app-empty-state`)
+
+**Propósito:** Componente para mostrar estados vacíos cuando no hay datos que mostrar. Incluye icono, título, mensaje y acción opcional.
+
+**Variantes:**
+- `no-results`: Sin resultados de búsqueda
+- `no-data`: Sin datos disponibles
+- `error`: Error al cargar datos
+
+**Ejemplo de uso:**
+```html
+<app-empty-state
+  icon="search"
+  title="No se encontraron resultados"
+  message="Intenta con otros términos de búsqueda"
+  actionText="Limpiar filtros"
+  (actionClick)="clearFilters()">
+</app-empty-state>
+```
+
+---
+
+### RequestState (`app-request-state`)
+
+**Propósito:** Componente unificado que maneja los tres estados de una petición HTTP: loading, error y empty. Simplifica el manejo de estados en componentes que consumen APIs.
+
+**Estados que renderiza:**
+- **Loading**: Muestra spinner inline mientras carga
+- **Error**: Muestra mensaje de error con opción de reintentar
+- **Empty**: Muestra estado vacío cuando no hay datos
+- **Success**: Proyecta el contenido (ng-content)
+
+**Ejemplo de uso:**
+```html
+<app-request-state
+  [loading]="isLoading"
+  [error]="errorMessage"
+  [empty]="games.length === 0"
+  emptyTitle="No hay juegos disponibles"
+  emptyMessage="Intenta buscar con otros filtros"
+  (retry)="loadGames()">
+  
+  <!-- Contenido cuando hay datos -->
+  <div class="games-grid">
+    @for (game of games; track game.id) {
+      <app-game-card [game]="game"></app-game-card>
+    }
+  </div>
+  
+</app-request-state>
+```
+
+---
+
 ### RegisterForm (`app-register-form`)
 
 **Propósito:** Modal de registro con formulario de email, usuario y contraseña. Incluye validación de email, longitud mínima de usuario y contraseña.
@@ -1318,81 +1766,74 @@ get classes(): string {
 
 ### ¿Qué es el Style Guide?
 
-El Style Guide es una página especial de la aplicación (`/style-guide`) que muestra **todos los componentes UI** en sus diferentes variantes y estados. Sirve como:
+El Style Guide es una página especial de la aplicación (`/style-guide`) que muestra **todos los componentes UI** en sus diferentes variantes y estados.
 
-1. **Documentación visual:** Referencia rápida de todos los componentes disponibles
-2. **Testing visual:** Permite verificar que los componentes se ven correctamente
-3. **Herramienta de desarrollo:** Facilita el desarrollo y ajuste de estilos
-4. **Guía de referencia:** Muestra cómo usar cada componente
+### ¿Para qué sirve?
 
-### Estructura del Style Guide
+1. **Documentación visual:** Referencia rápida y visual de todos los componentes disponibles, facilitando su consulta y uso consistente en toda la aplicación.
 
-El Style Guide está organizado en secciones:
+2. **Testing visual:** Permite verificar que todos los componentes se renderizan correctamente, detectar regresiones visuales y validar que los estilos funcionan en diferentes estados (normal, hover, disabled, error, etc.).
 
-1. **Botones:** Todas las variantes (primary, secondary, ghost, danger) y tamaños (sm, md, lg)
-2. **Formularios:** Form-input, form-textarea, form-select con estados normales y de error
-3. **Navegación y búsqueda:** SearchBox, ThemeToggle, Pagination
-4. **Feedback:** Alertas y notificaciones en todos sus tipos (success, error, warning, info)
-5. **Cards:** GameCover en diferentes tamaños y GameCard completo
-6. **Layout:** FeaturedSection con grid de covers
+3. **Herramienta de referencia:** Sirve como catálogo de componentes para desarrolladores, diseñadores y QA, mostrando ejemplos reales de uso y todas las variantes disponibles de cada componente.
+
+### Estructura
+
+El Style Guide está organizado en **7 pestañas** mediante navegación con tabs:
+
+1. **Botones:** Variantes (primary, secondary, ghost, danger), tamaños (sm, md, lg) y estados (normal, disabled)
+2. **Formularios:** Form Input, Textarea y Select con diferentes estados y validaciones
+3. **Navegación:** SearchBox, ThemeToggle y Pagination
+4. **Feedback:** Alertas, Notificaciones Toast, Spinners y Tooltips
+5. **Cards:** Platform Badges, Game Covers y Game Cards
+6. **Layout:** Featured Section con grid de juegos
+7. **Interactivos:** Tabs y Accordion
 
 ### Capturas de pantalla
 
-#### Sección de botones
+#### Vista general con Tabs
 
-![Style Guide - Sección de Botones](./img/style-guide-buttons.png)
+![Style Guide - Vista General](./img/style-guide-overview.png)
 
-*Sección de botones mostrando las 4 variantes (primary, secondary, ghost, danger) en los 3 tamaños disponibles (sm, md, lg).*
+*Vista general del Style Guide mostrando la navegación por tabs y el encabezado.*
 
-#### Sección de Formularios
+#### Tab de Botones
+
+![Style Guide - Botones](./img/style-guide-buttons.png)
+
+*Tab de Botones mostrando las 4 variantes (primary, secondary, ghost, danger), los 3 tamaños (sm, md, lg) y estados (normal, disabled).*
+
+#### Tab de Formularios
 
 ![Style Guide - Formularios](./img/style-guide-forms.png)
 
-*Componentes de formulario: inputs de texto, password, textarea y select, mostrando estados normales y con error.*
+*Tab de Formularios con Form Input (normal, con ayuda, con error, deshabilitado, password, email), Textarea (normal, con contador) y Select.*
 
-#### Sección de navegación
+#### Tab de Navegación
 
 ![Style Guide - Navegación](./img/style-guide-navigation.png)
 
-*Componentes de navegación: barra de búsqueda, cambio de tema y paginación, mostrando su aspecto y estados interactivos.*
+*Tab de Navegación mostrando SearchBox, ThemeToggle y Pagination.*
 
-#### Sección de Feedback
+#### Tab de Feedback
 
-![Style Guide - Alertas y Notificaciones](./img/style-guide-feedback.png)
+![Style Guide - Feedback](./img/style-guide-feedback.png)
 
-*Alertas inline y notificaciones toast en sus 4 tipos: success, error, warning e info.*
+*Tab de Feedback con Alertas (4 tipos), botones para disparar Notificaciones Toast, Spinner Global (3 variantes) y Spinner Inline (5 tamaños, 5 colores).*
 
-#### Sección de Cards
+#### Tab de Cards
 
-![Style Guide - Game Cards](./img/style-guide-cards.png)
+![Style Guide - Cards](./img/style-guide-cards.png)
 
-*GameCover en tamaños sm, md, lg y GameCard completo con información del juego.*
+*Tab de Cards mostrando Platform Badges, Game Cover (3 tamaños) y Game Card completo.*
 
-### Acceso al Style Guide
+#### Tab de Layout
 
-El Style Guide está disponible en desarrollo navegando a:
+![Style Guide - Layout](./img/style-guide-layout.png)
 
-```
-http://localhost:4200/style-guide
-```
+*Tab de Layout con Featured Section y grid de portadas de juegos.*
 
-La ruta está definida en `app.routes.ts`:
+#### Tab de Interactivos
 
-```typescript
-{
-  path: 'style-guide',
-  loadComponent: () => import('./pages/style-guide/style-guide').then(m => m.StyleGuide)
-}
-```
+![Style Guide - Interactivos](./img/style-guide-interactivos.png)
 
-### Uso del Style Guide
-
-El Style Guide es una herramienta de desarrollo que permite:
-
-- **Verificar consistencia visual:** Todos los componentes en un solo lugar
-- **Probar temas:** Usar el ThemeToggle para ver componentes en modo claro/oscuro
-- **Detectar regresiones:** Cambios en estilos globales se reflejan inmediatamente
-- **Onboarding:** Nuevos desarrolladores pueden familiarizarse con los componentes
-- **Comunicación:** Compartir con diseñadores para validar la implementación
-
-> **Nota:** Las capturas de pantalla deben añadirse manualmente a la carpeta `docs/design/img/` después de generar las imágenes del Style Guide en funcionamiento.
+*Tab de Interactivos mostrando Tabs anidadas y Accordion con múltiples items.*

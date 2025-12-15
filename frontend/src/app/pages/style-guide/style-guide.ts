@@ -268,10 +268,10 @@ export default class StyleGuide implements AfterViewInit {
   // MÉTODOS AUXILIARES
   // ============================================
   onSearch(query: string): void {
-    console.log('Búsqueda:', query);
+    // Búsqueda realizada
   }
 
   onButtonClick(): void {
-    console.log('Botón clickeado');
+    // Botón clickeado
   }
 }

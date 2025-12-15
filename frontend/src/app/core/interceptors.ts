@@ -216,28 +216,30 @@ export const loggingInterceptor: HttpInterceptorFn = (
   const requestId = generateRequestId();
 
   // Log de petición
-  console.groupCollapsed(
-    `%c[HTTP] ${req.method} ${getShortUrl(req.url)}`,
-    'color: #3B82F6; font-weight: bold;'
-  );
-  console.log('Request ID:', requestId);
-  console.log('URL:', req.url);
-  console.log('Method:', req.method);
-  
-  if (req.body) {
-    console.log('Body:', req.body);
+  if (typeof console !== 'undefined' && console.groupCollapsed) {
+    console.groupCollapsed(
+      `%c[HTTP] ${req.method} ${getShortUrl(req.url)}`,
+      'color: #3B82F6; font-weight: bold;'
+    );
+    console.log('Request ID:', requestId);
+    console.log('URL:', req.url);
+    console.log('Method:', req.method);
+    
+    if (req.body) {
+      console.log('Body:', req.body);
+    }
+    
+    if (req.params.keys().length > 0) {
+      console.log('Params:', req.params.toString());
+    }
+    
+    console.groupEnd();
   }
-  
-  if (req.params.keys().length > 0) {
-    console.log('Params:', req.params.toString());
-  }
-  
-  console.groupEnd();
 
   return next(req).pipe(
     tap({
       next: (event) => {
-        if (event instanceof HttpResponse) {
+        if (event instanceof HttpResponse && typeof console !== 'undefined') {
           const duration = Date.now() - startTime;
           console.log(
             `%c[HTTP] ✓ ${req.method} ${getShortUrl(req.url)} - ${event.status} (${duration}ms)`,
@@ -246,12 +248,14 @@ export const loggingInterceptor: HttpInterceptorFn = (
         }
       },
       error: (error: HttpErrorResponse) => {
-        const duration = Date.now() - startTime;
-        console.log(
-          `%c[HTTP] ✗ ${req.method} ${getShortUrl(req.url)} - ${error.status} (${duration}ms)`,
-          'color: #EF4444;'
-        );
-        console.error('Error details:', error.message);
+        if (typeof console !== 'undefined') {
+          const duration = Date.now() - startTime;
+          console.log(
+            `%c[HTTP] ✗ ${req.method} ${getShortUrl(req.url)} - ${error.status} (${duration}ms)`,
+            'color: #EF4444;'
+          );
+          console.error('Error details:', error.message);
+        }
       }
     })
   );

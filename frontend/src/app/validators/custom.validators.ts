@@ -465,16 +465,24 @@ export class CustomValidators {
   // ============================================
 
   /**
+   * Helper para verificar si el control es un FormArray
+   */
+  private static isFormArray(control: AbstractControl): control is AbstractControl & { controls: AbstractControl[] } {
+    return 'controls' in control && Array.isArray((control as { controls?: unknown }).controls);
+  }
+
+  /**
    * Validador de longitud mínima de array
    */
   static minArrayLength(minLength: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const formArray = control as any;
-      if (formArray.controls && formArray.controls.length < minLength) {
+      if (!CustomValidators.isFormArray(control)) return null;
+      
+      if (control.controls.length < minLength) {
         return { 
           minArrayLength: { 
             required: minLength, 
-            actual: formArray.controls.length 
+            actual: control.controls.length 
           } 
         };
       }
@@ -487,12 +495,13 @@ export class CustomValidators {
    */
   static maxArrayLength(maxLength: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const formArray = control as any;
-      if (formArray.controls && formArray.controls.length > maxLength) {
+      if (!CustomValidators.isFormArray(control)) return null;
+      
+      if (control.controls.length > maxLength) {
         return { 
           maxArrayLength: { 
             allowed: maxLength, 
-            actual: formArray.controls.length 
+            actual: control.controls.length 
           } 
         };
       }
@@ -505,20 +514,19 @@ export class CustomValidators {
    */
   static uniqueArrayItems(fieldName?: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const formArray = control as any;
-      
-      if (!formArray.controls) return null;
+      if (!CustomValidators.isFormArray(control)) return null;
 
-      const values = formArray.controls.map((c: AbstractControl) => {
+      const values = control.controls.map((c: AbstractControl) => {
         if (fieldName) {
           return c.get(fieldName)?.value;
         }
         return c.value;
       });
 
-      const uniqueValues = new Set(values.filter((v: any) => v !== null && v !== ''));
+      const validValues = values.filter((v: unknown) => v !== null && v !== '');
+      const uniqueValues = new Set(validValues);
       
-      if (uniqueValues.size !== values.filter((v: any) => v !== null && v !== '').length) {
+      if (uniqueValues.size !== validValues.length) {
         return { uniqueArrayItems: { message: 'Los elementos deben ser únicos' } };
       }
 

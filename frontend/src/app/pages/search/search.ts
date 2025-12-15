@@ -1,5 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 /**
  * @component SearchPage
@@ -14,14 +15,22 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   templateUrl: './search.html',
   styleUrl: './search.scss'
 })
-export default class SearchPage implements OnInit {
+export default class SearchPage implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
+  private destroy$ = new Subject<void>();
   
   searchQuery = '';
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.searchQuery = params['q'] || '';
-    });
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.searchQuery = params['q'] || '';
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
