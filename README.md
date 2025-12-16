@@ -9,6 +9,7 @@
 ## Tabla de Contenidos
 
 - [Comenzar](#comenzar)
+  - [Acceso a la Aplicación](#acceso-a-la-aplicación)
   - [Despliegue con Docker (Recomendado)](#despliegue-con-docker-recomendado)
   - [Modo Desarrollo](#modo-desarrollo)
 - [Características](#características)
@@ -22,6 +23,14 @@
 ---
 
 ## Comenzar
+
+### Acceso a la Aplicación
+
+La aplicación está desplegada y accesible para poder visualizarla sin problemas en:
+
+**[https://looking4rate-nu8km.ondigitalocean.app/](https://looking4rate-nu8km.ondigitalocean.app/)**
+
+> **Nota:** La aplicación está desplegada en Digital Ocean App Platform sin dominio personalizado. Puedes acceder directamente mediante el enlace proporcionado. Este despliegue es temporal, en el futuro buscare alguna plataforma en la cual poder desplegar de forma permanente mi aplicación con un dominio personalizado.
 
 ### Despliegue con Docker (Recomendado)
 
