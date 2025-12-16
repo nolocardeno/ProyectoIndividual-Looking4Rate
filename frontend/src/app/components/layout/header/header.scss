@@ -11,10 +11,14 @@
   background-color: var(--bg-header-footer);
   min-height: $spacing-header-footer;
   width: 100%;
-  border-bottom: $border-thin solid var(--border-color);
+  border-bottom: $border-thin solid var(--border-header-footer, var(--border-color));
   position: relative;
   z-index: 1000;
   @include transition(background-color);
+  
+  // En modo claro, mantener colores del modo oscuro
+  --text-primary: var(--text-header-footer, #{$color-text-dark});
+  --text-secondary: var(--text-header-footer-alt, #{$color-text-alt-dark});
 
   // --------------------------------------------------------------------------
   // CONTENEDOR

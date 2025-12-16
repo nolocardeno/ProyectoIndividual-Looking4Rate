@@ -38,13 +38,14 @@
     inset: 0;
     z-index: 1;
     // Gradientes que se desvanecen desde el centro hacia los lados
+    // Usa var(--bg-primary) para adaptarse automáticamente al tema
     background: 
       // Gradiente izquierdo
-      linear-gradient(to right, $color-primary-dark 0%, transparent 30%),
+      linear-gradient(to right, var(--bg-primary) 0%, transparent 30%),
       // Gradiente derecho  
-      linear-gradient(to left, $color-primary-dark 0%, transparent 30%),
+      linear-gradient(to left, var(--bg-primary) 0%, transparent 30%),
       // Gradiente inferior
-      linear-gradient(to top, $color-primary-dark 0%, transparent 50%);
+      linear-gradient(to top, var(--bg-primary) 0%, transparent 50%);
   }
   
   // Contenido centrado con padding

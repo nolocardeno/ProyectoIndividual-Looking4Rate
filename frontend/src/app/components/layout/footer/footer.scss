@@ -11,8 +11,12 @@
   background-color: var(--bg-header-footer);
   padding: $spacing-4 0;
   width: 100%;
-  border-top: $border-thin solid var(--border-color);
+  border-top: $border-thin solid var(--border-header-footer, var(--border-color));
   @include transition(background-color);
+  
+  // En modo claro, mantener colores del modo oscuro
+  --text-primary: var(--text-header-footer, #{$color-text-dark});
+  --text-secondary: var(--text-header-footer-alt, #{$color-text-alt-dark});
 
   // --------------------------------------------------------------------------
   // CONTENEDOR
