@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../../../../styles/00-settings/variables' as *;
 @use '../../../../styles/01-tools/mixins' as *;
 
@@ -123,29 +124,48 @@
   // --------------------------------------------------------------------------
   // Variables CSS locales
   // --------------------------------------------------------------------------
-  --notification-bg: var(--bg-secondary);
-  --notification-border: var(--color-info);
+  --notification-bg: #{$color-primary-dark};
+  --notification-bg-end: #{color.mix($color-primary-dark, $color-accent-dark, 85%)};
+  --notification-border-start: #{rgba($color-text-alt-dark, 0.6)};
+  --notification-border-end: #{rgba($color-text-alt-dark, 0.1)};
   --notification-text: var(--text-primary);
+  --notification-progress: var(--color-info);
 
   // --------------------------------------------------------------------------
-  // Estilos base (ya no usa position fixed individual)
+  // Estilos base
   // --------------------------------------------------------------------------
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: $spacing-1;
+  gap: $spacing-2;
   min-width: 18rem;
   max-width: 22rem;
-  padding: $spacing-1 $spacing-2;
+  padding: $spacing-2 $spacing-3;
   border-radius: $radius-lg;
-  border-left: $border-thick solid var(--notification-border);
-  background-color: var(--bg-secondary);
+  background: linear-gradient(180deg, var(--notification-bg) 0%, var(--notification-bg-end) 100%);
   box-shadow: $shadow-xl;
   font-family: $font-primary;
   font-size: $font-size-md;
   color: var(--notification-text);
   overflow: hidden;
   pointer-events: auto;
+  @include transition(all);
+
+  // --------------------------------------------------------------------------
+  // Borde con gradiente (pseudo-elemento como en botón/acordeón)
+  // --------------------------------------------------------------------------
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-lg;
+    padding: $border-thin;
+    background: linear-gradient(180deg, var(--notification-border-start) 0%, var(--notification-border-end) 100%);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    @include transition(all);
+  }
 
   // --------------------------------------------------------------------------
   // Animaciones de entrada (simplificadas para stack vertical)
@@ -171,8 +191,8 @@
     flex-shrink: 0;
     width: 1.5rem;
     height: 1.5rem;
-    font-size: $font-size-md;
-    color: var(--notification-border);
+    font-size: $font-size-lg;
+    color: $color-text-dark;
   }
 
   &__content {
@@ -184,11 +204,11 @@
 
   &__title {
     font-weight: $font-weight-semibold;
-    color: var(--notification-border);
+    color: $color-text-dark;
   }
 
   &__message {
-    color: var(--text-secondary);
+    color: $color-text-alt-dark;
     line-height: $line-height-normal;
   }
 
@@ -203,18 +223,18 @@
     border: none;
     border-radius: $radius-md;
     background: transparent;
-    color: var(--text-secondary);
+    color: $color-text-alt-dark;
     font-size: $font-size-md;
     cursor: pointer;
     @include transition(all);
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.1);
-      color: var(--text-primary);
+      background-color: rgba(0, 0, 0, 0.2);
+      color: $color-text-dark;
     }
 
     &:focus-visible {
-      outline: 2px solid var(--notification-border);
+      outline: 2px solid $color-accent-dark;
       outline-offset: 2px;
     }
   }
@@ -232,17 +252,17 @@
 
     // WebKit (Chrome, Safari, Edge)
     &::-webkit-progress-bar {
-      background-color: transparent;
+      background-color: rgba(0, 0, 0, 0.15);
     }
 
     &::-webkit-progress-value {
-      background-color: var(--notification-border);
+      background-color: var(--notification-progress);
       transition: none;
     }
 
     // Firefox
     &::-moz-progress-bar {
-      background-color: var(--notification-border);
+      background-color: var(--notification-progress);
     }
   }
 
@@ -252,21 +272,21 @@
 
   // Success - Verde para confirmaciones
   &--success {
-    --notification-border: var(--color-success);
+    --notification-progress: var(--color-success);
   }
 
   // Error - Rojo para errores
   &--error {
-    --notification-border: var(--color-error);
+    --notification-progress: var(--color-error);
   }
 
   // Warning - Naranja para advertencias
   &--warning {
-    --notification-border: var(--color-warning);
+    --notification-progress: var(--color-warning);
   }
 
-  // Info - Azul para información
+  // Info - Azul para información (default)
   &--info {
-    --notification-border: var(--color-info);
+    --notification-progress: var(--color-info);
   }
 }
