@@ -213,44 +213,61 @@ $spinner-transition-duration: 0.3s;
   // Barra de progreso (usando <meter>)
   &__progress {
     width: 100%;
-    max-width: 200px;
-    height: 8px;
+    max-width: 240px;
+    height: 10px;
     appearance: none;
     border: none;
-    background: var(--bg-tertiary);
+    background: rgba(0, 0, 0, 0.25);
     border-radius: $radius-full;
     overflow: hidden;
     position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 
     // WebKit (Chrome, Safari, Edge)
     &::-webkit-meter-bar {
-      background: var(--bg-tertiary);
+      background: rgba(0, 0, 0, 0.25);
       border-radius: $radius-full;
       border: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     &::-webkit-meter-optimum-value {
-      background: $spinner-color;
+      background: linear-gradient(90deg, 
+        #{$color-accent-dark} 0%, 
+        #{$color-primary-light} 50%, 
+        #{$color-accent-dark} 100%
+      );
       border-radius: $radius-full;
+      box-shadow: 0 0 8px rgba($color-accent-dark, 0.5);
     }
 
     // Firefox
     &::-moz-meter-bar {
-      background: $spinner-color;
+      background: linear-gradient(90deg, 
+        #{$color-accent-dark} 0%, 
+        #{$color-primary-light} 50%, 
+        #{$color-accent-dark} 100%
+      );
       border-radius: $radius-full;
+      box-shadow: 0 0 8px rgba($color-accent-dark, 0.5);
     }
   }
 
   // Fallback para navegadores sin soporte de <meter>
   &__progress-bar {
     height: 100%;
-    background: $spinner-color;
+    background: linear-gradient(90deg, 
+      #{$color-accent-dark} 0%, 
+      #{$color-primary-light} 50%, 
+      #{$color-accent-dark} 100%
+    );
     border-radius: $radius-full;
     transition: width 0.3s ease-out;
+    box-shadow: 0 0 8px rgba($color-accent-dark, 0.5);
   }
 
   &__progress-text {
-    display: block;
+    display: none; // Oculto para evitar duplicidad con el mensaje principal
     margin-top: $spacing-1;
     font-size: $font-size-xs;
     font-weight: $font-weight-bold;
