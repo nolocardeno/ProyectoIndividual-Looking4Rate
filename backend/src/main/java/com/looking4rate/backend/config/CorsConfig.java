@@ -18,11 +18,12 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Orígenes permitidos (frontend Angular)
+        // Orígenes permitidos (frontend Angular y producción)
         configuration.setAllowedOrigins(List.of(
             "http://localhost:4200",     // Angular dev server
             "http://localhost:4000",     // Angular SSR
-            "http://127.0.0.1:4200"
+            "http://127.0.0.1:4200",
+            "https://looking4rate-nu8km.ondigitalocean.app" // Producción DigitalOcean
         ));
         
         // Métodos HTTP permitidos
