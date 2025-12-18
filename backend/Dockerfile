@@ -5,19 +5,20 @@ FROM maven:3.9-eclipse-temurin-21-alpine AS build
 
 WORKDIR /app
 
-# Copiar archivos de dependencias primero (cache de capas)
+
+# Copiar solo los archivos necesarios para dependencias primero (mejor cache)
 COPY pom.xml .
 COPY mvnw .
-COPY .mvn .mvn
+COPY .mvn/wrapper .mvn/wrapper
 
-# Descargar dependencias (se cachea si pom.xml no cambia)
-RUN mvn dependency:go-offline -B
+# Descargar dependencias (se cachea si pom.xml y wrapper no cambian)
+RUN ./mvnw dependency:go-offline -B
 
-# Copiar código fuente
+# Copiar el resto del código fuente
 COPY src ./src
 
-# Construir la aplicación
-RUN mvn clean package -DskipTests
+# Construir la aplicación (sin tests para producción)
+RUN ./mvnw clean package -DskipTests
 
 # ============================================
 # STAGE 2: RUNTIME

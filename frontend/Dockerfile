@@ -5,14 +5,20 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Copiar archivos de dependencias primero (cache de capas)
-COPY package*.json ./
+
+# Copiar archivos de dependencias primero (mejor cache)
+COPY package.json .
+COPY package-lock.json .
 
 # Instalar dependencias
 RUN npm ci --legacy-peer-deps
 
-# Copiar código fuente
-COPY . .
+# Copiar solo el código fuente y assets necesarios (evita copiar archivos innecesarios)
+COPY src ./src
+COPY angular.json ./
+COPY tsconfig*.json ./
+COPY nginx.conf ./
+COPY public ./public
 
 # Construir la aplicación para producción (solo browser, sin SSR)
 RUN npm run build -- --output-mode=static
