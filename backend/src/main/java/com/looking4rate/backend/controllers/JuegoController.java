@@ -20,6 +20,7 @@ import com.looking4rate.backend.dtos.JuegoDTO;
 import com.looking4rate.backend.dtos.JuegoResumenDTO;
 import com.looking4rate.backend.services.JuegoService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -52,7 +53,7 @@ public class JuegoController {
      */
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<JuegoDTO> crear(@RequestBody JuegoCreacionDTO dto) {
+    public ResponseEntity<JuegoDTO> crear(@Valid @RequestBody JuegoCreacionDTO dto) {
         JuegoDTO creado = juegoService.crear(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
@@ -62,7 +63,7 @@ public class JuegoController {
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<JuegoDTO> actualizar(@PathVariable Long id, @RequestBody JuegoCreacionDTO dto) {
+    public ResponseEntity<JuegoDTO> actualizar(@PathVariable Long id, @Valid @RequestBody JuegoCreacionDTO dto) {
         return ResponseEntity.ok(juegoService.actualizar(id, dto));
     }
 

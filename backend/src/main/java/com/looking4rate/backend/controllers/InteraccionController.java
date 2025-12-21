@@ -18,6 +18,7 @@ import com.looking4rate.backend.dtos.InteraccionCreacionDTO;
 import com.looking4rate.backend.dtos.InteraccionDTO;
 import com.looking4rate.backend.services.InteraccionService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -58,7 +59,7 @@ public class InteraccionController {
     @PreAuthorize("hasAuthority('ADMIN') or #usuarioId == authentication.principal.id")
     public ResponseEntity<InteraccionDTO> crear(
             @PathVariable Long usuarioId,
-            @RequestBody InteraccionCreacionDTO dto) {
+            @Valid @RequestBody InteraccionCreacionDTO dto) {
         InteraccionDTO creada = interaccionService.crear(usuarioId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(creada);
     }
@@ -71,7 +72,7 @@ public class InteraccionController {
     public ResponseEntity<InteraccionDTO> actualizar(
             @PathVariable Long id,
             @PathVariable Long usuarioId,
-            @RequestBody InteraccionCreacionDTO dto) {
+            @Valid @RequestBody InteraccionCreacionDTO dto) {
         return ResponseEntity.ok(interaccionService.actualizar(usuarioId, id, dto));
     }
 
