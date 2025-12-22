@@ -2,6 +2,29 @@ version: '3.8'
 
 services:
   # ============================================
+  # DATABASE - PostgreSQL
+  # ============================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: looking4rate-postgres
+    environment:
+      - POSTGRES_DB=looking4rate_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - looking4rate-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d looking4rate_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ============================================
   # BACKEND - Spring Boot API
   # ============================================
   backend:
@@ -12,8 +35,17 @@ services:
     ports:
       - "8080:8080"
     environment:
+      - DATABASE_URL=jdbc:postgresql://postgres:5432/looking4rate_db
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DDL_AUTO=create-drop
+      - SHOW_SQL=true
+      - SQL_INIT_MODE=always
       - SPRING_PROFILES_ACTIVE=default
       - JAVA_OPTS=-Xms256m -Xmx512m
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - looking4rate-network
     healthcheck:
@@ -46,6 +78,13 @@ services:
       retries: 3
       start_period: 20s
     restart: unless-stopped
+
+# ============================================
+# VOLUMES
+# ============================================
+volumes:
+  postgres_data:
+    driver: local
 
 # ============================================
 # NETWORKS
