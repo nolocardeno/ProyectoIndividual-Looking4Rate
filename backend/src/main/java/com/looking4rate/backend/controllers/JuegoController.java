@@ -20,12 +20,19 @@ import com.looking4rate.backend.dtos.JuegoDTO;
 import com.looking4rate.backend.dtos.JuegoResumenDTO;
 import com.looking4rate.backend.services.JuegoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/juegos")
 @RequiredArgsConstructor
+@Tag(name = "Juegos", description = "Gestión del catálogo de videojuegos")
 public class JuegoController {
 
     private final JuegoService juegoService;
@@ -35,6 +42,8 @@ public class JuegoController {
     /**
      * GET /api/juegos - Lista todos los juegos (resumen)
      */
+    @Operation(summary = "Listar juegos", description = "Obtiene la lista de todos los juegos con información resumida")
+    @ApiResponse(responseCode = "200", description = "Lista de juegos obtenida correctamente")
     @GetMapping
     public ResponseEntity<List<JuegoResumenDTO>> listarTodos() {
         return ResponseEntity.ok(juegoService.listarTodos());
@@ -43,14 +52,26 @@ public class JuegoController {
     /**
      * GET /api/juegos/{id} - Obtiene un juego por ID (detalle completo)
      */
+    @Operation(summary = "Obtener juego", description = "Obtiene el detalle completo de un juego por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Juego encontrado"),
+        @ApiResponse(responseCode = "404", description = "Juego no encontrado")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<JuegoDTO> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<JuegoDTO> obtenerPorId(@Parameter(description = "ID del juego") @PathVariable Long id) {
         return ResponseEntity.ok(juegoService.obtenerPorId(id));
     }
 
     /**
      * POST /api/juegos - Crea un nuevo juego (solo ADMIN)
      */
+    @Operation(summary = "Crear juego", description = "Crea un nuevo juego en el catálogo (requiere rol ADMIN)")
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Juego creado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+        @ApiResponse(responseCode = "403", description = "Acceso denegado - requiere rol ADMIN")
+    })
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<JuegoDTO> crear(@Valid @RequestBody JuegoCreacionDTO dto) {

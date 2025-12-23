@@ -53,6 +53,15 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 
+                // Swagger y OpenAPI docs
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/swagger-ui.html").permitAll()
+                .requestMatchers("/api-docs/**").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                
+                // Actuator endpoints
+                .requestMatchers("/actuator/**").permitAll()
+                
                 // Endpoints de lectura públicos (GET)
                 .requestMatchers(HttpMethod.GET, "/api/juegos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/plataformas/**").permitAll()

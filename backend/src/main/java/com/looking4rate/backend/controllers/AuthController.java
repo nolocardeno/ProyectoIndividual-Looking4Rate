@@ -17,6 +17,11 @@ import com.looking4rate.backend.security.SecurityUtils;
 import com.looking4rate.backend.security.CustomUserDetailsService.CustomUserDetails;
 import com.looking4rate.backend.services.UsuarioService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Autenticación", description = "Endpoints para registro, login y gestión de sesión")
 public class AuthController {
     
     private final UsuarioService usuarioService;
@@ -34,6 +40,12 @@ public class AuthController {
     /**
      * POST /api/auth/registro - Registra un nuevo usuario
      */
+    @Operation(summary = "Registrar usuario", description = "Crea una nueva cuenta de usuario y devuelve un token JWT")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Usuario registrado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Datos de registro inválidos"),
+        @ApiResponse(responseCode = "409", description = "El email ya está registrado")
+    })
     @PostMapping("/registro")
     public ResponseEntity<AuthResponse> registro(@Valid @RequestBody UsuarioRegistroDTO dto) {
         UsuarioDTO usuario = usuarioService.registrar(dto);
@@ -49,6 +61,11 @@ public class AuthController {
     /**
      * POST /api/auth/login - Inicia sesión
      */
+    @Operation(summary = "Iniciar sesión", description = "Autentica al usuario y devuelve un token JWT")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login exitoso"),
+        @ApiResponse(responseCode = "401", description = "Credenciales inválidas")
+    })
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody UsuarioLoginDTO dto) {
         Usuario usuario = usuarioService.autenticar(dto);
@@ -69,6 +86,12 @@ public class AuthController {
     /**
      * GET /api/auth/me - Obtiene información del usuario autenticado
      */
+    @Operation(summary = "Obtener usuario actual", description = "Devuelve la información del usuario autenticado")
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuario obtenido correctamente"),
+        @ApiResponse(responseCode = "401", description = "No autenticado")
+    })
     @GetMapping("/me")
     public ResponseEntity<UsuarioDTO> obtenerUsuarioActual() {
         CustomUserDetails userDetails = SecurityUtils.getUsuarioActual();

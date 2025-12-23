@@ -16,6 +16,7 @@
 - [Stack Tecnológico](#stack-tecnológico)
 - [Arquitectura](#arquitectura)
 - [Estructura del Proyecto](#estructura-del-proyecto)
+- [Documentación API y Monitorización](#documentación-api-y-monitorización)
 - [Endpoints de la API](#endpoints-de-la-api)
 - [Documentación Adicional](#documentación-adicional)
 - [Licencia](#licencia)
@@ -51,10 +52,8 @@ docker-compose up --build
 2. **Acceder a la aplicación:**
    - **Frontend:** http://localhost
    - **Backend API:** http://localhost:8080/api
-   - **Consola H2:** http://localhost:8080/h2-console
-     - JDBC URL: `jdbc:h2:mem:looking4rate_db`
-     - Usuario: `sa`
-     - Contraseña: `sa`
+   - **Swagger UI:** http://localhost:8080/swagger-ui.html
+   - **Health Check:** http://localhost:8080/actuator/health
 
 3. **Detener los servicios:**
 ```bash
@@ -227,6 +226,35 @@ ProyectoIndividual-Looking4Rate/
 ├── docker-compose.yml
 └── README.md
 ```
+
+---
+
+## Documentación API y Monitorización
+
+El backend incluye herramientas integradas para documentación interactiva y monitorización:
+
+### Swagger UI (OpenAPI)
+
+Documentación interactiva de la API con capacidad de probar endpoints directamente:
+
+- **URL:** http://localhost:8080/swagger-ui.html (desarrollo)
+- **OpenAPI JSON:** http://localhost:8080/api-docs
+
+**Características:**
+- Documentación completa de todos los endpoints
+- Autenticación JWT integrada (botón "Authorize")
+- Prueba de endpoints en tiempo real
+- Esquemas de request/response
+
+### Spring Boot Actuator
+
+Endpoints para monitorizar el estado de la aplicación:
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `/actuator/health` | Estado de salud (base de datos, disco) |
+| `/actuator/info` | Información de la aplicación |
+| `/actuator/metrics` | Métricas del sistema |
 
 ---
 

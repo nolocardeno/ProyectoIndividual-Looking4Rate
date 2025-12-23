@@ -13,6 +13,9 @@
 - [3. DTOs Iniciales](#3-dtos-iniciales)
 - [4. Repositorios](#4-repositorios)
 - [5. Relaciones](#5-relaciones)
+- [6. Documentación y Salud de la Aplicación](#6-documentación-y-salud-de-la-aplicación)
+  - [6.1 Spring Boot Actuator](#61-spring-boot-actuator)
+  - [6.2 Swagger / OpenAPI](#62-swagger--openapi)
 
 ---
 
@@ -637,3 +640,219 @@ public interface JuegoGeneroRepository extends JpaRepository<JuegoGenero, Long> 
 - **Comentarios en reviews:** Sistema de comentarios anidados
 - **Likes en reviews:** Posibilidad de dar like a reviews de otros usuarios
 - **Editora/Publisher:** Entidad adicional para las publicadoras de juegos
+
+---
+
+## 6. Documentación y Salud de la Aplicación
+
+La aplicación incluye herramientas para monitorizar el estado del servidor y documentar la API de forma interactiva.
+
+### 6.1 Spring Boot Actuator
+
+**Spring Boot Actuator** proporciona endpoints para monitorizar y gestionar la aplicación en producción.
+
+#### Dependencia
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+#### Configuración (`application.properties`)
+
+```properties
+# Endpoints expuestos
+management.endpoints.web.exposure.include=health,info,metrics,env
+management.endpoint.health.show-details=always
+management.info.env.enabled=true
+
+# Información de la aplicación
+info.app.name=Looking4Rate API
+info.app.description=Backend API para la plataforma de valoración de videojuegos
+info.app.version=1.0.0
+info.app.java.version=${java.version}
+```
+
+#### Endpoints Disponibles
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `/actuator/health` | Estado de salud de la aplicación (UP/DOWN) |
+| `/actuator/info` | Información general de la aplicación |
+| `/actuator/metrics` | Métricas del sistema (memoria, CPU, peticiones HTTP) |
+| `/actuator/env` | Variables de entorno y configuración |
+
+#### Ejemplo de Respuesta `/actuator/health`
+
+```json
+{
+  "status": "UP",
+  "components": {
+    "db": {
+      "status": "UP",
+      "details": {
+        "database": "PostgreSQL",
+        "validationQuery": "isValid()"
+      }
+    },
+    "diskSpace": {
+      "status": "UP",
+      "details": {
+        "total": 499963174912,
+        "free": 123456789012,
+        "threshold": 10485760
+      }
+    }
+  }
+}
+```
+
+---
+
+### 6.2 Swagger / OpenAPI
+
+**SpringDoc OpenAPI** genera documentación interactiva de la API basada en el estándar OpenAPI 3.0.
+
+#### Dependencia
+
+```xml
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.8.4</version>
+</dependency>
+```
+
+#### Configuración (`application.properties`)
+
+```properties
+# Ruta personalizada para la documentación
+springdoc.api-docs.path=/api-docs
+springdoc.swagger-ui.path=/swagger-ui.html
+
+# Configuración de Swagger UI
+springdoc.swagger-ui.operationsSorter=method
+springdoc.swagger-ui.tagsSorter=alpha
+springdoc.swagger-ui.tryItOutEnabled=true
+```
+
+#### Endpoints de Documentación
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `/swagger-ui.html` | Interfaz gráfica interactiva de Swagger UI |
+| `/api-docs` | Especificación OpenAPI en formato JSON |
+| `/v3/api-docs` | Especificación OpenAPI (ruta alternativa) |
+
+#### Configuración de OpenAPI (`OpenApiConfig.java`)
+
+La clase de configuración define:
+
+- **Información del proyecto:** Título, versión, descripción, contacto y licencia
+- **Servidores:** URLs de desarrollo local y Docker
+- **Seguridad JWT:** Esquema de autenticación Bearer Token
+
+```java
+@Configuration
+public class OpenApiConfig {
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        final String securitySchemeName = "bearerAuth";
+        
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Looking4Rate API")
+                        .version("1.0.0")
+                        .description("API REST para la plataforma de valoración de videojuegos"))
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                .components(new Components()
+                        .addSecuritySchemes(securitySchemeName,
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")));
+    }
+}
+```
+
+#### Anotaciones en Controladores
+
+Los controladores utilizan anotaciones de OpenAPI para documentar cada endpoint:
+
+```java
+@Tag(name = "Autenticación", description = "Endpoints para registro y login")
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    @Operation(summary = "Iniciar sesión", description = "Autentica al usuario y devuelve un token JWT")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login exitoso"),
+        @ApiResponse(responseCode = "401", description = "Credenciales inválidas")
+    })
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody UsuarioLoginDTO dto) {
+        // ...
+    }
+}
+```
+
+#### Uso de Swagger UI
+
+1. Acceder a `http://localhost:8080/swagger-ui.html`
+2. Explorar los endpoints organizados por categorías (Tags)
+3. Para endpoints protegidos:
+   - Hacer login en `/api/auth/login`
+   - Copiar el token JWT recibido
+   - Click en "Authorize" (🔓)
+   - Pegar el token en el campo de Bearer
+4. Probar los endpoints directamente desde la interfaz
+
+---
+
+### 6.3 Seguridad de los Endpoints
+
+Los endpoints de Actuator y Swagger están configurados como públicos en `SecurityConfig.java`:
+
+```java
+.authorizeHttpRequests(auth -> auth
+    // Swagger y OpenAPI docs
+    .requestMatchers("/swagger-ui/**").permitAll()
+    .requestMatchers("/swagger-ui.html").permitAll()
+    .requestMatchers("/api-docs/**").permitAll()
+    .requestMatchers("/v3/api-docs/**").permitAll()
+    
+    // Actuator endpoints
+    .requestMatchers("/actuator/**").permitAll()
+    // ...
+)
+```
+
+> ⚠️ **Nota de Producción:** En entornos de producción, se recomienda restringir el acceso a `/actuator/env` y otros endpoints sensibles mediante autenticación o limitación por IP.
+
+---
+
+### 6.4 URLs de Acceso
+
+#### Desarrollo Local
+
+| Recurso | URL |
+|---------|-----|
+| Swagger UI | http://localhost:8080/swagger-ui.html |
+| OpenAPI JSON | http://localhost:8080/api-docs |
+| Health Check | http://localhost:8080/actuator/health |
+| Info | http://localhost:8080/actuator/info |
+| Metrics | http://localhost:8080/actuator/metrics |
+
+#### Docker
+
+| Recurso | URL |
+|---------|-----|
+| Swagger UI | http://localhost/swagger-ui.html |
+| OpenAPI JSON | http://localhost/api-docs |
+| Health Check | http://localhost/actuator/health |
+| Info | http://localhost/actuator/info |
+| Metrics | http://localhost/actuator/metrics |
