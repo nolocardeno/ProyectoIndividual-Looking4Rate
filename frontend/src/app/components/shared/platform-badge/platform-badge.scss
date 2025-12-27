@@ -23,16 +23,16 @@
   font-size: $font-size-md;
   font-weight: $font-weight-semibold;
   color: var(--text-primary);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.125rem;
   transition: color $transition-base $transition-ease;
 
   // --------------------------------------------------------------------------
-  // Modificador para enlaces
+  // Modificador para enlaces (hover activo)
   // --------------------------------------------------------------------------
   &--link {
     cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 0.125rem;
 
     &:hover {
       color: var(--color-accent);

@@ -1,41 +1,174 @@
+@use 'styles/00-settings/variables' as *;
+
+// ==========================================================================
+// GAME DETAIL PAGE
+// Página de detalle de un juego
+// ==========================================================================
+
 .game-detail {
   min-height: 100vh;
-  padding: 2rem;
-  
+
+  // --------------------------------------------------------------------------
+  // CONTENEDOR PRINCIPAL
+  // --------------------------------------------------------------------------
   &__container {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
+    width: 100%;
   }
-  
-  &__title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  &__id {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-  }
-  
-  &__info {
-    margin: 2rem 0;
-    color: var(--color-text-secondary, #666);
-  }
-  
-  &__links {
+
+  // --------------------------------------------------------------------------
+  // FILA PRINCIPAL (Game Card + Panel de Interacción)
+  // --------------------------------------------------------------------------
+  &__main {
     display: flex;
-    gap: 2rem;
-    justify-content: center;
-    margin-top: 2rem;
-  }
-  
-  &__link {
-    color: var(--color-primary, #007bff);
-    text-decoration: none;
+    gap: $spacing-4;
+    align-items: flex-start;
+    justify-content: space-between;
     
+    app-game-interaction-panel {
+      margin-top: 2.5rem;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ESTADOS: CARGA Y ERROR
+  // --------------------------------------------------------------------------
+  &__loading,
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    text-align: center;
+
+    p {
+      font-family: $font-primary;
+      font-size: $font-size-lg;
+      color: var(--text-secondary);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // NAVEGACIÓN
+  // --------------------------------------------------------------------------
+  &__nav {
+    display: flex;
+    gap: $spacing-3;
+    justify-content: center;
+    margin-top: $spacing-3;
+  }
+
+  &__link {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color $transition-fast $transition-ease;
+
     &:hover {
       text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: $border-medium solid var(--color-accent);
+      outline-offset: $border-medium;
+      border-radius: $radius-sm;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // SECCIÓN DE REVIEWS
+  // --------------------------------------------------------------------------
+  &__reviews {
+    margin-top: $spacing-5;
+    padding-top: $spacing-4;
+    border-top: $border-thin solid rgba($color-text-alt-dark, 0.2);
+  }
+
+  &__reviews-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-3;
+  }
+
+  &__reviews-title {
+    margin: 0;
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--text-primary);
+    letter-spacing: 0.05em;
+  }
+
+  &__reviews-link {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color $transition-fast $transition-ease;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+      border-radius: $radius-sm;
+    }
+  }
+
+  &__reviews-placeholder {
+    padding: $spacing-4;
+    text-align: center;
+    background: rgba($color-secondary-dark, 0.2);
+    border-radius: $radius-lg;
+
+    p {
+      margin: 0;
+      font-family: $font-primary;
+      font-size: $font-size-md;
+      color: var(--text-secondary);
+    }
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .game-detail {
+    padding: $spacing-3 $spacing-2;
+
+    &__main {
+      flex-direction: column;
+      align-items: center;
+      gap: $spacing-3;
+      
+      app-game-interaction-panel {
+        margin-top: 0;
+      }
+    }
+
+    &__reviews-header {
+      flex-direction: column;
+      gap: $spacing-2;
+      text-align: center;
+    }
+  }
+}
+
+// Móvil (640px)
+@media (max-width: $breakpoint-sm) {
+  .game-detail {
+    padding: $spacing-2 $spacing-1;
+
+    &__reviews-title {
+      font-size: $font-size-md;
     }
   }
 }

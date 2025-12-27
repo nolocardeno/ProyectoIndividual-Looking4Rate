@@ -1,0 +1,32 @@
+<!-- Star Rating: Componente de puntuación con estrellas CSS -->
+
+<section 
+  class="star-rating"
+  [class.star-rating--readonly]="readonly"
+  [class.star-rating--sm]="size === 'sm'"
+  [class.star-rating--md]="size === 'md'"
+  [class.star-rating--lg]="size === 'lg'"
+  role="slider"
+  [attr.aria-valuenow]="rating"
+  [attr.aria-valuemin]="1"
+  [attr.aria-valuemax]="maxStars"
+  [attr.aria-label]="readonly ? 'Puntuación: ' + (rating ?? 0) + ' de ' + maxStars : 'Selecciona una puntuación'"
+  [attr.tabindex]="readonly ? -1 : 0"
+>
+  @for (star of stars; track star) {
+    <button
+      type="button"
+      class="star-rating__star"
+      [class.star-rating__star--active]="isStarActive(star)"
+      [class.star-rating__star--hover]="isStarHovered(star)"
+      [disabled]="readonly"
+      [attr.aria-label]="'Puntuación ' + star + ' de ' + maxStars"
+      [attr.tabindex]="-1"
+      (mouseenter)="onStarHover(star)"
+      (mouseleave)="onStarLeave()"
+      (click)="onStarClick(star)"
+    >
+      <span class="star-rating__icon"></span>
+    </button>
+  }
+</section>

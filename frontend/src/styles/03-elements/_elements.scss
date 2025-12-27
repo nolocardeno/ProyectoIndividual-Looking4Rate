@@ -20,7 +20,7 @@ body {
   transition: background-color $transition-base $transition-ease,
               color $transition-base $transition-ease;
   overflow-x: hidden;
-  min-width: 320px;
+  min-width: 20rem;
 }
 
 // --------------------------------------------------------------------------
@@ -90,7 +90,7 @@ input, textarea, select {
 // --------------------------------------------------------------------------
 @media (max-width: $breakpoint-sm) {
   html {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   p {

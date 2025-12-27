@@ -1,0 +1,52 @@
+<!-- Game Interaction Panel: Panel de interacción usuario-juego -->
+
+<aside class="interaction-panel" [class.interaction-panel--loading]="loading">
+  <!-- Sección: Marcar como jugado -->
+  <section class="interaction-panel__section interaction-panel__section--played">
+    <button
+      type="button"
+      class="interaction-panel__played-btn"
+      [class.interaction-panel__played-btn--active]="isPlayed"
+      [disabled]="loading || !isAuthenticated"
+      (click)="togglePlayed()"
+      [attr.aria-pressed]="isPlayed"
+      aria-label="Marcar como jugado"
+    >
+      <span class="interaction-panel__played-icon">
+        <fa-icon [icon]="['fas', 'gamepad']" />
+      </span>
+      <span class="interaction-panel__played-text">
+        {{ isPlayed ? 'Jugado' : 'Marcar como jugado' }}
+      </span>
+    </button>
+  </section>
+
+  <!-- Separador -->
+  <hr class="interaction-panel__divider" />
+
+  <!-- Sección: Puntuación -->
+  <section class="interaction-panel__section interaction-panel__section--rating">
+    <h3 class="interaction-panel__section-title">Puntúa</h3>
+    <app-star-rating
+      [rating]="rating"
+      [readonly]="loading || !isAuthenticated"
+      size="lg"
+      (ratingChange)="onRatingChange($event)"
+    />
+  </section>
+
+  <!-- Separador -->
+  <hr class="interaction-panel__divider" />
+
+  <!-- Sección: Escribir review -->
+  <section class="interaction-panel__section interaction-panel__section--review">
+    <button
+      type="button"
+      class="interaction-panel__review-btn"
+      [disabled]="loading || !isAuthenticated"
+      (click)="onWriteReviewClick()"
+    >
+      Escribir review
+    </button>
+  </section>
+</aside>

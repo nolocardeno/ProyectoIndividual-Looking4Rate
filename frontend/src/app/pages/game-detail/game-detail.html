@@ -1,19 +1,63 @@
+<!-- Página de Detalle del Juego -->
+
 <section class="game-detail">
-  <article class="game-detail__container">
-    <h1 class="game-detail__title">🎮 Página de Detalle del Juego</h1>
-    
-    @if (gameId) {
-      <p class="game-detail__id">ID del juego: <strong>{{ gameId }}</strong></p>
-    }
+  <!-- Estado de carga -->
+  @if (loading()) {
+    <div class="game-detail__loading">
+      <p>Cargando...</p>
+    </div>
+  }
 
-    <p class="game-detail__info">
-      Esta es la página de detalle de un juego.
-      <br>Aquí se mostrará toda la información del juego seleccionado.
-    </p>
+  <!-- Estado de error -->
+  @if (error()) {
+    <div class="game-detail__error">
+      <p>{{ error() }}</p>
+      <nav class="game-detail__nav">
+        <a routerLink="/buscar" class="game-detail__link">← Volver a búsqueda</a>
+        <a routerLink="/" class="game-detail__link">← Volver al inicio</a>
+      </nav>
+    </div>
+  }
 
-    <nav class="game-detail__links" aria-label="Navegación de retorno">
-      <a routerLink="/buscar" class="game-detail__link">← Volver a búsqueda</a>
-      <a routerLink="/" class="game-detail__link">← Volver al inicio</a>
-    </nav>
-  </article>
+  <!-- Contenido principal -->
+  @if (!loading() && !error() && game()) {
+    <article class="game-detail__container">
+      <!-- Fila principal: Game Card + Panel de Interacción -->
+      <div class="game-detail__main">
+        <!-- Game Card con información del juego -->
+        <app-game-card
+          [coverSrc]="game()!.imagenPortada"
+          [title]="game()!.nombre"
+          [releaseDate]="releaseDate"
+          [developer]="developerName"
+          [description]="game()!.descripcion"
+          [platforms]="platforms"
+        />
+
+        <!-- Panel de interacción -->
+        <app-game-interaction-panel
+          [isPlayed]="isPlayed"
+          [rating]="userRating"
+          [loading]="interactionLoading()"
+          [isAuthenticated]="isAuthenticated"
+          (playedChange)="onPlayedChange($event)"
+          (ratingChange)="onRatingChange($event)"
+          (writeReviewClick)="onWriteReviewClick()"
+        />
+      </div>
+
+      <!-- Sección de Reviews (placeholder para implementación futura) -->
+      <section class="game-detail__reviews">
+        <header class="game-detail__reviews-header">
+          <h2 class="game-detail__reviews-title">REVIEWS</h2>
+          <a routerLink="reviews" class="game-detail__reviews-link">VER MÁS</a>
+        </header>
+        
+        <!-- Placeholder: Las reviews se implementarán más adelante -->
+        <div class="game-detail__reviews-placeholder">
+          <p>Las reviews se mostrarán aquí próximamente.</p>
+        </div>
+      </section>
+    </article>
+  }
 </section>

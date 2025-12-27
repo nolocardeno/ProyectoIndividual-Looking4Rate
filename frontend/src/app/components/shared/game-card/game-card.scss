@@ -54,6 +54,7 @@
     font-weight: $font-weight-bold;
     color: var(--text-primary);
     line-height: $line-height-tight;
+    text-transform: uppercase;
   }
 
   &__date {
@@ -88,6 +89,7 @@
     font-weight: $font-weight-semibold;
     color: var(--text-primary);
     text-decoration: underline;
+    text-decoration-thickness: 1px;
     text-underline-offset: 0.125rem;
     transition: color $transition-base $transition-ease;
 
@@ -107,6 +109,9 @@
     font-size: $font-size-md;
     font-weight: $font-weight-semibold;
     color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.125rem;
   }
 
   // --------------------------------------------------------------------------
