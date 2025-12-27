@@ -1,27 +1,63 @@
+<!-- Search Page: Página de resultados de búsqueda de juegos -->
+
 <section class="search-page">
-  <article class="search-page__container">
-    <h1 class="search-page__title">🔍 Página de Búsqueda</h1>
-    
-    @if (searchQuery) {
-      <p class="search-page__query">Buscando: <strong>"{{ searchQuery }}"</strong></p>
-    } @else {
-      <p class="search-page__empty">No se ha introducido ningún término de búsqueda.</p>
-    }
-
-    <p class="search-page__info">
-      Esta es la página de resultados de búsqueda.
-      <br>Aquí se mostrarán los juegos encontrados.
-    </p>
-
-    <aside class="search-page__demo-results">
-      <h2>Resultados de ejemplo:</h2>
-      <ul>
-        <li><a [routerLink]="['/juego', 1]">Elden Ring</a></li>
-        <li><a [routerLink]="['/juego', 2]">Dark Souls III</a></li>
-        <li><a [routerLink]="['/juego', 3]">Bloodborne</a></li>
-      </ul>
+  <!-- Estado de carga -->
+  @if (isLoading()) {
+    <aside class="search-page__loading">
+      <app-spinner />
     </aside>
+  } @else if (hasError()) {
+    <!-- Estado de error -->
+    <app-empty-state
+      icon="error"
+      title="Error al buscar"
+      message="Ha ocurrido un error al realizar la búsqueda. Por favor, inténtalo de nuevo."
+    />
+  } @else if (!searchQuery()) {
+    <!-- Sin término de búsqueda -->
+    <app-empty-state
+      icon="search"
+      title="Busca un juego"
+      message="Introduce un término de búsqueda para encontrar juegos."
+    />
+  } @else if (totalResults() === 0) {
+    <!-- Sin resultados -->
+    <app-empty-state
+      icon="search"
+      title="Sin resultados"
+      message="No se encontraron juegos para '{{ searchQuery() }}'. Prueba con otro término."
+    />
+  } @else {
+    <!-- Sección de resultados usando FeaturedSection -->
+    <app-featured-section [title]="'Mostrando resultados de \u0022' + searchQuery() + '\u0022'">
+      <!-- Lista de resultados -->
+      <ul class="search-page__results">
+        @for (game of visibleResults(); track game.id) {
+          <li class="search-page__result-item">
+            <app-search-game-card
+              [coverSrc]="game.imagenPortada"
+              [title]="game.nombre"
+              [releaseYear]="getReleaseYear(game.fechaSalida)"
+              [developer]="getDeveloper(game)"
+              [platforms]="getPlatforms(game)"
+              [gameLink]="getGameLink(game.id)"
+            />
+          </li>
+        }
+      </ul>
 
-    <a routerLink="/" class="search-page__back">← Volver al inicio</a>
-  </article>
+      <!-- Botón mostrar más -->
+      @if (hasMoreResults()) {
+        <footer class="search-page__load-more">
+          <app-button
+            variant="primary"
+            size="md"
+            (btnClick)="showMoreResults()"
+          >
+            Mostrar más resultados
+          </app-button>
+        </footer>
+      }
+    </app-featured-section>
+  }
 </section>

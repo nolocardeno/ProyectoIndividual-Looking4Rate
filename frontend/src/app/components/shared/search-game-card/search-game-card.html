@@ -1,0 +1,62 @@
+<!-- Search Game Card: Tarjeta de juego para resultados de búsqueda -->
+
+<article class="search-game-card">
+  <!-- Carátula del juego -->
+  <figure class="search-game-card__cover">
+    <app-game-cover
+      [src]="coverSrc"
+      [alt]="title"
+      [routerLink]="gameLink"
+      size="md"
+    />
+  </figure>
+
+  <!-- Información del juego -->
+  <section class="search-game-card__info">
+    <!-- Cabecera: Título y año -->
+    <header class="search-game-card__header">
+      @if (gameLink) {
+        <a [routerLink]="gameLink" class="search-game-card__title-link">
+          <h3 class="search-game-card__title">{{ title }}</h3>
+        </a>
+      } @else {
+        <h3 class="search-game-card__title">{{ title }}</h3>
+      }
+      @if (releaseYear) {
+        <time class="search-game-card__year">{{ releaseYear }}</time>
+      }
+    </header>
+
+    <!-- Desarrollador -->
+    @if (developer) {
+      <p class="search-game-card__developer">
+        <span class="search-game-card__label">Desarrollado por</span>
+        @if (developer.routerLink) {
+          <a [routerLink]="developer.routerLink" class="search-game-card__badge search-game-card__badge--link">
+            {{ developer.name }}
+          </a>
+        } @else {
+          <span class="search-game-card__badge">{{ developer.name }}</span>
+        }
+      </p>
+    }
+
+    <!-- Plataformas -->
+    @if (platforms.length > 0) {
+      <footer class="search-game-card__platforms">
+        <span class="search-game-card__label">Plataformas:</span>
+        <nav class="search-game-card__platforms-list">
+          @for (platform of platforms; track platform.name) {
+            @if (platform.routerLink) {
+              <a [routerLink]="platform.routerLink" class="search-game-card__badge search-game-card__badge--link">
+                {{ platform.name }}
+              </a>
+            } @else {
+              <span class="search-game-card__badge">{{ platform.name }}</span>
+            }
+          }
+        </nav>
+      </footer>
+    }
+  </section>
+</article>

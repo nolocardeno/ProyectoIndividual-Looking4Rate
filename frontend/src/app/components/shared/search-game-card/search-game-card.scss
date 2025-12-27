@@ -1,0 +1,247 @@
+@use 'sass:color';
+@use 'styles/00-settings/variables' as *;
+
+// ==========================================================================
+// SEARCH GAME CARD COMPONENT
+// Tarjeta de juego compacta para resultados de búsqueda
+// ==========================================================================
+
+:host {
+  display: block;
+}
+
+.search-game-card {
+  display: flex;
+  gap: $spacing-3;
+  padding: $spacing-4 0;
+
+  // --------------------------------------------------------------------------
+  // CARÁTULA
+  // --------------------------------------------------------------------------
+  &__cover {
+    flex-shrink: 0;
+    margin: 0;
+
+    app-game-cover {
+      display: block;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // INFORMACIÓN
+  // --------------------------------------------------------------------------
+  &__info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: $spacing-2;
+    padding-top: 0.25rem;
+  }
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-2;
+    flex-wrap: wrap;
+  }
+
+  &__title-link {
+    text-decoration: none;
+    color: inherit;
+
+    &:hover .search-game-card__title {
+      color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: $border-medium solid var(--color-accent);
+      outline-offset: 0.125rem;
+      border-radius: $radius-sm;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--text-primary);
+    line-height: $line-height-tight;
+    text-transform: uppercase;
+    transition: color $transition-base $transition-ease;
+  }
+
+  &__year {
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-regular;
+    color: var(--text-secondary);
+    line-height: $line-height-tight;
+  }
+
+  &__label {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-regular;
+    color: var(--text-secondary);
+  }
+
+  // --------------------------------------------------------------------------
+  // DESARROLLADOR
+  // --------------------------------------------------------------------------
+  &__developer {
+    margin: 0;
+    display: flex;
+    gap: $spacing-1;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  // --------------------------------------------------------------------------
+  // BADGE (Desarrollador y Plataformas) - Estilo botón
+  // --------------------------------------------------------------------------
+  &__badge {
+    // Variables CSS locales para el estilo de botón (idéntico a primary)
+    --badge-bg: #{$color-primary-dark};
+    --badge-bg-end: #{color.mix($color-primary-dark, $color-accent-dark, 70%)};
+    --badge-border-start: #{rgba($color-text-alt-dark, 1)};
+    --badge-border-end: #{rgba($color-text-alt-dark, 0.1)};
+    --badge-shadow: #{$shadow-hover-accent};
+    --badge-shadow-active: #{$shadow-active-accent};
+
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 4px 8px;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    color: $color-text-dark;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    border: none;
+    border-radius: $radius-lg;
+    cursor: pointer;
+    background: linear-gradient(180deg, var(--badge-bg) 0%, var(--badge-bg-end) 100%);
+    transition: all $transition-base $transition-ease;
+
+    // Borde con gradiente (pseudo-elemento)
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      padding: $border-thin;
+      background: linear-gradient(180deg, var(--badge-border-start) 0%, var(--badge-border-end) 100%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      transition: all $transition-base $transition-ease;
+    }
+
+    // Estados interactivos (idénticos a botones)
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--badge-shadow);
+      --badge-bg-end: #{color.mix($color-primary-dark, $color-accent-dark, 50%)};
+
+      &::before {
+        --badge-border-start: #{rgba($color-text-dark, 1)};
+        --badge-border-end: #{rgba($color-text-dark, 0.1)};
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: var(--badge-shadow-active);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent-dark;
+      outline-offset: 2px;
+    }
+
+    &--link {
+      cursor: pointer;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // PLATAFORMAS
+  // --------------------------------------------------------------------------
+  &__platforms {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+
+  &__platforms-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .search-game-card {
+    gap: $spacing-3;
+    padding: $spacing-3 0;
+
+    &__cover {
+      width: 8rem; // 128px
+    }
+
+    &__title {
+      font-size: $font-size-md;
+    }
+
+    &__year {
+      font-size: $font-size-md;
+    }
+  }
+}
+
+// Móvil (640px)
+@media (max-width: $breakpoint-sm) {
+  .search-game-card {
+    gap: $spacing-2;
+    padding: $spacing-2 0;
+
+    &__cover {
+      width: 6rem; // 96px
+    }
+
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+
+    &__title {
+      font-size: $font-size-md;
+    }
+
+    &__year {
+      font-size: $font-size-md;
+    }
+
+    &__label {
+      font-size: $font-size-sm;
+    }
+
+    &__badge {
+      font-size: $font-size-xs;
+      padding: 0.0625rem 0.375rem;
+    }
+  }
+}
