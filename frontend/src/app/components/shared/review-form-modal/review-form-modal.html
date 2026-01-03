@@ -1,0 +1,69 @@
+@if (isOpen) {
+  <aside 
+    class="review-modal__overlay" 
+    (click)="onOverlayClick($event)"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="review-modal-title">
+    <article 
+      #modalContainer
+      class="review-modal"
+      (click)="onModalClick($event)">
+      <header class="review-modal__header">
+        <h2 id="review-modal-title" class="review-modal__title">Review de...</h2>
+        <button 
+          #closeButton
+          class="review-modal__close" 
+          (click)="closeModal()"
+          (keydown)="onCloseKeyDown($event)"
+          aria-label="Cerrar modal"
+          type="button">
+          <fa-icon [icon]="['fas', 'times']"></fa-icon>
+        </button>
+      </header>
+
+      <div class="review-modal__content">
+        <!-- Carátula del juego -->
+        <div class="review-modal__cover-wrapper">
+          <app-game-cover
+            [src]="gameCover"
+            [alt]="gameTitle"
+            size="md"
+          />
+        </div>
+
+        <!-- Contenido derecho: Título + Textarea -->
+        <div class="review-modal__right">
+          <!-- Título y año -->
+          <div class="review-modal__game-details">
+            <h3 class="review-modal__game-title">{{ gameTitle | uppercase }}</h3>
+            <span class="review-modal__game-year">{{ gameYear }}</span>
+          </div>
+
+          <!-- Formulario de review -->
+          <form class="review-modal__form" (ngSubmit)="onSubmit($event)">
+            <app-form-textarea
+              label=""
+              name="review"
+              placeholder="Añade una review..."
+              [value]="reviewText"
+              [resizable]="false"
+              (valueChange)="reviewText = $event"
+            />
+          </form>
+        </div>
+      </div>
+
+      <!-- Botón fuera del área de carátula -->
+      <footer class="review-modal__actions">
+        <button 
+          type="submit" 
+          class="review-modal__submit"
+          [disabled]="!canSubmit || loading"
+          (click)="onSubmit($event)">
+          {{ loading ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </footer>
+    </article>
+  </aside>
+}

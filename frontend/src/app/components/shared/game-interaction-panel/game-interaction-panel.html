@@ -43,10 +43,18 @@
     <button
       type="button"
       class="interaction-panel__review-btn"
+      [class.interaction-panel__review-btn--has-review]="hasReview"
       [disabled]="loading || !isAuthenticated"
       (click)="onWriteReviewClick()"
     >
-      Escribir review
+      @if (hasReview) {
+        <span class="interaction-panel__review-indicator">
+          <fa-icon [icon]="['fas', 'check']" />
+        </span>
+      }
+      <span class="interaction-panel__review-text">
+        {{ hasReview ? 'Editar review' : 'Escribir review' }}
+      </span>
     </button>
   </section>
 </aside>

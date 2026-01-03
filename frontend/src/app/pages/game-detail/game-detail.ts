@@ -5,9 +5,11 @@ import { catchError, switchMap } from 'rxjs/operators';
 
 import { GameCard, GamePlatform } from '../../components/shared/game-card/game-card';
 import { GameInteractionPanel } from '../../components/shared/game-interaction-panel/game-interaction-panel';
+import { ReviewFormModal } from '../../components/shared/review-form-modal/review-form-modal';
 import { JuegosService } from '../../services/juegos.service';
 import { InteraccionesService } from '../../services/interacciones.service';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { JuegoDTO, InteraccionDTO } from '../../models';
 
 /**
@@ -21,7 +23,7 @@ import { JuegoDTO, InteraccionDTO } from '../../models';
  */
 @Component({
   selector: 'app-game-detail',
-  imports: [RouterLink, GameCard, GameInteractionPanel],
+  imports: [RouterLink, GameCard, GameInteractionPanel, ReviewFormModal],
   templateUrl: './game-detail.html',
   styleUrl: './game-detail.scss'
 })
@@ -30,6 +32,7 @@ export default class GameDetailPage implements OnInit, OnDestroy {
   private juegosService = inject(JuegosService);
   private interaccionesService = inject(InteraccionesService);
   private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
   private destroy$ = new Subject<void>();
   
   /** ID del juego actual */
@@ -49,6 +52,12 @@ export default class GameDetailPage implements OnInit, OnDestroy {
 
   /** Estado de carga de interacciones */
   interactionLoading = signal(false);
+
+  /** Estado del modal de review */
+  showReviewModal = signal(false);
+
+  /** Estado de carga del envío de review */
+  reviewLoading = signal(false);
 
   /** Usuario autenticado */
   get isAuthenticated(): boolean {
@@ -106,6 +115,30 @@ export default class GameDetailPage implements OnInit, OnDestroy {
     } catch {
       return juego.fechaSalida;
     }
+  }
+
+  /** Año de lanzamiento del juego */
+  get gameYear(): string {
+    const juego = this.game();
+    if (!juego?.fechaSalida) return '';
+    
+    try {
+      const date = new Date(juego.fechaSalida);
+      return date.getFullYear().toString();
+    } catch {
+      return '';
+    }
+  }
+
+  /** Indica si el usuario tiene una review escrita */
+  get hasReview(): boolean {
+    const review = this.userInteraction()?.review;
+    return !!review && review.trim().length > 0;
+  }
+
+  /** Obtiene la review existente del usuario */
+  get existingReview(): string | null {
+    return this.userInteraction()?.review ?? null;
   }
 
   ngOnInit(): void {
@@ -225,8 +258,47 @@ export default class GameDetailPage implements OnInit, OnDestroy {
 
   /** Abre el modal/formulario para escribir review */
   onWriteReviewClick(): void {
-    // TODO: Implementar modal de review
-    console.log('Abrir modal de review');
+    this.showReviewModal.set(true);
+  }
+
+  /** Cierra el modal de review */
+  closeReviewModal(): void {
+    this.showReviewModal.set(false);
+  }
+
+  /** Maneja el envío de la review */
+  onReviewSubmit(reviewText: string): void {
+    if (!this.currentUserId || !this.gameId) return;
+
+    this.reviewLoading.set(true);
+    
+    const currentInteraction = this.userInteraction();
+    
+    this.interaccionesService.crearOActualizar(
+      this.currentUserId,
+      this.gameId,
+      {
+        review: reviewText,
+        puntuacion: currentInteraction?.puntuacion ?? null,
+        estadoJugado: currentInteraction?.estadoJugado ?? false
+      }
+    ).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (interaction) => {
+        this.userInteraction.set(interaction);
+        this.reviewLoading.set(false);
+        this.showReviewModal.set(false);
+        this.notificationService.success(
+          this.hasReview ? 'Review actualizada correctamente' : 'Review guardada correctamente'
+        );
+      },
+      error: (err) => {
+        console.error('Error guardando review:', err);
+        this.reviewLoading.set(false);
+        this.notificationService.error('Error al guardar la review');
+      }
+    });
   }
 
   ngOnDestroy(): void {

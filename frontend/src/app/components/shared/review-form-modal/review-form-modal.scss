@@ -1,0 +1,488 @@
+// ==========================================================================
+// REVIEW-FORM-MODAL COMPONENT
+// Modal para escribir/editar reviews de juegos con estilos BEM y responsive
+// ==========================================================================
+
+@use 'sass:color';
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// --------------------------------------------------------------------------
+// OVERLAY
+// --------------------------------------------------------------------------
+.review-modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: $spacing-4;
+  box-sizing: border-box;
+}
+
+// --------------------------------------------------------------------------
+// MODAL CONTAINER
+// --------------------------------------------------------------------------
+.review-modal {
+  background: linear-gradient(
+    180deg, 
+    $color-primary-dark 0%,
+    color.mix($color-primary-dark, $color-accent-dark, 70%) 100%
+  );
+  border-radius: $radius-lg;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: $shadow-complete;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  // Borde decorativo con gradiente
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-lg;
+    padding: $border-thin;
+    background: $color-text-alt-dark;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  // --------------------------------------------------------------------------
+  // HEADER
+  // --------------------------------------------------------------------------
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-2 $spacing-6;
+    border-bottom: $border-thin solid $color-text-alt-dark;
+  }
+
+  &__title {
+    color: $color-text-dark;
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    margin: 0;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: $color-text-alt-dark;
+    cursor: pointer;
+    padding: $spacing-1;
+    @include transition(color);
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    &:hover {
+      color: $color-text-dark;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // CONTENT (Carátula izquierda + Contenido derecho)
+  // --------------------------------------------------------------------------
+  &__content {
+    padding: $spacing-4 $spacing-6 0;
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-4;
+    align-items: flex-end;
+  }
+
+  // --------------------------------------------------------------------------
+  // COVER WRAPPER (Contenedor de la carátula)
+  // --------------------------------------------------------------------------
+  &__cover-wrapper {
+    flex-shrink: 0;
+    width: 200px;
+    height: 280px;
+
+    app-game-cover {
+      display: block;
+      width: 200px;
+      height: 280px;
+
+      // Sobrescribir todos los estilos del componente game-cover
+      ::ng-deep {
+        .game-cover {
+          width: 200px;
+          height: 280px;
+          padding-bottom: 0;
+          margin: 0;
+        }
+
+        .game-cover--md {
+          width: 200px;
+          height: 280px;
+          padding-bottom: 0;
+        }
+
+        .game-cover__image {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // RIGHT CONTENT (Título + Textarea)
+  // --------------------------------------------------------------------------
+  &__right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    height: 280px;
+    padding-top: $spacing-4;
+  }
+
+  &__game-details {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: $spacing-2;
+    flex-shrink: 0;
+  }
+
+  &__form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    app-form-textarea {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      ::ng-deep {
+        .form-textarea {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          gap: 0;
+
+          &__label {
+            display: none;
+          }
+
+          &__field {
+            flex: 1;
+            min-height: unset;
+            height: 100%;
+            box-sizing: border-box;
+          }
+
+          &__footer {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  &__game-title {
+    color: $color-text-dark;
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    margin: 0;
+    letter-spacing: 0.05em;
+    line-height: $line-height-tight;
+  }
+
+  &__game-year {
+    color: $color-text-alt-dark;
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-light;
+  }
+
+  // --------------------------------------------------------------------------
+  // ACTIONS
+  // --------------------------------------------------------------------------
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: $spacing-3 $spacing-6 $spacing-4;
+  }
+
+  // Botón con mismo estilo que login-form__submit
+  &__submit {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-primary;
+    font-weight: $font-weight-regular;
+    border-radius: $radius-md;
+    cursor: pointer;
+    @include transition(all);
+    padding: 0.2rem $spacing-2;
+    font-size: $font-size-md;
+    position: relative;
+    background: linear-gradient(
+      180deg, 
+      $color-primary-dark 0%,
+      color.mix($color-primary-dark, $color-accent-dark, 70%) 100%
+    );
+    border: none;
+    color: $color-text-dark;
+    letter-spacing: 0.02em;
+    box-shadow: $shadow-complete;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-md;
+      padding: $border-thin;
+      background: linear-gradient(
+        180deg,
+        rgba($color-text-alt-dark, 1) 0%,
+        rgba($color-text-alt-dark, 0.1) 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      @include transition(all);
+    }
+
+    &:hover {
+      background: linear-gradient(
+        180deg, 
+        $color-primary-dark 0%,
+        color.mix($color-primary-dark, $color-accent-dark, 50%) 100%
+      );
+
+      &::before {
+        background: linear-gradient(
+          180deg,
+          rgba($color-text-dark, 1) 0%,
+          rgba($color-text-dark, 0.1) 100%
+        );
+      }
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      
+      &:hover {
+        background: linear-gradient(
+          180deg, 
+          $color-primary-dark 0%,
+          color.mix($color-primary-dark, $color-accent-dark, 70%) 100%
+        );
+        
+        &::before {
+          background: linear-gradient(
+            180deg,
+            rgba($color-text-alt-dark, 1) 0%,
+            rgba($color-text-alt-dark, 0.1) 100%
+          );
+        }
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // ESTILOS PARA FORM-TEXTAREA DENTRO DEL MODAL
+  // --------------------------------------------------------------------------
+  app-form-textarea {
+    flex: 1;
+    display: flex;
+    
+    .form-textarea {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .form-textarea__label {
+        display: none;
+      }
+
+      .form-textarea__field {
+        background-color: #8a9298;
+        color: #1a1d24;
+        border-radius: $radius-lg;
+        resize: none;
+
+        &::placeholder {
+          color: #4a5560;
+        }
+
+        &:hover {
+          background-color: #959ca2;
+          color: #1a1d24;
+
+          &::placeholder {
+            color: #4a5560;
+          }
+        }
+
+        &:focus {
+          background-color: #a0a7ad;
+          color: #1a1d24;
+
+          &::placeholder {
+            color: #4a5560;
+          }
+        }
+      }
+
+      .form-textarea__footer {
+        display: none;
+      }
+    }
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// Tablet (768px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-md) {
+  .review-modal__overlay {
+    padding: $spacing-3;
+  }
+
+  .review-modal {
+    max-width: 700px;
+
+    &__header {
+      padding: $spacing-2 $spacing-4;
+    }
+
+    &__content {
+      padding: $spacing-3 $spacing-4;
+      gap: $spacing-3;
+    }
+
+    &__title {
+      font-size: $font-size-md;
+    }
+
+    &__cover {
+      width: 140px;
+      height: 195px;
+    }
+
+    &__game-title {
+      font-size: $font-size-md;
+    }
+
+    &__game-year {
+      font-size: $font-size-md;
+    }
+
+    .form-textarea__field {
+      min-height: 150px;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// Móvil (640px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-sm) {
+  .review-modal__overlay {
+    padding: $spacing-2;
+  }
+
+  .review-modal {
+    max-width: 100%;
+    border-radius: $radius-md;
+
+    &__header {
+      padding: $spacing-2 $spacing-3;
+    }
+
+    &__content {
+      padding: $spacing-3;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__title {
+      font-size: $font-size-md;
+    }
+
+    &__close {
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+
+    &__cover {
+      width: 120px;
+      height: 168px;
+    }
+
+    &__right {
+      width: 100%;
+    }
+
+    &__game-details {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    &__game-title {
+      font-size: $font-size-md;
+      text-align: center;
+    }
+
+    &__game-year {
+      font-size: $font-size-sm;
+    }
+
+    &__form {
+      width: 100%;
+    }
+
+    .form-textarea__field {
+      min-height: 120px;
+      font-size: $font-size-sm;
+    }
+
+    &__submit {
+      width: 100%;
+      padding: $spacing-2;
+    }
+  }
+}

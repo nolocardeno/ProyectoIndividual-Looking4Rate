@@ -40,6 +40,7 @@
           [rating]="userRating"
           [loading]="interactionLoading()"
           [isAuthenticated]="isAuthenticated"
+          [hasReview]="hasReview"
           (playedChange)="onPlayedChange($event)"
           (ratingChange)="onRatingChange($event)"
           (writeReviewClick)="onWriteReviewClick()"
@@ -61,3 +62,15 @@
     </article>
   }
 </section>
+
+<!-- Modal de Review -->
+<app-review-form-modal
+  [isOpen]="showReviewModal()"
+  [gameTitle]="game()?.nombre || ''"
+  [gameCover]="game()?.imagenPortada || ''"
+  [gameYear]="gameYear"
+  [existingReview]="existingReview"
+  [loading]="reviewLoading()"
+  (close)="closeReviewModal()"
+  (reviewSubmit)="onReviewSubmit($event)"
+/>

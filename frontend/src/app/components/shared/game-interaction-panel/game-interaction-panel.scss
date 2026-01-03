@@ -67,7 +67,7 @@
     font-family: $font-primary;
     font-size: $font-size-md;
     font-weight: $font-weight-medium;
-    color: var(--text-primary);
+    color: $color-text-dark;
     text-align: center;
   }
 
@@ -127,7 +127,7 @@
       }
 
       .interaction-panel__played-text {
-        color: var(--text-primary);
+        color: $color-text-dark;
       }
     }
   }
@@ -154,7 +154,7 @@
     font-family: $font-primary;
     font-size: $font-size-md;
     font-weight: $font-weight-regular;
-    color: var(--text-primary);
+    color: $color-text-dark;
     text-align: center;
     transition: color $transition-fast $transition-ease;
   }
@@ -173,18 +173,22 @@
     font-family: $font-primary;
     font-size: $font-size-md;
     font-weight: $font-weight-regular;
-    color: var(--text-primary);
+    color: $color-text-dark;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     transition: background-color $transition-fast $transition-ease,
                 color $transition-fast $transition-ease;
 
     &:hover:not(:disabled) {
       background: rgba($color-text-alt-dark, 0.1);
-      color: var(--color-accent);
+      color: $color-accent-dark;
     }
 
     &:focus-visible {
-      outline: 2px solid var(--color-accent);
+      outline: 2px solid $color-accent-dark;
       outline-offset: 2px;
     }
 
@@ -192,6 +196,33 @@
       cursor: not-allowed;
       opacity: 0.5;
     }
+
+    // Estado con review existente
+    &--has-review {
+      .interaction-panel__review-indicator {
+        color: $color-accent-dark;
+      }
+
+      .interaction-panel__review-text {
+        color: $color-text-dark;
+      }
+    }
+  }
+
+  &__review-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-accent-dark;
+    font-size: 0.875rem;
+
+    fa-icon {
+      display: flex;
+    }
+  }
+
+  &__review-text {
+    transition: color $transition-fast $transition-ease;
   }
 }
 

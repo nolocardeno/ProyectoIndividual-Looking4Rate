@@ -36,6 +36,9 @@ export class GameInteractionPanel {
   /** Si el usuario está autenticado */
   @Input() isAuthenticated = true;
 
+  /** Indica si el usuario ya tiene una review escrita */
+  @Input() hasReview = false;
+
   /** Evento cuando cambia el estado de jugado */
   @Output() playedChange = new EventEmitter<boolean>();
 
