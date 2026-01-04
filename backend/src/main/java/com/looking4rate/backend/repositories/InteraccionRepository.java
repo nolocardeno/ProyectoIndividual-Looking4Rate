@@ -23,7 +23,7 @@ public interface InteraccionRepository extends JpaRepository<Interaccion, Long>{
     // Verificar si existe interacción entre usuario y juego
     boolean existsByUsuarioIdAndJuegoId(Long usuarioId, Long juegoId);
     
-    // Reviews de un juego ordenadas por fecha (más recientes primero)
+    // Reviews de un juego ordenadas por fecha/hora (más recientes primero)
     @Query("SELECT i FROM Interaccion i WHERE i.juego.id = :juegoId ORDER BY i.fecha_interaccion DESC")
     List<Interaccion> findByJuegoIdOrderByFechaInteraccionDesc(@Param("juegoId") Long juegoId);
     

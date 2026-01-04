@@ -1,5 +1,6 @@
 package com.looking4rate.backend.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -116,7 +117,7 @@ public class InteraccionService {
                 .puntuacion(dto.puntuacion())
                 .review(dto.review())
                 .estado_jugado(dto.estadoJugado())
-                .fecha_interaccion(interaccion.getFecha_interaccion())
+                .fecha_interaccion(LocalDateTime.now()) // Actualizar fecha/hora cuando se modifica
                 .build();
         
         @SuppressWarnings("null")

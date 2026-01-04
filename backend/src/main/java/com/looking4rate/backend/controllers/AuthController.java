@@ -109,6 +109,38 @@ public class AuthController {
     }
     
     /**
+     * GET /api/auth/check-email - Verifica si un email ya está registrado
+     */
+    @Operation(summary = "Verificar disponibilidad de email", description = "Comprueba si un email está disponible para registro")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Verificación completada")
+    })
+    @GetMapping("/check-email")
+    public ResponseEntity<AvailabilityResponse> checkEmail(@org.springframework.web.bind.annotation.RequestParam String email) {
+        boolean exists = usuarioService.existeEmail(email);
+        return ResponseEntity.ok(new AvailabilityResponse(
+            !exists,
+            exists ? "Este email ya está registrado" : "Email disponible"
+        ));
+    }
+    
+    /**
+     * GET /api/auth/check-username - Verifica si un nombre de usuario ya está en uso
+     */
+    @Operation(summary = "Verificar disponibilidad de username", description = "Comprueba si un nombre de usuario está disponible para registro")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Verificación completada")
+    })
+    @GetMapping("/check-username")
+    public ResponseEntity<AvailabilityResponse> checkUsername(@org.springframework.web.bind.annotation.RequestParam String username) {
+        boolean exists = usuarioService.existeNombre(username);
+        return ResponseEntity.ok(new AvailabilityResponse(
+            !exists,
+            exists ? "Este nombre de usuario ya está en uso" : "Nombre de usuario disponible"
+        ));
+    }
+    
+    /**
      * Clase interna para la respuesta de autenticación
      */
     public record AuthResponse(
@@ -126,4 +158,12 @@ public class AuthController {
      * Response de validación de token
      */
     public record TokenValidationResponse(boolean valido) {}
+    
+    /**
+     * Response de disponibilidad de email/username
+     */
+    public record AvailabilityResponse(
+        boolean available,
+        String message
+    ) {}
 }

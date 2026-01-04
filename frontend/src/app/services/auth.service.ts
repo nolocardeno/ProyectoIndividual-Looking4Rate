@@ -1,7 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
 import { EventBusService } from './event-bus.service';
+import { AuthHttpService } from './auth-http.service';
+import { AuthResponse, UsuarioDTO } from '../models';
+import { STORAGE_KEYS } from '../core/constants';
 
 /**
  * Usuario autenticado
@@ -10,7 +13,7 @@ export interface AuthUser {
   id: number;
   nombre: string;
   email: string;
-  avatar: string;
+  avatar: string | null;
   rol: 'USER' | 'ADMIN';
 }
 
@@ -26,9 +29,8 @@ export interface AuthState {
 
 /**
  * @service AuthService
- * @description Servicio de autenticación simulado.
- * En producción, este servicio se conectaría con el backend para
- * gestionar tokens JWT y sesiones de usuario.
+ * @description Servicio de autenticación que conecta con el backend real.
+ * Gestiona tokens JWT y sesiones de usuario.
  * 
  * @example
  * private authService = inject(AuthService);
@@ -46,6 +48,7 @@ export interface AuthState {
 })
 export class AuthService {
   private eventBus = inject(EventBusService);
+  private authHttpService = inject(AuthHttpService);
 
   /** Estado inicial */
   private readonly initialState: AuthState = {
@@ -62,15 +65,6 @@ export class AuthService {
   /** URL para redirección post-login */
   private redirectUrl: string | null = null;
 
-  /** Usuario de prueba para simulación */
-  private mockUser: AuthUser = {
-    id: 1,
-    nombre: 'NOLORUBIO23',
-    email: 'nolorubio@email.com',
-    avatar: 'assets/img/avatars/user1.jpg',
-    rol: 'USER'
-  };
-
   constructor() {
     this.loadStoredAuth();
   }
@@ -81,42 +75,28 @@ export class AuthService {
 
   /**
    * Inicia sesión con email y contraseña
-   * SIMULADO - En producción se conectaría con el backend
+   * Conecta con el backend real
    */
-  login(username: string, password: string): Observable<AuthUser> {
+  login(email: string, password: string): Observable<AuthUser> {
     this.setLoading(true);
 
-    // Simulación de login
-    return new Observable<AuthUser>(observer => {
-      setTimeout(() => {
-        // Simular validación
-        if (username && password.length >= 6) {
-          // Usar el username como nombre del usuario
-          const user: AuthUser = {
-            ...this.mockUser,
-            nombre: username,
-            email: username.includes('@') ? username : `${username}@email.com`
-          };
-          const token = 'mock-jwt-token-' + Date.now();
-          
-          this.setAuthState({
-            isAuthenticated: true,
-            user,
-            token,
-            loading: false
-          });
-
-          // Guardar en localStorage
-          this.saveToStorage(user, token);
-          
-          observer.next(user);
-          observer.complete();
-        } else {
-          this.setLoading(false);
-          observer.error(new Error('Credenciales inválidas'));
-        }
-      }, 1000);
-    });
+    return this.authHttpService.login({ email, contrasenia: password }).pipe(
+      tap(response => {
+        const user = this.mapUsuarioToAuthUser(response.usuario);
+        this.setAuthState({
+          isAuthenticated: true,
+          user,
+          token: response.token,
+          loading: false
+        });
+        this.saveToStorage(user, response.token);
+      }),
+      map(response => this.mapUsuarioToAuthUser(response.usuario)),
+      catchError(error => {
+        this.setLoading(false);
+        return throwError(() => error);
+      })
+    );
   }
 
   /**
@@ -130,34 +110,28 @@ export class AuthService {
 
   /**
    * Registra un nuevo usuario
-   * SIMULADO - En producción se conectaría con el backend
+   * Conecta con el backend real
    */
   register(email: string, nombre: string, password: string): Observable<boolean> {
     this.setLoading(true);
 
-    return new Observable<boolean>(observer => {
-      setTimeout(() => {
-        const user: AuthUser = {
-          id: Date.now(),
-          nombre,
-          email,
-          avatar: 'assets/img/avatars/default.jpg',
-          rol: 'USER'
-        };
-        const token = 'mock-jwt-token-' + Date.now();
-
+    return this.authHttpService.registro({ email, nombre, contrasenia: password }).pipe(
+      tap(response => {
+        const user = this.mapUsuarioToAuthUser(response.usuario);
         this.setAuthState({
           isAuthenticated: true,
           user,
-          token,
+          token: response.token,
           loading: false
         });
-
-        this.saveToStorage(user, token);
-        observer.next(true);
-        observer.complete();
-      }, 1500);
-    });
+        this.saveToStorage(user, response.token);
+      }),
+      map(() => true),
+      catchError(error => {
+        this.setLoading(false);
+        return throwError(() => error);
+      })
+    );
   }
 
   // ========================================
@@ -249,8 +223,8 @@ export class AuthService {
   private loadStoredAuth(): void {
     if (typeof localStorage === 'undefined') return;
 
-    const storedUser = localStorage.getItem('auth_user');
-    const storedToken = localStorage.getItem('auth_token');
+    const storedUser = localStorage.getItem(STORAGE_KEYS.AUTH_USER);
+    const storedToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
 
     if (storedUser && storedToken) {
       try {
@@ -272,8 +246,8 @@ export class AuthService {
    */
   private saveToStorage(user: AuthUser, token: string): void {
     if (typeof localStorage === 'undefined') return;
-    localStorage.setItem('auth_user', JSON.stringify(user));
-    localStorage.setItem('auth_token', token);
+    localStorage.setItem(STORAGE_KEYS.AUTH_USER, JSON.stringify(user));
+    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
   }
 
   /**
@@ -281,13 +255,26 @@ export class AuthService {
    */
   private clearStorage(): void {
     if (typeof localStorage === 'undefined') return;
-    localStorage.removeItem('auth_user');
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem(STORAGE_KEYS.AUTH_USER);
+    localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
   }
 
   // ========================================
   // UTILIDADES PRIVADAS
   // ========================================
+
+  /**
+   * Convierte UsuarioDTO a AuthUser
+   */
+  private mapUsuarioToAuthUser(usuario: UsuarioDTO): AuthUser {
+    return {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      email: usuario.email,
+      avatar: usuario.avatar,
+      rol: usuario.rol as 'USER' | 'ADMIN'
+    };
+  }
 
   /**
    * Actualiza el estado de autenticación

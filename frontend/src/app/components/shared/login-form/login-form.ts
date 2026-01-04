@@ -56,7 +56,7 @@ export class LoginForm implements AfterViewChecked, OnInit, OnDestroy {
    */
   private initForm(): void {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
@@ -144,10 +144,10 @@ export class LoginForm implements AfterViewChecked, OnInit, OnDestroy {
   }
 
   get usernameError(): string {
-    const control = this.loginForm?.get('username');
+    const control = this.loginForm?.get('email');
     if (!control || !control.touched) return '';
-    if (control.hasError('required')) return 'El nombre de usuario es obligatorio';
-    if (control.hasError('minlength')) return 'Mínimo 3 caracteres';
+    if (control.hasError('required')) return 'El email es obligatorio';
+    if (control.hasError('email')) return 'Introduce un email válido';
     return '';
   }
 
@@ -178,7 +178,7 @@ export class LoginForm implements AfterViewChecked, OnInit, OnDestroy {
   }
 
   onUsernameBlur(): void {
-    this.loginForm.get('username')?.markAsTouched();
+    this.loginForm.get('email')?.markAsTouched();
   }
 
   onPasswordBlur(): void {
@@ -207,22 +207,22 @@ export class LoginForm implements AfterViewChecked, OnInit, OnDestroy {
     }
     
     if (this.loginForm.valid) {
-      const { username, password } = this.loginForm.value;
+      const { email, password } = this.loginForm.value;
       
       // Mostrar loading global mientras se procesa el login
       this.loadingService.showGlobal('Iniciando sesión...');
       
       // Emitir evento de intento de login
-      this.eventBus.emit('auth:login:attempt', { username });
+      this.eventBus.emit('auth:login:attempt', { email });
       
       // Intentar login con AuthService
-      this.authService.login(username, password).subscribe({
-        next: (success) => {
+      this.authService.login(email, password).subscribe({
+        next: (user) => {
           this.loadingService.hideGlobal();
           
-          if (success) {
-            this.notificationService.success('Inicio de sesión exitoso', `¡Bienvenido, ${username}!`);
-            this.eventBus.emit('auth:login:success', { username });
+          if (user) {
+            this.notificationService.success('Inicio de sesión exitoso', `¡Bienvenido, ${user.nombre}!`);
+            this.eventBus.emit('auth:login:success', { email });
             
             // Obtener URL de redirección o ir al home
             const redirectUrl = this.authService.getRedirectUrl() || '/';
@@ -239,13 +239,26 @@ export class LoginForm implements AfterViewChecked, OnInit, OnDestroy {
         },
         error: (error) => {
           this.loadingService.hideGlobal();
-          this.notificationService.error('Error de conexión', 'No se pudo conectar con el servidor');
+          
+          // Detectar el tipo de error específico del backend
+          const errorCode = error?.error?.message || error?.message || '';
+          
+          if (errorCode === 'EMAIL_NOT_FOUND') {
+            this.notificationService.error('Email no encontrado', 'No existe una cuenta con este email. ¿Quieres registrarte?');
+          } else if (errorCode === 'WRONG_PASSWORD') {
+            this.notificationService.error('Contraseña incorrecta', 'La contraseña introducida no es correcta');
+          } else if (error?.status === 0 || error?.status === 503) {
+            this.notificationService.error('Error de conexión', 'No se pudo conectar con el servidor. Inténtalo más tarde.');
+          } else {
+            this.notificationService.error('Error de autenticación', 'Credenciales inválidas');
+          }
+          
           console.error('Login error:', error);
         }
       });
       
       // Emitir el evento de submit (para compatibilidad)
-      this.loginSubmit.emit({ username, password });
+      this.loginSubmit.emit({ username: email, password });
     } else {
       // Marcar todos los campos como tocados para mostrar errores
       this.loginForm.markAllAsTouched();

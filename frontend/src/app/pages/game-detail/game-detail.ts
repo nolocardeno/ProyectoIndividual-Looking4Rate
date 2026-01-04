@@ -1,16 +1,27 @@
 import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, takeUntil, forkJoin, of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, switchMap, map } from 'rxjs/operators';
 
 import { GameCard, GamePlatform } from '../../components/shared/game-card/game-card';
 import { GameInteractionPanel } from '../../components/shared/game-interaction-panel/game-interaction-panel';
 import { ReviewFormModal } from '../../components/shared/review-form-modal/review-form-modal';
+import { UserReviewComponent } from '../../components/shared/user-review/user-review';
+import { FeaturedSection } from '../../components/shared/featured-section/featured-section';
 import { JuegosService } from '../../services/juegos.service';
 import { InteraccionesService } from '../../services/interacciones.service';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
-import { JuegoDTO, InteraccionDTO } from '../../models';
+import { JuegoDTO, InteraccionDTO, ReviewDTO } from '../../models';
+
+export interface UserReviewData {
+  id: number;
+  nombreUsuario: string;
+  avatarUsuario?: string;
+  puntuacion: number;
+  review: string;
+  fechaInteraccion: string;
+}
 
 /**
  * @component GameDetailPage
@@ -23,7 +34,7 @@ import { JuegoDTO, InteraccionDTO } from '../../models';
  */
 @Component({
   selector: 'app-game-detail',
-  imports: [RouterLink, GameCard, GameInteractionPanel, ReviewFormModal],
+  imports: [RouterLink, GameCard, GameInteractionPanel, ReviewFormModal, UserReviewComponent, FeaturedSection],
   templateUrl: './game-detail.html',
   styleUrl: './game-detail.scss'
 })
@@ -43,6 +54,9 @@ export default class GameDetailPage implements OnInit, OnDestroy {
 
   /** Interacción del usuario con el juego */
   userInteraction = signal<InteraccionDTO | null>(null);
+
+  /** Reviews del juego */
+  gameReviews = signal<UserReviewData[]>([]);
 
   /** Estado de carga */
   loading = signal(true);
@@ -172,9 +186,28 @@ export default class GameDetailPage implements OnInit, OnDestroy {
       ? this.interaccionesService.getByUsuarioYJuego(this.currentUserId, gameId)
       : of(null);
 
+    // Cargar reviews del juego
+    const reviews$ = this.interaccionesService.getByJuego(gameId).pipe(
+      map(interacciones => 
+        interacciones
+          .filter(i => i.review !== null && i.review.trim().length > 0)
+          .map(i => ({
+            id: i.id,
+            nombreUsuario: i.nombreUsuario,
+            avatarUsuario: i.avatarUsuario,
+            puntuacion: i.puntuacion || 0,
+            review: i.review || '',
+            fechaInteraccion: i.fechaInteraccion
+          }))
+          .sort((a, b) => new Date(b.fechaInteraccion).getTime() - new Date(a.fechaInteraccion).getTime()) // Más reciente primero
+      ),
+      catchError(() => of([]))
+    );
+
     return forkJoin({
       game: game$,
-      interaction: interaction$
+      interaction: interaction$,
+      reviews: reviews$
     }).pipe(
       catchError(err => {
         console.error('Error cargando datos del juego:', err);
@@ -187,6 +220,7 @@ export default class GameDetailPage implements OnInit, OnDestroy {
         if (result) {
           this.game.set(result.game);
           this.userInteraction.set(result.interaction);
+          this.gameReviews.set(result.reviews);
         }
         this.loading.set(false);
         return of(result);
@@ -292,11 +326,40 @@ export default class GameDetailPage implements OnInit, OnDestroy {
         this.notificationService.success(
           this.hasReview ? 'Review actualizada correctamente' : 'Review guardada correctamente'
         );
+        // Recargar las reviews del juego
+        if (this.gameId) {
+          this.loadGameReviews(this.gameId);
+        }
       },
       error: (err) => {
         console.error('Error guardando review:', err);
         this.reviewLoading.set(false);
         this.notificationService.error('Error al guardar la review');
+      }
+    });
+  }
+
+  /** Carga solo las reviews del juego (para recargar después de crear/editar) */
+  private loadGameReviews(gameId: number): void {
+    this.interaccionesService.getByJuego(gameId).pipe(
+      map(interacciones => 
+        interacciones
+          .filter(i => i.review !== null && i.review.trim().length > 0)
+          .map(i => ({
+            id: i.id,
+            nombreUsuario: i.nombreUsuario,
+            avatarUsuario: i.avatarUsuario,
+            puntuacion: i.puntuacion || 0,
+            review: i.review || '',
+            fechaInteraccion: i.fechaInteraccion
+          }))
+          .sort((a, b) => new Date(b.fechaInteraccion).getTime() - new Date(a.fechaInteraccion).getTime()) // Más reciente primero
+      ),
+      catchError(() => of([])),
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (reviews) => {
+        this.gameReviews.set(reviews);
       }
     });
   }

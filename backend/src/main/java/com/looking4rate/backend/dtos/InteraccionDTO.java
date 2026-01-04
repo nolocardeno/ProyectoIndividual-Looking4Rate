@@ -1,6 +1,6 @@
 package com.looking4rate.backend.dtos;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * DTO para respuestas de Interaccion
@@ -14,5 +14,5 @@ public record InteraccionDTO(
     Integer puntuacion,
     String review,
     boolean estadoJugado,
-    LocalDate fechaInteraccion
+    LocalDateTime fechaInteraccion
 ) {}

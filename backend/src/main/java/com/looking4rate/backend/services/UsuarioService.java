@@ -160,13 +160,29 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public Usuario autenticar(UsuarioLoginDTO dto) {
         Usuario usuario = usuarioRepository.findByEmail(dto.email())
-                .orElseThrow(() -> new UnauthorizedException("Credenciales inválidas"));
+                .orElseThrow(() -> new UnauthorizedException("EMAIL_NOT_FOUND"));
         
         if (!passwordEncoder.matches(dto.contrasenia(), usuario.getContrasenia())) {
-            throw new UnauthorizedException("Credenciales inválidas");
+            throw new UnauthorizedException("WRONG_PASSWORD");
         }
         
         return usuario;
+    }
+    
+    /**
+     * Verifica si existe un email registrado
+     */
+    @Transactional(readOnly = true)
+    public boolean existeEmail(String email) {
+        return usuarioRepository.existsByEmail(email);
+    }
+    
+    /**
+     * Verifica si existe un nombre de usuario registrado
+     */
+    @Transactional(readOnly = true)
+    public boolean existeNombre(String nombre) {
+        return usuarioRepository.existsByNombre(nombre);
     }
     
     /**

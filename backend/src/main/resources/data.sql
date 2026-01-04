@@ -177,3 +177,12 @@ INSERT INTO juego_genero (juego_id, genero_id) VALUES (9, 4);
 -- Hollow Knight Silksong: Acción, Plataformas
 INSERT INTO juego_genero (juego_id, genero_id) VALUES (10, 1);
 INSERT INTO juego_genero (juego_id, genero_id) VALUES (10, 9);
+-- ============================================
+-- USUARIO ADMINISTRADOR
+-- ============================================
+-- Email: admin@looking4rate.com
+-- Contraseña: RAPture23.
+-- Rol: ADMIN
+
+INSERT INTO usuario (nombre, email, contrasenia, fecha_registro, avatar, rol, activo) VALUES 
+('Admin', 'admin@looking4rate.com', '$2a$10$hgC/q19Z1mm1RIkl8/Tg9uKqTEd3cbsgd9.jf42XDtr9lqQ3/loRy', '2026-01-04', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin', 'ADMIN', true);

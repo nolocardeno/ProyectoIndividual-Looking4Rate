@@ -95,7 +95,7 @@ erDiagram
         Integer puntuacion
         String review
         boolean estado_jugado
-        LocalDate fecha_interaccion
+        LocalDateTime fecha_interaccion
     }
 
     PLATAFORMA {
@@ -192,7 +192,7 @@ Representa la interacción entre un usuario y un juego (valoración, reseña, es
 | puntuacion | Integer | Nullable (1-10) | Puntuación del juego |
 | review | String | Nullable | Reseña escrita |
 | estado_jugado | boolean | NOT NULL | Si ha jugado al juego |
-| fecha_interaccion | LocalDate | NOT NULL, Auto | Fecha de la interacción |
+| fecha_interaccion | LocalDateTime | NOT NULL, Auto | Fecha y hora de la interacción |
 
 **Relaciones:**
 - N:1 con `Usuario`
@@ -369,7 +369,7 @@ public record InteraccionDTO(
     Integer puntuacion,
     String review,
     boolean estadoJugado,
-    LocalDate fechaInteraccion
+    LocalDateTime fechaInteraccion
 ) {}
 ```
 

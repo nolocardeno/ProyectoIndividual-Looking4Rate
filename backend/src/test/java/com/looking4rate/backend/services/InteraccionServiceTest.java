@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -65,7 +65,7 @@ class InteraccionServiceTest {
                 .puntuacion(9)
                 .review("Excelente juego")
                 .estado_jugado(true)
-                .fecha_interaccion(LocalDate.now())
+                .fecha_interaccion(LocalDateTime.now())
                 .build();
         
         interaccionCreacionDTO = new InteraccionCreacionDTO(

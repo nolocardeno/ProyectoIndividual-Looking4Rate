@@ -8,9 +8,11 @@
  * @version 1.0.0
  */
 
-import { Injectable } from '@angular/core';
-import { Observable, of, timer } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { API_URL } from '../core/constants';
 
 /**
  * Respuesta de verificación de disponibilidad
@@ -27,6 +29,8 @@ export interface AvailabilityResponse {
   providedIn: 'root'
 })
 export class ValidationService {
+  
+  private readonly http = inject(HttpClient);
   
   /** Caché de resultados */
   private cache = new Map<string, { result: boolean; timestamp: number }>();
@@ -52,15 +56,16 @@ export class ValidationService {
       });
     }
 
-    // Simulación de llamada al backend
-    return this.simulateApiCall(email, 'email').pipe(
-      map(available => {
-        this.setCache(cacheKey, available);
-        return {
-          available,
-          message: available ? 'Email disponible' : 'Este email ya está registrado'
-        };
-      })
+    // Llamada real al backend
+    return this.http.get<AvailabilityResponse>(
+      `${API_URL}/auth/check-email`,
+      { params: { email } }
+    ).pipe(
+      map(response => {
+        this.setCache(cacheKey, response.available);
+        return response;
+      }),
+      catchError(() => of({ available: true, message: 'No se pudo verificar' }))
     );
   }
 
@@ -82,35 +87,16 @@ export class ValidationService {
       });
     }
 
-    return this.simulateApiCall(username, 'username').pipe(
-      map(available => {
-        this.setCache(cacheKey, available);
-        return {
-          available,
-          message: available ? 'Usuario disponible' : 'Este nombre de usuario ya está en uso'
-        };
-      })
-    );
-  }
-
-  /**
-   * Simula una llamada a la API
-   */
-  private simulateApiCall(value: string, type: 'email' | 'username'): Observable<boolean> {
-    const delay = Math.random() * 500 + 300;
-    
-    // Valores "ocupados" para simulación
-    const takenEmails = ['admin@looking4rate.com', 'test@test.com', 'usuario@email.com'];
-    const takenUsernames = ['admin', 'test', 'usuario', 'root', 'system'];
-    
-    return timer(delay).pipe(
-      map(() => {
-        if (type === 'email') {
-          return !takenEmails.includes(value.toLowerCase());
-        } else {
-          return !takenUsernames.includes(value.toLowerCase());
-        }
-      })
+    // Llamada real al backend
+    return this.http.get<AvailabilityResponse>(
+      `${API_URL}/auth/check-username`,
+      { params: { username } }
+    ).pipe(
+      map(response => {
+        this.setCache(cacheKey, response.available);
+        return response;
+      }),
+      catchError(() => of({ available: true, message: 'No se pudo verificar' }))
     );
   }
 

@@ -50,6 +50,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/registro").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/validar").permitAll()
+                .requestMatchers("/api/auth/check-email").permitAll()
+                .requestMatchers("/api/auth/check-username").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 

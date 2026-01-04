@@ -1,0 +1,93 @@
+/**
+ * @fileoverview Estilos del componente User Review
+ * Diseño que coincide con la imagen de referencia
+ */
+
+@use 'styles/00-settings/variables' as *;
+
+// El host del componente controla el espaciado entre reviews
+:host {
+  display: block;
+  
+  // Todas las reviews excepto la primera tienen margin-top de 24px
+  &:not(:first-child) {
+    margin-top: $spacing-3;
+  }
+  
+  // Responsive
+  @media (max-width: $breakpoint-md) {
+    &:not(:first-child) {
+      margin-top: $spacing-2;
+    }
+  }
+}
+
+.user-review {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2; // 16px entre avatar y contenido
+  padding-bottom: $spacing-3; // 24px abajo para separar del borde
+  border-bottom: $border-thin solid var(--border-color);
+
+  // Avatar del usuario
+  &__avatar {
+    width: $spacing-6; // 48px
+    height: $spacing-6; // 48px
+    min-width: $spacing-6;
+    min-height: $spacing-6;
+    border-radius: $radius-full;
+    object-fit: cover;
+    flex-shrink: 0;
+    background-color: rgba($color-secondary-dark, 0.5);
+  }
+
+  // Contenido de la review
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  // Título "Review de Usuario"
+  &__title {
+    font-family: $font-primary;
+    font-size: 1.125rem; // 18px - un poco más grande que md (16px)
+    font-weight: $font-weight-bold; // Mismo grosor que el nombre
+    color: var(--text-secondary); // "Review de" en gris
+    margin-bottom: $spacing-2; // 16px de separación entre título y texto
+    line-height: $line-height-tight;
+
+    strong {
+      color: var(--text-primary); // Nombre del usuario en blanco
+    }
+  }
+
+  // Texto de la review
+  &__text {
+    font-family: $font-primary;
+    font-size: $font-size-md; // Mismo tamaño que la descripción del juego
+    line-height: $line-height-normal;
+    color: var(--text-secondary); // Mismo color que "Desarrollado por"
+    margin: 0;
+  }
+
+  // Responsive
+  @media (max-width: $breakpoint-md) {
+    padding-bottom: $spacing-2; // 16px abajo en responsive
+    gap: $spacing-2;
+
+    &__avatar {
+      width: $spacing-5; // 40px
+      height: $spacing-5; // 40px
+      min-width: $spacing-5;
+      min-height: $spacing-5;
+    }
+
+    &__title {
+      font-size: $font-size-sm;
+    }
+
+    &__text {
+      font-size: $font-size-xs;
+    }
+  }
+}

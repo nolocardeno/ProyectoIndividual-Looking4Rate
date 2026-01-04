@@ -1,6 +1,6 @@
 package com.looking4rate.backend.entities;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,10 +40,10 @@ public class Interaccion {
     private boolean estado_jugado;
 
     @Column(nullable = false)
-    private LocalDate fecha_interaccion;
+    private LocalDateTime fecha_interaccion;
 
     @PrePersist
     protected void alCrear() {
-        fecha_interaccion = LocalDate.now();
+        fecha_interaccion = LocalDateTime.now();
     }
 }

@@ -1,0 +1,12 @@
+<!-- Componente de Review de Usuario -->
+<article class="user-review">
+  <img 
+    [src]="avatarUrl" 
+    [alt]="'Avatar de ' + review.nombreUsuario"
+    class="user-review__avatar"
+  />
+  <section class="user-review__content">
+    <h3 class="user-review__title">Review de <strong>{{ review.nombreUsuario }}</strong></h3>
+    <p class="user-review__text">{{ review.review }}</p>
+  </section>
+</article>

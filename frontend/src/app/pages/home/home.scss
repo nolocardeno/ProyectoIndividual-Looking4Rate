@@ -79,6 +79,33 @@
       font-weight: $font-weight-bold;
     }
   }
+
+  // Variante de bienvenida para usuarios autenticados
+  &--welcome {
+    min-height: auto;
+    background: none;
+    padding: $spacing-header-footer $spacing-4 0; // 60px arriba, 0 abajo (el gap del .home ya da 60px)
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__content--welcome {
+    margin-bottom: 0;
+  }
+
+  &__text--welcome {
+    font-family: $font-primary;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: var(--text-secondary);
+    text-shadow: none;
+    margin: 0;
+    
+    strong {
+      color: var(--text-primary);
+      font-weight: $font-weight-bold; // Mantener el mismo peso en negrita
+    }
+  }
 }
 
 // ==========================================================================

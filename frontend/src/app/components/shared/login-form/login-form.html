@@ -28,14 +28,14 @@
 
           <app-form-input
             #usernameInput
-            label="Nombre de usuario"
-            type="text"
-            name="username"
+            label="Email"
+            type="email"
+            name="email"
             placeholder=""
             [required]="true"
             [errorMessage]="usernameError"
-            [value]="loginForm.get('username')?.value || ''"
-            (valueChange)="loginForm.get('username')?.setValue($event)"
+            [value]="loginForm.get('email')?.value || ''"
+            (valueChange)="loginForm.get('email')?.setValue($event)"
             (inputBlur)="onUsernameBlur()">
           </app-form-input>
 

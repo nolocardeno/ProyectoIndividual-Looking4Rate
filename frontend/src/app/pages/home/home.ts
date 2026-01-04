@@ -16,7 +16,7 @@ import { Button } from '../../components/shared/button/button';
 import { SpinnerInline } from '../../components/shared/spinner-inline/spinner-inline';
 import { Alert } from '../../components/shared/alert/alert';
 
-import { JuegosService, EventBusService } from '../../services';
+import { JuegosService, EventBusService, AuthService } from '../../services';
 import { JuegoResumenDTO } from '../../models';
 
 /**
@@ -44,8 +44,15 @@ interface SectionState {
 export default class Home implements OnInit, OnDestroy {
   private juegosService = inject(JuegosService);
   private eventBus = inject(EventBusService);
+  private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
   private destroy$ = new Subject<void>();
+
+  /** Indica si el usuario está autenticado */
+  isAuthenticated = signal(false);
+
+  /** Nombre del usuario autenticado */
+  userName = signal('');
 
   // ============================================
   // ESTADO REACTIVO CON SIGNALS
@@ -83,6 +90,14 @@ export default class Home implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.cargarNovedades();
       this.cargarProximosLanzamientos();
+      
+      // Suscribirse a cambios de autenticación
+      this.authService.authState$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(state => {
+          this.isAuthenticated.set(state.isAuthenticated);
+          this.userName.set(state.user?.nombre ?? '');
+        });
     }
   }
 
