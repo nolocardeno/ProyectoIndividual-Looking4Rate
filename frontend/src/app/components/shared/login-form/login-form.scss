@@ -231,8 +231,8 @@
     }
 
     &__field {
-      background-color: #8a9298;
-      color: #1a1d24;
+      background-color: var(--input-bg, #{$color-gray-400-dark});
+      color: var(--input-text, #{$color-text-light});
       border: none;
       border-radius: $radius-2xl;
       padding: $spacing-2 $spacing-3;
@@ -240,15 +240,15 @@
       box-sizing: border-box;
 
       &::placeholder {
-        color: #4a5560;
+        color: var(--input-placeholder, #{$color-gray-600-dark});
       }
 
       &:hover {
-        background-color: #959ca2;
+        background-color: var(--input-bg-hover, #{$color-gray-300-dark});
       }
 
       &:focus {
-        background-color: #a0a7ad;
+        background-color: var(--input-bg-focus, #{$color-gray-200-dark});
       }
     }
   }
@@ -257,6 +257,19 @@
 // ==========================================================================
 // RESPONSIVE
 // ==========================================================================
+
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// Desktop pequeño (1024px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-lg) {
+  .login-modal {
+    max-width: 340px;
+  }
+}
 
 // --------------------------------------------------------------------------
 // Tablet (768px)
@@ -284,7 +297,7 @@
 }
 
 // --------------------------------------------------------------------------
-// Movil (640px)
+// Móvil estándar (375px)
 // --------------------------------------------------------------------------
 @media (max-width: $breakpoint-sm) {
   .login-modal__overlay {
@@ -333,6 +346,37 @@
         font-size: $font-size-sm;
       }
     }
+  }
+}
+
+// --------------------------------------------------------------------------
+// Móvil pequeño (320px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-xs) {
+  .login-modal__overlay {
+    padding: $spacing-1;
+  }
+
+  .login-modal {
+    &__header {
+      padding: $spacing-1 $spacing-2;
+    }
+
+    &__form {
+      padding: $spacing-2;
+    }
+
+    &__title {
+      font-size: $font-size-sm;
+    }
+
+    &__submit {
+      font-size: $font-size-sm;
+    }
+  }
+
+  .login-modal__switch {
+    font-size: $font-size-xs;
   }
 }
 

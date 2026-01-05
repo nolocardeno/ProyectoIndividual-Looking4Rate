@@ -4,6 +4,7 @@
  */
 
 @use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
 
 // El host del componente controla el espaciado entre reviews
 :host {
@@ -12,13 +13,6 @@
   // Todas las reviews excepto la primera tienen margin-top de 24px
   &:not(:first-child) {
     margin-top: $spacing-3;
-  }
-  
-  // Responsive
-  @media (max-width: $breakpoint-md) {
-    &:not(:first-child) {
-      margin-top: $spacing-2;
-    }
   }
 }
 
@@ -69,10 +63,40 @@
     color: var(--text-secondary); // Mismo color que "Desarrollado por"
     margin: 0;
   }
+}
 
-  // Responsive
-  @media (max-width: $breakpoint-md) {
-    padding-bottom: $spacing-2; // 16px abajo en responsive
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  :host {
+    &:not(:first-child) {
+      margin-top: $spacing-2;
+    }
+  }
+
+  .user-review {
+    padding-bottom: $spacing-2;
+
+    &__title {
+      font-size: $font-size-md;
+      margin-bottom: $spacing-1;
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  :host {
+    &:not(:first-child) {
+      margin-top: $spacing-2;
+    }
+  }
+
+  .user-review {
+    padding-bottom: $spacing-2;
     gap: $spacing-2;
 
     &__avatar {
@@ -87,7 +111,51 @@
     }
 
     &__text {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// Móvil estándar (375px)
+@media (max-width: $breakpoint-sm) {
+  :host {
+    &:not(:first-child) {
+      margin-top: $spacing-1;
+    }
+  }
+
+  .user-review {
+    padding-bottom: $spacing-1;
+    gap: $spacing-1;
+
+    &__avatar {
+      width: $spacing-4; // 32px
+      height: $spacing-4; // 32px
+      min-width: $spacing-4;
+      min-height: $spacing-4;
+    }
+
+    &__title {
       font-size: $font-size-xs;
+      margin-bottom: $spacing-1;
+    }
+
+    &__text {
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .user-review {
+    gap: $spacing-1;
+
+    &__avatar {
+      width: $spacing-3; // 24px
+      height: $spacing-3; // 24px
+      min-width: $spacing-3;
+      min-height: $spacing-3;
     }
   }
 }

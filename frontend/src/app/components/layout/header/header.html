@@ -37,10 +37,10 @@
       <!-- Toggle de tema -->
       <app-theme-toggle></app-theme-toggle>
       
-      <!-- Botón de búsqueda móvil (solo icono) -->
+      <!-- Botón de búsqueda móvil (solo icono) - abre buscador expandido -->
       <app-search-box 
         variant="icon-only"
-        (iconClick)="onSearch(searchQuery)">
+        (iconClick)="toggleMobileSearch()">
       </app-search-box>
 
       <!-- Botón hamburguesa con manejo de eventos mejorado -->
@@ -80,24 +80,24 @@
         
         @if (authState.isAuthenticated && authState.user) {
           <li role="menuitem">
-            <button class="header__mobile-menu-item" (click)="goToHome()" type="button">
-              <fa-icon [icon]="['fas', 'home']"></fa-icon> Inicio
-            </button>
+            <app-button variant="primary" size="lg" (btnClick)="goToHome()">
+              <fa-icon [icon]="['fas', 'home']" style="margin-right: 0.5rem;"></fa-icon> INICIO
+            </app-button>
           </li>
           <li role="menuitem">
-            <button class="header__mobile-menu-item" (click)="goToProfile()" type="button">
-              <fa-icon [icon]="['fas', 'user-circle']"></fa-icon> Perfil
-            </button>
+            <app-button variant="primary" size="lg" (btnClick)="goToProfile()">
+              <fa-icon [icon]="['fas', 'user-circle']" style="margin-right: 0.5rem;"></fa-icon> PERFIL
+            </app-button>
           </li>
           <li role="menuitem">
-            <button class="header__mobile-menu-item" (click)="goToSettings()" type="button">
-              <fa-icon [icon]="['fas', 'cog']"></fa-icon> Ajustes
-            </button>
+            <app-button variant="primary" size="lg" (btnClick)="goToSettings()">
+              <fa-icon [icon]="['fas', 'cog']" style="margin-right: 0.5rem;"></fa-icon> AJUSTES
+            </app-button>
           </li>
           <li role="menuitem">
-            <button class="header__mobile-menu-item header__mobile-menu-item--logout" (click)="logout()" type="button">
-              🚪 Cerrar sesión
-            </button>
+            <app-button variant="primary" size="lg" (btnClick)="logout()">
+              <fa-icon [icon]="['fas', 'sign-out-alt']" style="margin-right: 0.5rem;"></fa-icon> CERRAR SESIÓN
+            </app-button>
           </li>
         }
       </ul>
@@ -113,4 +113,23 @@
       </aside>
     }
   </section>
+
+  <!-- Buscador móvil expandido (fuera del contenedor para ancho completo) -->
+  @if (isMobileSearchOpen) {
+    <section class="header__mobile-search" #mobileSearchContainer>
+      <app-search-box 
+        #mobileSearchBox
+        placeholder="Buscar juegos..."
+        [(value)]="mobileSearchQuery"
+        (search)="onMobileSearch($event)">
+      </app-search-box>
+      <button 
+        class="header__mobile-search-close" 
+        (click)="closeMobileSearch()"
+        aria-label="Cerrar búsqueda"
+        type="button">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
+      </button>
+    </section>
+  }
 </header>

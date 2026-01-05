@@ -16,7 +16,7 @@
   align-items: center;
 }
 
-// Contenedor de pagina con padding lateral responsive
+// Contenedor de pagina con padding lateral responsive (Desktop-First)
 @mixin page-container {
   padding-left: $page-padding-x;
   padding-right: $page-padding-x;
@@ -57,35 +57,164 @@
 }
 
 // --------------------------------------------------------------------------
-// RESPONSIVE HELPERS
+// RESPONSIVE HELPERS (Desktop-First Strategy)
+// Usa max-width para ir reduciendo desde desktop
 // --------------------------------------------------------------------------
 
-// Media query para breakpoint especifico
+// Media query genérica para breakpoint específico (max-width - desktop-first)
 @mixin respond-to($breakpoint) {
   @media (max-width: $breakpoint) {
     @content;
   }
 }
 
-// Ocultar en movil
-@mixin hide-mobile {
-  @media (max-width: $breakpoint-sm) {
-    display: none;
+// Media query para desktop estándar (1280px y menor)
+@mixin desktop {
+  @media (max-width: $breakpoint-xl) {
+    @content;
   }
 }
+
+// Media query para desktop pequeño (1024px y menor)
+@mixin desktop-small {
+  @media (max-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+// Media query para tablet (768px y menor)
+@mixin tablet {
+  @media (max-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+// Media query para móvil (640px y menor)
+@mixin mobile {
+  @media (max-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+// Media query para móvil pequeño (320px y menor)
+@mixin mobile-small {
+  @media (max-width: $breakpoint-xs) {
+    @content;
+  }
+}
+
+// --------------------------------------------------------------------------
+// VISIBILITY HELPERS (Desktop-First)
+// --------------------------------------------------------------------------
 
 // Ocultar en tablet y menor
 @mixin hide-tablet {
   @media (max-width: $breakpoint-md) {
-    display: none;
+    display: none !important;
   }
 }
 
-// Mostrar solo en movil
+// Ocultar en móvil
+@mixin hide-mobile {
+  @media (max-width: $breakpoint-sm) {
+    display: none !important;
+  }
+}
+
+// Mostrar solo en tablet y menor
+@mixin show-tablet-only {
+  display: none !important;
+  
+  @media (max-width: $breakpoint-md) {
+    display: flex !important;
+  }
+}
+
+// Mostrar solo en móvil
 @mixin show-mobile-only {
-  display: none;
+  display: none !important;
   
   @media (max-width: $breakpoint-sm) {
-    display: flex;
+    display: flex !important;
   }
+}
+
+// --------------------------------------------------------------------------
+// CONTAINER QUERIES
+// Para componentes independientes del viewport
+// --------------------------------------------------------------------------
+
+// Define un contenedor para container queries
+@mixin container($name: null) {
+  container-type: inline-size;
+  @if $name {
+    container-name: $name;
+  }
+}
+
+// Media query basada en el contenedor (para anchos específicos)
+@mixin container-query($min-width: null, $max-width: null, $name: null) {
+  @if $min-width and $max-width {
+    @if $name {
+      @container #{$name} (min-width: #{$min-width}) and (max-width: #{$max-width}) {
+        @content;
+      }
+    } @else {
+      @container (min-width: #{$min-width}) and (max-width: #{$max-width}) {
+        @content;
+      }
+    }
+  } @else if $min-width {
+    @if $name {
+      @container #{$name} (min-width: #{$min-width}) {
+        @content;
+      }
+    } @else {
+      @container (min-width: #{$min-width}) {
+        @content;
+      }
+    }
+  } @else if $max-width {
+    @if $name {
+      @container #{$name} (max-width: #{$max-width}) {
+        @content;
+      }
+    } @else {
+      @container (max-width: #{$max-width}) {
+        @content;
+      }
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// TYPOGRAPHY RESPONSIVE
+// --------------------------------------------------------------------------
+
+// Escala tipográfica responsive
+@mixin responsive-text($desktop-size, $tablet-size: null, $mobile-size: null) {
+  font-size: $desktop-size;
+  
+  @if $tablet-size {
+    @include tablet {
+      font-size: $tablet-size;
+    }
+  }
+  
+  @if $mobile-size {
+    @include mobile {
+      font-size: $mobile-size;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// GRID HELPERS
+// --------------------------------------------------------------------------
+
+// Grid responsive automático
+@mixin responsive-grid($min-item-width: 200px, $gap: $spacing-3) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min-item-width, 1fr));
+  gap: $gap;
 }

@@ -1,4 +1,5 @@
 @use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
 
 // ==========================================================================
 // FEATURED SECTION COMPONENT
@@ -23,6 +24,8 @@
     align-items: center;
     border-bottom: 2px solid var(--text-secondary);
     padding-bottom: $spacing-1;
+    gap: $spacing-2;
+    flex-wrap: wrap;
   }
 
   &__title {
@@ -42,9 +45,94 @@
     color: var(--text-secondary);
     text-decoration: none;
     transition: color $transition-fast $transition-ease;
+    white-space: nowrap;
 
     &:hover {
       color: var(--color-accent);
+    }
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  .featured-section {
+    gap: $spacing-2;
+
+    &__header {
+      padding-bottom: $spacing-1;
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .featured-section {
+    gap: $spacing-2;
+
+    &__header {
+      flex-direction: row;
+      align-items: center;
+      gap: $spacing-2;
+    }
+
+    &__title {
+      font-size: $font-size-sm;
+    }
+
+    &__link {
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+// Móvil estándar (640px)
+@media (max-width: $breakpoint-sm) {
+  .featured-section {
+    gap: $spacing-2;
+
+    &__header {
+      // Mantener en fila para que VER MAS esté a la derecha
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__title {
+      font-size: $font-size-sm;
+      letter-spacing: 0.03em;
+    }
+
+    &__link {
+      font-size: $font-size-xs;
+      white-space: nowrap;
+    }
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .featured-section {
+    gap: $spacing-2;
+
+    &__header {
+      gap: $spacing-1;
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
+
+    // Títulos más grandes para mejor legibilidad
+    &__title {
+      font-size: $font-size-md;
+      letter-spacing: 0.04em;
+    }
+
+    &__link {
+      font-size: $font-size-sm;
     }
   }
 }

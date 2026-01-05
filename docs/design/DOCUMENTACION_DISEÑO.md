@@ -16,6 +16,13 @@
 	- [3.1 Componentes implementados](#31-componentes-implementados)
 	- [3.2 Nomenclatura y metodología](#32-nomenclatura-y-metodología)
 	- [3.3 Style Guide](#33-style-guide)
+- [Sección 4: Responsive Design](#sección-4-responsive-design)
+	- [4.1 Breakpoints definidos](#41-breakpoints-definidos)
+	- [4.2 Estrategia responsive](#42-estrategia-responsive)
+	- [4.3 Container Queries](#43-container-queries)
+	- [4.4 Adaptaciones principales](#44-adaptaciones-principales)
+	- [4.5 Páginas implementadas](#45-páginas-implementadas)
+	- [4.6 Screenshots comparativos](#46-screenshots-comparativos)
 # Sección 1: Arquitectura CSS y comunicación visual.
 ## 1.1 Principios de comunicación visual
 
@@ -261,15 +268,15 @@ A continuación se documentan todas las variables utilizadas:
 
 ### Breakpoints
 
-Los breakpoints (`$breakpoint-sm`, `$breakpoint-md`, `$breakpoint-lg`, `$breakpoint-xl`) están pensados para cubrir los dispositivos más comunes: móviles, tablets y escritorios.  
-- Se han elegido valores estándar para asegurar que la interfaz se adapte correctamente y ofrezca una experiencia óptima en cualquier resolución.
+Los breakpoints están pensados para cubrir los dispositivos más comunes: móviles pequeños, móviles estándar, tablets y escritorios. Se utiliza una estrategia **desktop-first** con `max-width`.
 
 A continuación se documentan todas las variables utilizadas:
 
-- `$breakpoint-sm`: 640px (móvil grande)
+- `$breakpoint-xs`: 320px (móvil pequeño)
+- `$breakpoint-sm`: 640px (móvil grande / menú hamburguesa)
 - `$breakpoint-md`: 768px (tablet)
-- `$breakpoint-lg`: 1024px (desktop)
-- `$breakpoint-xl`: 1280px (desktop grande)
+- `$breakpoint-lg`: 1024px (desktop pequeño)
+- `$breakpoint-xl`: 1280px (desktop estándar)
 
 ### Elevaciones (Sombras)
 
@@ -277,10 +284,21 @@ Las elevaciones (sombras) se utilizan para aportar profundidad y jerarquía visu
 
 A continuación se documentan todas las variables utilizadas:
 
-- `$shadow-sm`: 0 1px 2px 0 rgba(0,0,0,0.08)
-- `$shadow-md`: 0 4px 8px 0 rgba(0,0,0,0.12)
-- `$shadow-lg`: 0 8px 16px 0 rgba(0,0,0,0.16)
-- `$shadow-xl`: 0 16px 32px 0 rgba(0,0,0,0.20)
+**Sombras estándar:**
+- `$shadow-sm`: Sombra sutil para elementos pequeños
+- `$shadow-md`: Sombra media para tarjetas
+- `$shadow-lg`: Sombra grande para elementos elevados
+- `$shadow-xl`: Sombra muy grande para modales
+- `$shadow-2xl`: Sombra extra grande para overlays
+- `$shadow-complete`: Sombra completa (todos los lados)
+- `$shadow-inner`: Sombra interior (inset)
+
+**Sombras para efectos hover interactivos:**
+- `$shadow-glow-accent`: Resplandor con color accent
+- `$shadow-glow-accent-hover`: Resplandor accent más intenso al hover
+- `$shadow-hover-accent`: Sombra de elevación al hover con accent
+- `$shadow-active-accent`: Sombra al estado active
+- `$shadow-hover-lift`: Efecto de elevación al hover
 
 ### Bordes
 
@@ -483,6 +501,137 @@ A continuación se documentan los mixins creados en el proyecto, su utilidad y e
 ```scss
 .mobile-menu {
   @include show-mobile-only;
+}
+```
+
+### 9. desktop y desktop-small
+**Descripción:** Media queries para breakpoints de escritorio específicos.
+**Definición:**
+```scss
+@mixin desktop {
+  @media (max-width: $breakpoint-xl) { @content; }
+}
+
+@mixin desktop-small {
+  @media (max-width: $breakpoint-lg) { @content; }
+}
+```
+**Ejemplo de uso:**
+```scss
+.sidebar {
+  width: 300px;
+  
+  @include desktop-small {
+    width: 250px;
+  }
+}
+```
+
+### 10. tablet y mobile
+**Descripción:** Media queries semánticas para tablet y móvil.
+**Definición:**
+```scss
+@mixin tablet {
+  @media (max-width: $breakpoint-md) { @content; }
+}
+
+@mixin mobile {
+  @media (max-width: $breakpoint-sm) { @content; }
+}
+
+@mixin mobile-small {
+  @media (max-width: $breakpoint-xs) { @content; }
+}
+```
+**Ejemplo de uso:**
+```scss
+.grid {
+  grid-template-columns: repeat(5, 1fr);
+  
+  @include tablet {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  @include mobile {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+```
+
+### 11. container y container-query (Container Queries)
+**Descripción:** Mixins para implementar Container Queries, permitiendo que los componentes se adapten según el tamaño de su contenedor padre.
+**Definición:**
+```scss
+@mixin container($name: null) {
+  container-type: inline-size;
+  @if $name {
+    container-name: $name;
+  }
+}
+
+@mixin container-query($min-width: null, $max-width: null, $name: null) {
+  @if $max-width {
+    @if $name {
+      @container #{$name} (max-width: #{$max-width}) { @content; }
+    } @else {
+      @container (max-width: #{$max-width}) { @content; }
+    }
+  }
+}
+```
+**Ejemplo de uso:**
+```scss
+:host {
+  @include container(card);
+}
+
+.card {
+  display: flex;
+  gap: 1rem;
+  
+  @include container-query($max-width: 400px, $name: card) {
+    flex-direction: column;
+  }
+}
+```
+
+### 12. responsive-text
+**Descripción:** Aplica diferentes tamaños de fuente según el dispositivo.
+**Definición:**
+```scss
+@mixin responsive-text($desktop-size, $tablet-size: null, $mobile-size: null) {
+  font-size: $desktop-size;
+  
+  @if $tablet-size {
+    @include tablet { font-size: $tablet-size; }
+  }
+  
+  @if $mobile-size {
+    @include mobile { font-size: $mobile-size; }
+  }
+}
+```
+**Ejemplo de uso:**
+```scss
+.hero__title {
+  @include responsive-text($font-size-xl, $font-size-lg, $font-size-md);
+}
+```
+
+### 13. responsive-grid
+**Descripción:** Crea un grid responsive automático basado en un ancho mínimo de ítem.
+**Definición:**
+```scss
+@mixin responsive-grid($min-item-width: 200px, $gap: $spacing-3) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min-item-width, 1fr));
+  gap: $gap;
+}
+```
+**Ejemplo de uso:**
+```scss
+.cards-container {
+  @include responsive-grid(250px, $spacing-4);
 }
 ```
 
@@ -1555,6 +1704,142 @@ loadingService.hideGlobal();
 
 ---
 
+### StarRating (`app-star-rating`)
+
+**Propósito:** Componente de valoración con estrellas interactivas. Permite al usuario seleccionar una puntuación de 1 a 5 estrellas.
+
+**Modos de uso:**
+- **Interactivo**: El usuario puede hacer hover y click para seleccionar
+- **Solo lectura**: Muestra una puntuación sin interacción
+
+**Estados que maneja:**
+- Hover: Muestra preview de la puntuación
+- Seleccionado: Estrellas rellenas hasta la puntuación
+- Readonly: No interactivo, solo visualización
+
+**Ejemplo de uso:**
+```html
+<!-- Modo interactivo -->
+<app-star-rating
+  [(rating)]="userRating"
+  (ratingChange)="onRatingChange($event)">
+</app-star-rating>
+
+<!-- Modo solo lectura -->
+<app-star-rating
+  [rating]="gameRating"
+  [readonly]="true">
+</app-star-rating>
+```
+
+---
+
+### SearchGameCard (`app-search-game-card`)
+
+**Propósito:** Tarjeta compacta de juego para resultados de búsqueda. Muestra carátula, título, año, desarrollador y plataformas. Implementa **Container Queries** para adaptarse al ancho del contenedor.
+
+**Características:**
+- Layout horizontal (carátula + información)
+- Container Queries para responsividad independiente del viewport
+- Badges clicables para desarrollador y plataformas
+
+**Ejemplo de uso:**
+```html
+<app-search-game-card
+  [coverSrc]="game.imagenPortada"
+  [title]="game.nombre"
+  [releaseYear]="2024"
+  [developer]="'Treyarch'"
+  [platforms]="['PlayStation', 'Xbox', 'PC']"
+  [gameLink]="'/juego/' + game.id">
+</app-search-game-card>
+```
+
+---
+
+### GameInteractionPanel (`app-game-interaction-panel`)
+
+**Propósito:** Panel de interacción para la página de detalle de juego. Permite al usuario marcar el juego como jugado, gustado, en lista de deseos, y añadir/ver reseñas.
+
+**Acciones disponibles:**
+- **Jugado**: Marcar que el usuario ha jugado el juego
+- **Me gusta**: Añadir a favoritos
+- **Lista de deseos**: Añadir a wishlist
+- **Reseñar**: Abrir modal para escribir reseña
+
+**Estados que maneja:**
+- Activo/Inactivo para cada acción
+- Loading durante peticiones
+- Disabled si no está autenticado
+
+**Ejemplo de uso:**
+```html
+<app-game-interaction-panel
+  [gameId]="game.id"
+  [isPlayed]="interaction.jugado"
+  [isLiked]="interaction.meGusta"
+  [isWishlisted]="interaction.enListaDeseos"
+  (playedChange)="onPlayedToggle()"
+  (likedChange)="onLikedToggle()"
+  (wishlistChange)="onWishlistToggle()"
+  (reviewClick)="openReviewModal()">
+</app-game-interaction-panel>
+```
+
+---
+
+### UserReview (`app-user-review`)
+
+**Propósito:** Muestra una reseña de usuario con rating, texto, fecha y opcionalmente acciones de edición/eliminación.
+
+**Información mostrada:**
+- Nombre de usuario
+- Puntuación con estrellas
+- Texto de la reseña
+- Fecha de publicación
+- Botones de editar/eliminar (si es el autor)
+
+**Ejemplo de uso:**
+```html
+<app-user-review
+  [userName]="review.usuario.nombre"
+  [rating]="review.puntuacion"
+  [content]="review.contenido"
+  [date]="review.fecha"
+  [isOwner]="isCurrentUser(review.usuario.id)"
+  (edit)="onEditReview(review)"
+  (delete)="onDeleteReview(review.id)">
+</app-user-review>
+```
+
+---
+
+### ReviewFormModal (`app-review-form-modal`)
+
+**Propósito:** Modal para crear o editar una reseña de juego. Incluye selector de puntuación con estrellas y área de texto para el contenido.
+
+**Modos:**
+- **Crear**: Formulario vacío para nueva reseña
+- **Editar**: Precargado con datos de reseña existente
+
+**Validaciones:**
+- Puntuación requerida (1-5 estrellas)
+- Contenido opcional pero con límite de caracteres
+
+**Ejemplo de uso:**
+```html
+<app-review-form-modal
+  [isOpen]="showReviewModal"
+  [gameId]="game.id"
+  [gameName]="game.nombre"
+  [existingReview]="userReview"
+  (close)="showReviewModal = false"
+  (submit)="onReviewSubmit($event)">
+</app-review-form-modal>
+```
+
+---
+
 ## 3.2 Nomenclatura y metodología
 
 ### Estructura BEM aplicada
@@ -1837,3 +2122,344 @@ El Style Guide está organizado en **7 pestañas** mediante navegación con tabs
 ![Style Guide - Interactivos](./img/style-guide-interactivos.png)
 
 *Tab de Interactivos mostrando Tabs anidadas y Accordion con múltiples items.*
+
+---
+
+# Sección 4: Responsive Design
+
+## 4.1 Breakpoints definidos
+
+El sistema de breakpoints de Looking4Rate está definido en `frontend/src/styles/00-settings/_variables.scss` y sigue una estrategia **desktop-first** usando `max-width`:
+
+| Breakpoint | Valor | Dispositivo | Justificación |
+|------------|-------|-------------|---------------|
+| `$breakpoint-xl` | 80rem (1280px) | Desktop estándar | Punto donde el diseño desktop completo empieza a requerir ajustes |
+| `$breakpoint-lg` | 64rem (1024px) | Desktop pequeño | Límite para laptops y monitores pequeños |
+| `$breakpoint-md` | 48rem (768px) | Tablet | Estándar de tablets en orientación portrait |
+| `$breakpoint-sm` | 40rem (640px) | Móvil grande | Transición a navegación móvil (menú hamburguesa) |
+| `$breakpoint-xs` | 20rem (320px) | Móvil pequeño | Dispositivos más pequeños (iPhone SE, etc.) |
+
+### Justificación de valores
+
+- **1280px (xl):** Es el ancho estándar para diseño desktop, usado por la mayoría de monitores y resoluciones comunes.
+- **1024px (lg):** Punto de transición donde los layouts de múltiples columnas empiezan a necesitar ajustes.
+- **768px (md):** Estándar de la industria para tablets iPad en orientación portrait.
+- **640px (sm):** Punto donde la navegación desktop se vuelve inutilizable y se activa el menú hamburguesa.
+- **320px (xs):** Garantiza compatibilidad con los dispositivos móviles más pequeños del mercado.
+
+---
+
+## 4.2 Estrategia responsive
+
+### Decisión: Desktop-First
+
+Looking4Rate utiliza una estrategia **desktop-first**, lo que significa que los estilos base están diseñados para pantallas grandes y se usan media queries con `max-width` para adaptar progresivamente a pantallas más pequeñas.
+
+### Justificación
+
+1. **Naturaleza de la aplicación:** Looking4Rate es una aplicación de catálogo y seguimiento de videojuegos donde los usuarios pasan tiempo explorando contenido, lo cual es más cómodo en desktop.
+
+2. **Complejidad visual:** Los layouts con múltiples carátulas de juegos, paneles de interacción y detalles se diseñaron pensando primero en el espacio disponible en desktop.
+
+3. **Audiencia objetivo:** Los gamers, público principal de la aplicación, utilizan frecuentemente ordenadores de escritorio.
+
+4. **Facilidad de simplificación:** Es más intuitivo simplificar un diseño complejo para móvil que agregar complejidad desde un diseño móvil simple.
+
+### Ejemplo de código (Desktop-First)
+
+```scss
+// frontend/src/app/pages/home/home.scss
+
+// Estilos base para DESKTOP
+.home__covers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); // 5 columnas en desktop
+  gap: $spacing-3;
+}
+
+// Adaptación para TABLET (768px)
+@media (max-width: $breakpoint-md) {
+  .home__covers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; // Centrar filas incompletas
+    gap: $spacing-3;
+    
+    .home__cover-item {
+      flex: 0 0 auto;
+      width: 9rem;
+    }
+  }
+}
+
+// Adaptación para MÓVIL (640px)
+@media (max-width: $breakpoint-sm) {
+  .home__covers {
+    gap: $spacing-2;
+    
+    .home__cover-item {
+      width: 9rem; // Mismo tamaño que tablet para buena visibilidad
+    }
+  }
+}
+```
+
+### Mixins de responsive
+
+Se han creado mixins en `_mixins.scss` para facilitar la escritura de media queries consistentes:
+
+```scss
+// frontend/src/styles/01-tools/_mixins.scss
+
+// Mixin para cada breakpoint específico
+@mixin desktop-xl {
+  @media (max-width: $breakpoint-xl) { @content; }
+}
+
+@mixin desktop-lg {
+  @media (max-width: $breakpoint-lg) { @content; }
+}
+
+@mixin tablet {
+  @media (max-width: $breakpoint-md) { @content; }
+}
+
+@mixin mobile {
+  @media (max-width: $breakpoint-sm) { @content; }
+}
+
+@mixin mobile-xs {
+  @media (max-width: $breakpoint-xs) { @content; }
+}
+
+// Mixin genérico para breakpoint personalizado
+@mixin respond-to($breakpoint) {
+  @media (max-width: $breakpoint) { @content; }
+}
+```
+
+---
+
+## 4.3 Container Queries
+
+### Componente implementado: SearchGameCard
+
+El componente `search-game-card` implementa Container Queries para adaptarse automáticamente según el ancho del contenedor donde se renderice.
+
+#### Definición del contenedor
+
+```scss
+// frontend/src/app/components/shared/search-game-card/search-game-card.scss
+
+:host {
+  display: block;
+  container-type: inline-size;
+  container-name: search-card;
+}
+```
+
+#### Container Queries implementadas
+
+```scss
+// ==========================================================================
+// CONTAINER QUERIES
+// Permite que el componente se adapte según su contenedor padre,
+// independientemente del viewport. Útil cuando el componente se usa
+// en sidebars, modales o layouts con ancho variable.
+// ==========================================================================
+
+// Contenedor mediano (menos de 400px de ancho)
+@container search-card (max-width: 400px) {
+  .search-game-card {
+    &__cover {
+      width: 6rem;
+    }
+
+    &__title {
+      font-size: $font-size-md;
+    }
+
+    &__year {
+      font-size: $font-size-md;
+    }
+
+    &__badge {
+      font-size: $font-size-sm;
+      padding: 3px 6px;
+    }
+  }
+}
+
+// Contenedor pequeño (menos de 300px de ancho)
+@container search-card (max-width: 300px) {
+  .search-game-card {
+    gap: $spacing-2;
+
+    &__cover {
+      width: 5rem;
+    }
+
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+
+    &__title {
+      font-size: $font-size-sm;
+    }
+
+    &__year {
+      font-size: $font-size-sm;
+    }
+
+    &__badge {
+      font-size: $font-size-xs;
+      padding: 2px 4px;
+    }
+  }
+}
+```
+
+### Mixin reutilizable para Container Queries
+
+Se creó un mixin genérico para facilitar la implementación de Container Queries en otros componentes:
+
+```scss
+// frontend/src/styles/01-tools/_mixins.scss
+
+// Define un contenedor para container queries
+@mixin container($name: null) {
+  container-type: inline-size;
+  @if $name {
+    container-name: $name;
+  }
+}
+
+// Media query basada en el contenedor
+@mixin container-query($min-width: null, $max-width: null, $name: null) {
+  @if $max-width {
+    @if $name {
+      @container #{$name} (max-width: #{$max-width}) {
+        @content;
+      }
+    } @else {
+      @container (max-width: #{$max-width}) {
+        @content;
+      }
+    }
+  }
+}
+```
+
+### ¿Por qué SearchGameCard?
+
+1. **Componente reutilizable:** Se usa en la página de búsqueda pero podría usarse en sidebars, modales o widgets.
+2. **Layout complejo:** Contiene carátula, título, año, desarrollador y plataformas que necesitan reorganizarse.
+3. **Independencia del contexto:** Si se coloca en un contenedor estrecho (sidebar), se adapta automáticamente sin depender del viewport.
+
+---
+
+## 4.4 Adaptaciones principales
+
+### Tabla resumen de adaptaciones por viewport
+
+| Elemento | Desktop (1280px+) | Tablet (768px) | Móvil (640px) | Móvil pequeño (320px) |
+|----------|-------------------|----------------|---------------|----------------------|
+| **Navegación** | Barra horizontal con dropdown de usuario | Barra horizontal con dropdown | Menú hamburguesa con búsqueda expandible | Menú hamburguesa compacto |
+| **Hero (Home)** | 85vh, texto 32px | 60vh, texto 24px | 50vh, texto 24px | 50vh, texto 24px |
+| **Grid carátulas** | 5 columnas fijas | Flex-wrap, 9rem por carátula | Flex-wrap centrado, 9rem | Flex-wrap centrado, 6rem |
+| **Game Detail** | 2 columnas (carátula + info) | 2 columnas compactas | 1 columna apilada | 1 columna compacta |
+| **Panel interacción** | Botones en columna vertical | Botones en columna | Botones horizontales | Botones horizontales compactos |
+| **Search results** | Cards con carátula 10rem | Cards con carátula 10rem | Cards con carátula 8rem | Cards con carátula 6rem |
+| **Títulos sección** | Título + VER MÁS en línea | Título + VER MÁS en línea | Título + VER MÁS en línea | Título + VER MÁS en línea |
+| **Formularios** | Ancho fijo con márgenes | Ancho completo | Ancho completo | Ancho completo, inputs más grandes |
+
+---
+
+## 4.5 Páginas implementadas
+
+### Lista de páginas responsive
+
+| Página | Ruta | Descripción | Adaptaciones clave |
+|--------|------|-------------|-------------------|
+| **Home** | `/` | Página principal con hero y secciones de juegos | Hero responsive, grid de carátulas adaptativo, secciones con flex-wrap |
+| **Game Detail** | `/juego/:id` | Detalle de un juego con carátula, info y panel de interacción | Layout 2→1 columnas, panel horizontal en móvil |
+| **Search** | `/buscar` | Resultados de búsqueda de juegos | Cards con Container Queries, botón "mostrar más" escalable |
+| **Profile** | `/perfil` | Perfil del usuario con estadísticas y listas | Grid adaptativo de estadísticas, listas responsive |
+| **Settings** | `/ajustes` | Configuración de cuenta del usuario | Formularios a ancho completo, inputs optimizados |
+| **Style Guide** | `/style-guide` | Catálogo de componentes UI | Grid de ejemplos adaptativo |
+| **Not Found** | `/404` | Página de error 404 | Layout centrado responsive |
+
+---
+
+## 4.6 Screenshots comparativos
+
+### Página Home
+
+#### Desktop (1280px)
+![Home Desktop](./img/responsive/home-desktop.png)
+
+*Vista desktop con hero a pantalla completa, navegación horizontal y grid de 5 carátulas por fila.*
+
+#### Tablet (768px)
+![Home Tablet](./img/responsive/home-tablet.png)
+
+*Vista tablet con hero reducido, carátulas en flex-wrap centradas y menú hamburguesa.*
+
+#### Móvil (375px)
+![Home Mobile](./img/responsive/home-mobile.png)
+
+*Vista móvil con menú hamburguesa, búsqueda expandible y carátulas centradas en filas flexibles.*
+
+---
+
+### Página Game Detail
+
+#### Desktop (1280px)
+![Game Detail Desktop](./img/responsive/game-detail-desktop.png)
+
+*Vista desktop con layout de 2 columnas: carátula a la izquierda, información y panel de interacción a la derecha.*
+
+#### Tablet (768px)
+![Game Detail Tablet](./img/responsive/game-detail-tablet.png)
+
+*Vista tablet manteniendo 2 columnas pero con proporciones ajustadas.*
+
+#### Móvil (375px)
+![Game Detail Mobile](./img/responsive/game-detail-mobile.png)
+
+*Vista móvil con layout de 1 columna: carátula arriba, información abajo, botones de interacción en fila horizontal.*
+
+---
+
+### Página Search
+
+#### Desktop (1280px)
+![Search Desktop](./img/responsive/search-desktop.png)
+
+*Vista desktop con tarjetas de resultados amplias mostrando carátula, título, desarrollador y plataformas.*
+
+#### Tablet (768px)
+![Search Tablet](./img/responsive/search-tablet.png)
+
+*Vista tablet con tarjetas adaptadas, carátulas de 10rem y badges legibles.*
+
+#### Móvil (375px)
+![Search Mobile](./img/responsive/search-mobile.png)
+
+*Vista móvil con tarjetas compactas gracias a Container Queries, carátulas de 8rem y botón "Mostrar más" prominente.*
+
+---
+
+### Notas sobre testing
+
+El responsive design ha sido verificado en los siguientes viewports usando Chrome DevTools y Firefox Developer Tools:
+
+- **320px** (iPhone SE, móviles pequeños)
+- **375px** (iPhone 12/13/14, móviles estándar)
+- **768px** (iPad, tablets)
+- **1024px** (iPad Pro, laptops pequeños)
+- **1280px** (Desktop estándar)
+
+También se ha verificado el comportamiento del menú hamburguesa, la búsqueda expandible móvil, y el centrado de carátulas en filas incompletas.

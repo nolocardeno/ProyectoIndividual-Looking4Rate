@@ -165,10 +165,19 @@
 }
 
 // ==========================================================================
-// RESPONSIVE
+// RESPONSIVE (Desktop-First Strategy)
 // ==========================================================================
 
-// Desktop grande (1024px)
+// Desktop grande (1280px)
+@media (max-width: $breakpoint-xl) {
+  .search-box {
+    &__input {
+      width: 150px;
+    }
+  }
+}
+
+// Desktop pequeño (1024px)
 @media (max-width: $breakpoint-lg) {
   .search-box {
     &__input {
@@ -187,7 +196,7 @@
   }
 }
 
-// Movil (640px)
+// Móvil estándar (375px)
 @media (max-width: $breakpoint-sm) {
   .search-box {
     &__input {
@@ -202,6 +211,33 @@
 
     &__icon {
       font-size: 14px;
+    }
+
+    &--icon-only {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+    }
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .search-box {
+    &__input {
+      width: 80px;
+      padding: 3px 8px;
+      font-size: $font-size-xs;
+    }
+
+    &--icon-only {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+
+      ::ng-deep .search-box__icon {
+        font-size: $font-size-md;
+      }
     }
   }
 }

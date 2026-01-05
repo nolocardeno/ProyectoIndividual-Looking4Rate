@@ -22,23 +22,23 @@
         </button>
       </header>
 
-      <div class="review-modal__content">
+      <section class="review-modal__content">
         <!-- Carátula del juego -->
-        <div class="review-modal__cover-wrapper">
+        <figure class="review-modal__cover-wrapper">
           <app-game-cover
             [src]="gameCover"
             [alt]="gameTitle"
             size="md"
           />
-        </div>
+        </figure>
 
         <!-- Contenido derecho: Título + Textarea -->
-        <div class="review-modal__right">
+        <section class="review-modal__right">
           <!-- Título y año -->
-          <div class="review-modal__game-details">
+          <header class="review-modal__game-details">
             <h3 class="review-modal__game-title">{{ gameTitle | uppercase }}</h3>
             <span class="review-modal__game-year">{{ gameYear }}</span>
-          </div>
+          </header>
 
           <!-- Formulario de review -->
           <form class="review-modal__form" (ngSubmit)="onSubmit($event)">
@@ -51,8 +51,8 @@
               (valueChange)="reviewText = $event"
             />
           </form>
-        </div>
-      </div>
+        </section>
+      </section>
 
       <!-- Botón fuera del área de carátula -->
       <footer class="review-modal__actions">

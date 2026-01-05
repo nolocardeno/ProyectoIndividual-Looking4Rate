@@ -3,27 +3,27 @@
 <section class="game-detail">
   <!-- Estado de carga -->
   @if (loading()) {
-    <div class="game-detail__loading">
+    <aside class="game-detail__loading">
       <p>Cargando...</p>
-    </div>
+    </aside>
   }
 
   <!-- Estado de error -->
   @if (error()) {
-    <div class="game-detail__error">
+    <aside class="game-detail__error">
       <p>{{ error() }}</p>
       <nav class="game-detail__nav">
         <a routerLink="/buscar" class="game-detail__link">← Volver a búsqueda</a>
         <a routerLink="/" class="game-detail__link">← Volver al inicio</a>
       </nav>
-    </div>
+    </aside>
   }
 
   <!-- Contenido principal -->
   @if (!loading() && !error() && game()) {
     <article class="game-detail__container">
       <!-- Fila principal: Game Card + Panel de Interacción -->
-      <div class="game-detail__main">
+      <section class="game-detail__main">
         <!-- Game Card con información del juego -->
         <app-game-card
           [coverSrc]="game()!.imagenPortada"
@@ -45,7 +45,7 @@
           (ratingChange)="onRatingChange($event)"
           (writeReviewClick)="onWriteReviewClick()"
         />
-      </div>
+      </section>
 
       <!-- Sección de Reviews -->
       <app-featured-section
@@ -53,15 +53,15 @@
         [linkRoute]="gameReviews().length > 3 ? 'reviews' : null"
       >
         @if (gameReviews().length === 0) {
-          <div class="game-detail__reviews-empty">
-            <p>Aún no hay reviews para este juego. ¡Sé el primero en escribir una!</p>
-          </div>
+          <aside class="game-detail__reviews-empty">
+            <p>¡Aún no hay reviews para este juego. Sé el primero en escribir una!</p>
+          </aside>
         } @else {
-          <div class="game-detail__reviews-grid">
+          <section class="game-detail__reviews-grid">
             @for (review of gameReviews().slice(0, 3); track review.id) {
               <app-user-review [review]="review" />
             }
-          </div>
+          </section>
         }
       </app-featured-section>
     </article>

@@ -89,7 +89,6 @@
     font-weight: $font-weight-semibold;
     color: var(--text-primary);
     text-decoration: underline;
-    text-decoration-thickness: 1px;
     text-underline-offset: 0.125rem;
     transition: color $transition-base $transition-ease;
 
@@ -110,7 +109,6 @@
     font-weight: $font-weight-semibold;
     color: var(--text-primary);
     text-decoration: underline;
-    text-decoration-thickness: 1px;
     text-underline-offset: 0.125rem;
   }
 
@@ -123,7 +121,7 @@
     font-family: $font-primary;
     font-size: $font-size-md;
     font-weight: $font-weight-regular;
-    color: var(--text-secondary); // Mismo color que "Desarrollado por"
+    color: var(--text-secondary);
     line-height: $line-height-normal;
   }
 
@@ -176,17 +174,30 @@
   }
 }
 
-// Movil (640px)
+// Móvil (640px)
 @media (max-width: $breakpoint-sm) {
   .game-card {
     gap: $spacing-2;
 
     &__cover {
-      width: 8.75rem;
+      width: 11rem; // Carátula más grande
     }
 
     &__title {
       font-size: $font-size-md;
+    }
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .game-card {
+    &__cover {
+      width: 10rem; // Aún grande y visible
+    }
+
+    &__title {
+      font-size: $font-size-sm;
     }
   }
 }

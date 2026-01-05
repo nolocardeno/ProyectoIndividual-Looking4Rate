@@ -1,4 +1,5 @@
 @use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
 
 // ==========================================================================
 // GAME COVER COMPONENT
@@ -92,4 +93,82 @@ a.game-cover {
 
 figure.game-cover {
   margin: 0;
+}
+
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  .game-cover {
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    &--sm {
+      width: 90px;
+      height: 126px;
+    }
+
+    &--md {
+      width: 130px;
+      height: 182px;
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .game-cover {
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    &--sm {
+      width: 80px;
+      height: 112px;
+    }
+
+    &--md {
+      width: 110px;
+      height: 154px;
+    }
+  }
+}
+
+// Móvil estándar (375px)
+@media (max-width: $breakpoint-sm) {
+  .game-cover {
+    --cover-border: 1px;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    &--sm {
+      width: 70px;
+      height: 98px;
+    }
+
+    &--md {
+      width: 90px;
+      height: 126px;
+    }
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .game-cover {
+    &--sm {
+      width: 60px;
+      height: 84px;
+    }
+
+    &--md {
+      width: 75px;
+      height: 105px;
+    }
+  }
 }

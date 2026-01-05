@@ -23,7 +23,7 @@ $spinner-colors: (
   'success': var(--color-success),
   'warning': var(--color-warning),
   'error': var(--color-error),
-  'white': #ffffff,
+  'white': var(--color-white, #ffffff),
   'current': currentColor
 );
 

@@ -172,12 +172,39 @@
 }
 
 // ==========================================================================
-// RESPONSIVE
+// RESPONSIVE (Desktop-First Strategy)
 // ==========================================================================
+
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  .btn {
+    &--lg { padding: 5px 14px; font-size: $font-size-lg; }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .btn {
+    &--sm { padding: 2px 5px; font-size: $font-size-sm; }
+    &--md { padding: 4px 7px; font-size: $font-size-md; }
+    &--lg { padding: 5px 12px; font-size: $font-size-md; }
+  }
+}
+
+// Móvil estándar (375px)
 @media (max-width: $breakpoint-sm) {
   .btn {
     &--sm { padding: 2px 4px; font-size: $font-size-xs; }
     &--md { padding: 3px 6px; font-size: $font-size-sm; }
-    &--lg { padding: 6px 12px; font-size: $font-size-md; }
+    &--lg { padding: 5px 10px; font-size: $font-size-md; }
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .btn {
+    &--sm { padding: 1px 3px; font-size: $font-size-xs; }
+    &--md { padding: 2px 5px; font-size: $font-size-xs; }
+    &--lg { padding: 4px 8px; font-size: $font-size-sm; }
   }
 }

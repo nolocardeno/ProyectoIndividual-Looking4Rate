@@ -227,31 +227,103 @@
 }
 
 // ==========================================================================
-// RESPONSIVE
+// RESPONSIVE (Desktop-First Strategy)
 // ==========================================================================
 
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  .interaction-panel {
+    min-width: 11rem;
+    max-width: 13rem;
+    padding: $spacing-2;
+  }
+}
+
+// Tablet (768px)
 @media (max-width: $breakpoint-md) {
   .interaction-panel {
     min-width: auto;
     max-width: none;
     width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: $spacing-2;
+
+    &__section {
+      flex: 1;
+      padding: $spacing-1;
+    }
+
+    &__divider {
+      width: $border-thin;
+      height: auto;
+      min-height: 3rem;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba($color-text-alt-dark, 0.3) 50%,
+        transparent 100%
+      );
+    }
   }
 }
 
+// Móvil estándar (640px) - Mantener horizontal como tablet
 @media (max-width: $breakpoint-sm) {
   .interaction-panel {
+    // Mantener layout horizontal de tablet
+    flex-direction: row;
+    justify-content: space-around;
     padding: $spacing-1;
 
+    &__section {
+      flex: 1;
+      padding: $spacing-1;
+    }
+
+    &__divider {
+      width: $border-thin;
+      height: auto;
+      min-height: 2.5rem;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba($color-text-alt-dark, 0.3) 50%,
+        transparent 100%
+      );
+    }
+
     &__played-icon {
-      width: 3rem;
-      height: 3rem;
-      font-size: 1.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.25rem;
     }
 
     &__played-text,
     &__section-title,
     &__review-btn {
       font-size: $font-size-sm;
+    }
+  }
+}
+
+// Móvil pequeño (320px) - Mantener horizontal
+@media (max-width: $breakpoint-xs) {
+  .interaction-panel {
+    padding: $spacing-1;
+    gap: $spacing-1;
+
+    &__played-icon {
+      width: 2rem;
+      height: 2rem;
+      font-size: 1rem;
+    }
+
+    &__played-text,
+    &__section-title,
+    &__review-btn {
+      font-size: $font-size-xs;
     }
   }
 }

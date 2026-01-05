@@ -1,4 +1,5 @@
 @use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
 
 // ==========================================================================
 // SEARCH PAGE
@@ -48,5 +49,70 @@
     display: flex;
     justify-content: center;
     margin-top: $spacing-4;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// Desktop grande (1280px)
+@media (max-width: $breakpoint-xl) {
+  .search-page {
+    &__load-more {
+      margin-top: $spacing-4;
+    }
+  }
+}
+
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  .search-page {
+    &__loading {
+      min-height: 15rem;
+    }
+
+    &__load-more {
+      margin-top: $spacing-3;
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .search-page {
+    &__loading {
+      min-height: 12rem;
+    }
+
+    &__load-more {
+      margin-top: $spacing-3;
+    }
+  }
+}
+
+// Móvil estándar (375px)
+@media (max-width: $breakpoint-sm) {
+  .search-page {
+    &__loading {
+      min-height: 10rem;
+    }
+
+    &__load-more {
+      margin-top: $spacing-2;
+    }
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .search-page {
+    &__loading {
+      min-height: 8rem;
+    }
+
+    &__load-more {
+      margin-top: $spacing-2;
+    }
   }
 }

@@ -306,8 +306,8 @@
     }
 
     &__field {
-      background-color: #8a9298;
-      color: #1a1d24;
+      background-color: var(--input-bg, #{$color-gray-400-dark});
+      color: var(--input-text, #{$color-text-light});
       border: none;
       border-radius: $radius-2xl;
       padding: $spacing-2 $spacing-3;
@@ -315,15 +315,15 @@
       box-sizing: border-box;
 
       &::placeholder {
-        color: #4a5560;
+        color: var(--input-placeholder, #{$color-gray-600-dark});
       }
 
       &:hover {
-        background-color: #959ca2;
+        background-color: var(--input-bg-hover, #{$color-gray-300-dark});
       }
 
       &:focus {
-        background-color: #a0a7ad;
+        background-color: var(--input-bg-focus, #{$color-gray-200-dark});
       }
     }
   }

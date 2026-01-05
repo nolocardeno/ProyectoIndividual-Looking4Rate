@@ -333,30 +333,30 @@
       }
 
       .form-textarea__field {
-        background-color: #8a9298;
-        color: #1a1d24;
+        background-color: var(--input-bg, #{$color-gray-400-dark});
+        color: var(--input-text, #{$color-text-light});
         border-radius: $radius-lg;
         resize: none;
 
         &::placeholder {
-          color: #4a5560;
+          color: var(--input-placeholder, #{$color-gray-600-dark});
         }
 
         &:hover {
-          background-color: #959ca2;
-          color: #1a1d24;
+          background-color: var(--input-bg-hover, #{$color-gray-300-dark});
+          color: var(--input-text, #{$color-text-light});
 
           &::placeholder {
-            color: #4a5560;
+            color: var(--input-placeholder, #{$color-gray-600-dark});
           }
         }
 
         &:focus {
-          background-color: #a0a7ad;
-          color: #1a1d24;
+          background-color: var(--input-bg-focus, #{$color-gray-200-dark});
+          color: var(--input-text, #{$color-text-light});
 
           &::placeholder {
-            color: #4a5560;
+            color: var(--input-placeholder, #{$color-gray-600-dark});
           }
         }
       }
@@ -369,8 +369,57 @@
 }
 
 // ==========================================================================
-// RESPONSIVE
+// RESPONSIVE (Desktop-First Strategy)
 // ==========================================================================
+
+// --------------------------------------------------------------------------
+// Desktop grande (1280px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-xl) {
+  .review-modal {
+    max-width: 800px;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Desktop pequeño (1024px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-lg) {
+  .review-modal {
+    max-width: 700px;
+
+    &__header {
+      padding: $spacing-2 $spacing-4;
+    }
+
+    &__content {
+      padding: $spacing-3 $spacing-4 0;
+      gap: $spacing-3;
+    }
+
+    &__cover-wrapper {
+      width: 160px;
+      height: 224px;
+
+      app-game-cover {
+        width: 160px;
+        height: 224px;
+
+        ::ng-deep {
+          .game-cover,
+          .game-cover--md {
+            width: 160px;
+            height: 224px;
+          }
+        }
+      }
+    }
+
+    &__right {
+      height: 224px;
+    }
+  }
+}
 
 // --------------------------------------------------------------------------
 // Tablet (768px)
@@ -381,14 +430,14 @@
   }
 
   .review-modal {
-    max-width: 700px;
+    max-width: 600px;
 
     &__header {
       padding: $spacing-2 $spacing-4;
     }
 
     &__content {
-      padding: $spacing-3 $spacing-4;
+      padding: $spacing-3 $spacing-4 0;
       gap: $spacing-3;
     }
 
@@ -396,9 +445,27 @@
       font-size: $font-size-md;
     }
 
-    &__cover {
+    &__cover-wrapper {
       width: 140px;
-      height: 195px;
+      height: 196px;
+
+      app-game-cover {
+        width: 140px;
+        height: 196px;
+
+        ::ng-deep {
+          .game-cover,
+          .game-cover--md {
+            width: 140px;
+            height: 196px;
+          }
+        }
+      }
+    }
+
+    &__right {
+      height: 196px;
+      padding-top: $spacing-2;
     }
 
     &__game-title {
@@ -412,11 +479,15 @@
     .form-textarea__field {
       min-height: 150px;
     }
+
+    &__actions {
+      padding: $spacing-2 $spacing-4 $spacing-3;
+    }
   }
 }
 
 // --------------------------------------------------------------------------
-// Móvil (640px)
+// Móvil estándar (375px)
 // --------------------------------------------------------------------------
 @media (max-width: $breakpoint-sm) {
   .review-modal__overlay {
@@ -438,7 +509,7 @@
     }
 
     &__title {
-      font-size: $font-size-md;
+      font-size: $font-size-sm;
     }
 
     &__close {
@@ -448,13 +519,28 @@
       }
     }
 
-    &__cover {
+    &__cover-wrapper {
       width: 120px;
       height: 168px;
+
+      app-game-cover {
+        width: 120px;
+        height: 168px;
+
+        ::ng-deep {
+          .game-cover,
+          .game-cover--md {
+            width: 120px;
+            height: 168px;
+          }
+        }
+      }
     }
 
     &__right {
       width: 100%;
+      height: auto;
+      padding-top: 0;
     }
 
     &__game-details {
@@ -463,7 +549,7 @@
     }
 
     &__game-title {
-      font-size: $font-size-md;
+      font-size: $font-size-sm;
       text-align: center;
     }
 
@@ -480,9 +566,75 @@
       font-size: $font-size-sm;
     }
 
+    &__actions {
+      padding: $spacing-2 $spacing-3;
+    }
+
     &__submit {
       width: 100%;
       padding: $spacing-2;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// Móvil pequeño (320px)
+// --------------------------------------------------------------------------
+@media (max-width: $breakpoint-xs) {
+  .review-modal__overlay {
+    padding: $spacing-1;
+  }
+
+  .review-modal {
+    &__header {
+      padding: $spacing-1 $spacing-2;
+    }
+
+    &__content {
+      padding: $spacing-2;
+    }
+
+    &__title {
+      font-size: $font-size-xs;
+    }
+
+    &__cover-wrapper {
+      width: 100px;
+      height: 140px;
+
+      app-game-cover {
+        width: 100px;
+        height: 140px;
+
+        ::ng-deep {
+          .game-cover,
+          .game-cover--md {
+            width: 100px;
+            height: 140px;
+          }
+        }
+      }
+    }
+
+    &__game-title {
+      font-size: $font-size-xs;
+    }
+
+    &__game-year {
+      font-size: $font-size-xs;
+    }
+
+    .form-textarea__field {
+      min-height: 100px;
+      font-size: $font-size-xs;
+    }
+
+    &__actions {
+      padding: $spacing-2;
+    }
+
+    &__submit {
+      font-size: $font-size-sm;
     }
   }
 }

@@ -32,7 +32,9 @@ export class Header implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('headerContainer') headerContainer!: ElementRef<HTMLElement>;
 
   searchQuery = '';
+  mobileSearchQuery = '';
   isMenuOpen = false;
+  isMobileSearchOpen = false;
   isUserDropdownOpen = false;
   private isBrowser: boolean;
   
@@ -220,6 +222,50 @@ export class Header implements AfterViewInit, OnInit, OnDestroy {
     if (query.trim()) {
       this.router.navigate(['/buscar'], { queryParams: { q: query.trim() } });
       this.searchQuery = ''; // Limpiar el input después de buscar
+    }
+  }
+
+  /**
+   * Navega a la página de búsqueda (para botón móvil)
+   */
+  goToSearch(): void {
+    this.closeMenu();
+    this.router.navigate(['/buscar']);
+  }
+
+  /**
+   * Alterna la visibilidad del buscador móvil
+   */
+  toggleMobileSearch(): void {
+    this.isMobileSearchOpen = !this.isMobileSearchOpen;
+    this.closeMenu();
+    
+    // Enfocar el input cuando se abre
+    if (this.isMobileSearchOpen && this.isBrowser) {
+      setTimeout(() => {
+        const input = document.querySelector('.header__mobile-search input') as HTMLInputElement;
+        if (input) {
+          input.focus();
+        }
+      }, 100);
+    }
+  }
+
+  /**
+   * Cierra el buscador móvil
+   */
+  closeMobileSearch(): void {
+    this.isMobileSearchOpen = false;
+    this.mobileSearchQuery = '';
+  }
+
+  /**
+   * Maneja la búsqueda desde el buscador móvil
+   */
+  onMobileSearch(query: string): void {
+    if (query.trim()) {
+      this.router.navigate(['/buscar'], { queryParams: { q: query.trim() } });
+      this.closeMobileSearch();
     }
   }
 

@@ -1,6 +1,14 @@
+@use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// SETTINGS PAGE
+// Página de ajustes de cuenta
+// ==========================================================================
+
 .settings {
   min-height: 100vh;
-  padding: 2rem;
+  padding: $spacing-4;
   
   &__container {
     max-width: 50rem;
@@ -9,28 +17,129 @@
   }
   
   &__title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-family: $font-primary;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: var(--text-primary);
+    margin-bottom: $spacing-2;
   }
   
   &__info {
-    margin: 2rem 0;
-    color: var(--color-text-secondary, #666);
+    margin: $spacing-4 0;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    color: var(--text-secondary);
+    line-height: $line-height-normal;
   }
   
   &__note {
-    margin: 1rem 0;
-    color: var(--color-warning, #f0ad4e);
+    margin: $spacing-2 0;
+    font-family: $font-primary;
+    font-size: $font-size-sm;
+    color: var(--color-warning);
+    font-style: italic;
   }
   
   &__back {
     display: inline-block;
-    margin-top: 2rem;
-    color: var(--color-primary, #007bff);
+    margin-top: $spacing-4;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    color: var(--color-accent);
     text-decoration: none;
+    @include transition(color);
     
     &:hover {
       text-decoration: underline;
+    }
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// Desktop grande (1280px)
+@media (max-width: $breakpoint-xl) {
+  .settings {
+    &__container {
+      max-width: 45rem;
+    }
+  }
+}
+
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  .settings {
+    padding: $spacing-3;
+
+    &__container {
+      max-width: 40rem;
+    }
+
+    &__title {
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .settings {
+    padding: $spacing-3 $spacing-2;
+
+    &__container {
+      max-width: 100%;
+    }
+
+    &__title {
+      font-size: $font-size-lg;
+    }
+
+    &__info {
+      margin: $spacing-3 0;
+      font-size: $font-size-sm;
+    }
+
+    &__note {
+      font-size: $font-size-xs;
+    }
+
+    &__back {
+      margin-top: $spacing-3;
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// Móvil estándar (375px)
+@media (max-width: $breakpoint-sm) {
+  .settings {
+    padding: $spacing-2;
+
+    &__title {
+      font-size: $font-size-md;
+    }
+
+    &__info {
+      margin: $spacing-2 0;
+      font-size: $font-size-xs;
+    }
+
+    &__back {
+      margin-top: $spacing-2;
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .settings {
+    padding: $spacing-2 $spacing-1;
+
+    &__title {
+      font-size: $font-size-sm;
     }
   }
 }

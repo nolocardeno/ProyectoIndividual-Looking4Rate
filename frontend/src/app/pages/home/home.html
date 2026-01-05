@@ -22,7 +22,7 @@
   } @else {
     <!-- Hero original para usuarios no autenticados -->
     <section class="hero">
-      <div class="hero__overlay" aria-hidden="true"></div>
+      <span class="hero__overlay" aria-hidden="true"></span>
       <header class="hero__content">
         <h2 class="hero__text">
           Ten un seguimiento de lo&nbsp;que&nbsp;juegas.
@@ -43,19 +43,19 @@
   <!-- ============================================ -->
   <app-featured-section title="NOVEDADES EN L4R" linkRoute="/buscar">
     @if (novedadesLoading()) {
-      <div class="home__loading">
+      <aside class="home__loading">
         <app-spinner-inline size="md"></app-spinner-inline>
         <p>Cargando novedades...</p>
-      </div>
+      </aside>
     } @else if (novedadesError()) {
-      <div class="home__error">
+      <aside class="home__error">
         <app-alert type="error" [dismissible]="false">
           {{ novedadesError() }}
         </app-alert>
         <app-button variant="secondary" size="sm" (click)="reintentarNovedades()">
           Reintentar
         </app-button>
-      </div>
+      </aside>
     } @else {
       <ul class="home__covers">
         @for (juego of novedadesData(); track juego.id) {
@@ -79,19 +79,19 @@
   <!-- ============================================ -->
   <app-featured-section title="PRÓXIMOS LANZAMIENTOS" linkRoute="/buscar">
     @if (proximosLoading()) {
-      <div class="home__loading">
+      <aside class="home__loading">
         <app-spinner-inline size="md"></app-spinner-inline>
         <p>Cargando próximos lanzamientos...</p>
-      </div>
+      </aside>
     } @else if (proximosError()) {
-      <div class="home__error">
+      <aside class="home__error">
         <app-alert type="error" [dismissible]="false">
           {{ proximosError() }}
         </app-alert>
         <app-button variant="secondary" size="sm" (click)="reintentarProximos()">
           Reintentar
         </app-button>
-      </div>
+      </aside>
     } @else {
       <ul class="home__covers">
         @for (juego of proximosData(); track juego.id) {

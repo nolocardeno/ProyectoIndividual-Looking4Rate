@@ -27,10 +27,18 @@
 }
 
 // ==========================================================================
-// RESPONSIVE
+// RESPONSIVE (Desktop-First Strategy)
 // ==========================================================================
 
-// Desktop (1024px)
+// Desktop grande (1280px)
+@media (max-width: $breakpoint-xl) {
+  .main {
+    padding-top: $spacing-4;
+    padding-bottom: $spacing-4;
+  }
+}
+
+// Desktop pequeño (1024px)
 @media (max-width: $breakpoint-lg) {
   .main {
     padding-top: $spacing-3;
@@ -46,10 +54,18 @@
   }
 }
 
-// Movil (640px)
+// Móvil estándar (375px)
 @media (max-width: $breakpoint-sm) {
   .main {
     padding-top: $spacing-2;
     padding-bottom: $spacing-2;
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .main {
+    padding-top: $spacing-1;
+    padding-bottom: $spacing-1;
   }
 }

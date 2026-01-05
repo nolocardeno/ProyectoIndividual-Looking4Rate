@@ -1,4 +1,5 @@
 @use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
 
 // ==========================================================================
 // GAME DETAIL PAGE
@@ -56,6 +57,7 @@
     gap: $spacing-3;
     justify-content: center;
     margin-top: $spacing-3;
+    flex-wrap: wrap;
   }
 
   &__link {
@@ -106,8 +108,18 @@
 }
 
 // ==========================================================================
-// RESPONSIVE
+// RESPONSIVE (Desktop-First Strategy)
 // ==========================================================================
+
+// Desktop grande (1280px)
+@media (max-width: $breakpoint-xl) {
+  // Sin cambios significativos - mantiene diseño desktop
+}
+
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  // Sin cambios significativos - mantiene diseño desktop
+}
 
 // Tablet (768px)
 @media (max-width: $breakpoint-md) {
@@ -130,5 +142,12 @@
 @media (max-width: $breakpoint-sm) {
   .game-detail {
     padding: $spacing-2 $spacing-1;
+  }
+}
+
+// Móvil pequeño (320px)
+@media (max-width: $breakpoint-xs) {
+  .game-detail {
+    padding: $spacing-1;
   }
 }

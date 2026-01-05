@@ -101,12 +101,14 @@ $spacing-header-footer: 3.75rem; // 60px
 $page-padding-x: 15.9375rem; // 255px
 
 // --------------------------------------------------------------------------
-// BREAKPOINTS
+// BREAKPOINTS (Desktop-First Strategy)
+// Se usan con max-width para ir de desktop a móvil
 // --------------------------------------------------------------------------
-$breakpoint-sm: 40rem;   // 640px - movil grande
-$breakpoint-md: 48rem;   // 768px - tablet
-$breakpoint-lg: 64rem;   // 1024px - desktop
-$breakpoint-xl: 80rem;   // 1280px - desktop grande
+$breakpoint-xs: 20rem;      // 320px - móvil pequeño
+$breakpoint-sm: 40rem;      // 640px - móvil grande / menú hamburguesa
+$breakpoint-md: 48rem;      // 768px - tablet
+$breakpoint-lg: 64rem;      // 1024px - desktop pequeño
+$breakpoint-xl: 80rem;      // 1280px - desktop estándar
 
 // --------------------------------------------------------------------------
 // SOMBRAS
