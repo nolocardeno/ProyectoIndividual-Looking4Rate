@@ -23,6 +23,12 @@
 	- [4.4 Adaptaciones principales](#44-adaptaciones-principales)
 	- [4.5 Páginas implementadas](#45-páginas-implementadas)
 	- [4.6 Screenshots comparativos](#46-screenshots-comparativos)
+- [Sección 5: Optimización multimedia](#sección-5-optimización-multimedia)
+	- [5.1 Formatos elegidos](#51-formatos-elegidos)
+	- [5.2 Herramientas utilizadas](#52-herramientas-utilizadas)
+	- [5.3 Resultados de optimización](#53-resultados-de-optimización)
+	- [5.4 Tecnologías implementadas](#54-tecnologías-implementadas)
+	- [5.5 Animaciones CSS](#55-animaciones-css)
 # Sección 1: Arquitectura CSS y comunicación visual.
 ## 1.1 Principios de comunicación visual
 
@@ -2398,17 +2404,17 @@ Se creó un mixin genérico para facilitar la implementación de Container Queri
 ### Página Home
 
 #### Desktop (1280px)
-![Home Desktop](./img/responsive/home-desktop.png)
+![Home Desktop](./img/pagina-home-1280px.png)
 
 *Vista desktop con hero a pantalla completa, navegación horizontal y grid de 5 carátulas por fila.*
 
 #### Tablet (768px)
-![Home Tablet](./img/responsive/home-tablet.png)
+![Home Tablet](./img/pagina-home-768px.png)
 
 *Vista tablet con hero reducido, carátulas en flex-wrap centradas y menú hamburguesa.*
 
 #### Móvil (375px)
-![Home Mobile](./img/responsive/home-mobile.png)
+![Home Mobile](./img/pagina-home-375px.png)
 
 *Vista móvil con menú hamburguesa, búsqueda expandible y carátulas centradas en filas flexibles.*
 
@@ -2417,17 +2423,17 @@ Se creó un mixin genérico para facilitar la implementación de Container Queri
 ### Página Game Detail
 
 #### Desktop (1280px)
-![Game Detail Desktop](./img/responsive/game-detail-desktop.png)
+![Game Detail Desktop](./img/pagina-game-detail-1280px.png)
 
 *Vista desktop con layout de 2 columnas: carátula a la izquierda, información y panel de interacción a la derecha.*
 
 #### Tablet (768px)
-![Game Detail Tablet](./img/responsive/game-detail-tablet.png)
+![Game Detail Tablet](./img/pagina-game-detail-768px.png)
 
 *Vista tablet manteniendo 2 columnas pero con proporciones ajustadas.*
 
 #### Móvil (375px)
-![Game Detail Mobile](./img/responsive/game-detail-mobile.png)
+![Game Detail Mobile](./img/pagina-game-detail-375px.png)
 
 *Vista móvil con layout de 1 columna: carátula arriba, información abajo, botones de interacción en fila horizontal.*
 
@@ -2436,17 +2442,17 @@ Se creó un mixin genérico para facilitar la implementación de Container Queri
 ### Página Search
 
 #### Desktop (1280px)
-![Search Desktop](./img/responsive/search-desktop.png)
+![Search Desktop](./img/pagina-search-1280px.png)
 
 *Vista desktop con tarjetas de resultados amplias mostrando carátula, título, desarrollador y plataformas.*
 
 #### Tablet (768px)
-![Search Tablet](./img/responsive/search-tablet.png)
+![Search Tablet](./img/pagina-search-768px.png)
 
 *Vista tablet con tarjetas adaptadas, carátulas de 10rem y badges legibles.*
 
 #### Móvil (375px)
-![Search Mobile](./img/responsive/search-mobile.png)
+![Search Mobile](./img/pagina-search-375px.png)
 
 *Vista móvil con tarjetas compactas gracias a Container Queries, carátulas de 8rem y botón "Mostrar más" prominente.*
 
@@ -2463,3 +2469,369 @@ El responsive design ha sido verificado en los siguientes viewports usando Chrom
 - **1280px** (Desktop estándar)
 
 También se ha verificado el comportamiento del menú hamburguesa, la búsqueda expandible móvil, y el centrado de carátulas en filas incompletas.
+
+---
+
+# Sección 5: Optimización multimedia
+
+Esta sección documenta las estrategias de optimización de imágenes y animaciones CSS implementadas en Looking4Rate para mejorar el rendimiento y la experiencia de usuario.
+
+## 5.1 Formatos elegidos
+
+### Formatos de imagen utilizados
+
+| Formato | Uso | Justificación |
+|---------|-----|---------------|
+| **AVIF** | Hero background | Mejor compresión (50% menos que JPG), ideal para imágenes grandes con muchos detalles. Soporte en navegadores modernos >95%. |
+| **WebP** | Logos | Excelente balance entre compresión y compatibilidad. Soporta transparencia. Soporte universal en navegadores actuales. |
+| **PNG** | Favicons | Soporte universal obligatorio para favicons. Transparencia perfecta en tamaños pequeños. |
+
+### Decisión AVIF vs WebP vs JPG
+
+**AVIF:**
+- Mejor compresión (30-50% menos que WebP)
+- Ideal para fotografías y fondos grandes
+- Codificación más lenta
+- **Uso:** Hero background (imágenes >100KB)
+
+**WebP:**
+- Excelente compatibilidad (>97% navegadores)
+- Soporta transparencia
+- Buena compresión (25-35% menos que PNG/JPG)
+- **Uso:** Logos, iconos, imágenes con transparencia
+
+**JPG:**
+- Compatibilidad universal (100%)
+- No soporta transparencia
+- Mayor peso que AVIF/WebP
+- **Uso:** Fallback para navegadores muy antiguos (no implementado por bajo uso)
+
+### Iconografía (SVG)
+
+**FontAwesome (https://fontawesome.com/)**
+
+La aplicación utiliza la librería **FontAwesome v7.1.0** para toda la iconografía de la interfaz. Esta librería renderiza iconos como SVG inline optimizados automáticamente por el navegador.
+
+**Ventajas:**
+- Iconos vectoriales escalables sin pérdida de calidad
+- Optimización automática por la librería
+- Tree-shaking: solo se incluyen los iconos usados
+- No requieren optimización manual
+
+**Implementación:**
+```typescript
+// frontend/src/app/fontawesome.config.ts
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faHome, faUserCircle, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faInstagram, faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
+```
+
+**Uso en templates:**
+```html
+<fa-icon [icon]="['fas', 'home']"></fa-icon>
+<fa-icon [icon]="['fab', 'instagram']"></fa-icon>
+```
+
+## 5.2 Herramientas utilizadas
+
+### Squoosh (https://squoosh.app/)
+**Uso principal:** Optimización y conversión de todas las imágenes del proyecto.
+
+### TinyPNG (https://tinypng.com/)
+**Uso:** Compresión adicional de PNGs para favicons.
+
+## 5.3 Resultados de optimización
+
+### Tabla de imágenes optimizadas
+
+| Imagen | Tamaño original | Tamaño optimizado | Reducción |
+|--------|-----------------|-------------------|----------|
+| hero-background-large.avif | ~800KB (JPG original) | 163KB | **80%** |
+| hero-background-medium.avif | ~400KB | 112KB | **72%** |
+| hero-background-small.avif | ~200KB | 102KB | **49%** |
+| logoL4R-large.webp | ~150KB (PNG original) | 20KB | **87%** |
+| logoL4R-medium.webp | ~80KB | 19KB | **76%** |
+| logoL4R-small.webp | ~40KB | 8KB | **80%** |
+| logoL4R-favicon-large.webp | ~100KB (PNG original) | 17KB | **83%** |
+| logoL4R-favicon-medium.webp | ~50KB | 19KB | **62%** |
+| logoL4R-favicon-small.webp | ~25KB | 7KB | **72%** |
+| favicon-32x32.png | ~5KB | 2.88KB | **42%** |
+| favicon-16x16.png | ~3KB | 0.99KB | **67%** |
+
+### Resumen de optimización
+
+- **Total imágenes optimizadas:** 11 archivos
+- **Peso total original estimado:** ~1.8MB
+- **Peso total optimizado:** ~471KB
+- **Reducción total:** **74%**
+- **Todas las imágenes < 200KB:**
+
+## 5.4 Tecnologías implementadas
+
+### 5.4.1 Elemento `<picture>` (Art Direction)
+
+El elemento `<picture>` permite servir diferentes imágenes según el viewport, optimizando la carga para cada dispositivo.
+
+**Implementación en Header:**
+```html
+<!-- frontend/src/app/components/layout/header/header.html -->
+<a routerLink="/" class="header__logo">
+  <picture>
+    <source
+      media="(max-width: 640px)"
+      srcset="assets/img/logos/logoL4R-small.webp"
+    >
+    <source
+      media="(max-width: 1024px)"
+      srcset="assets/img/logos/logoL4R-medium.webp"
+    >
+    <img
+      src="assets/img/logos/logoL4R-large.webp"
+      alt="Looking4Rate Logo"
+      class="header__logo-img"
+      width="461"
+      height="135"
+      loading="eager"
+    >
+  </picture>
+</a>
+```
+
+**Implementación en Footer:**
+```html
+<!-- frontend/src/app/components/layout/footer/footer.html -->
+<picture>
+  <source
+    media="(max-width: 640px)"
+    srcset="assets/img/logos/logoL4R-favicon-small.webp"
+  >
+  <source
+    media="(max-width: 1024px)"
+    srcset="assets/img/logos/logoL4R-favicon-medium.webp"
+  >
+  <img
+    src="assets/img/logos/logoL4R-favicon-large.webp"
+    alt="Looking4Rate Logo"
+    class="footer__logo-img"
+    width="202"
+    height="201"
+    loading="lazy"
+  >
+</picture>
+```
+
+### 5.4.2 Background responsive con CSS Media Queries
+
+Para el hero background se utiliza CSS con media queries para cargar diferentes tamaños:
+
+```scss
+// frontend/src/app/pages/home/home.scss
+.hero {
+  // Móviles: 800px de ancho
+  background: url('/assets/img/hero/hero-background-small.avif') center center / cover no-repeat;
+  
+  // Tablets (768px+): 1400px de ancho
+  @media (min-width: 768px) {
+    background-image: url('/assets/img/hero/hero-background-medium.avif');
+  }
+  
+  // Desktop (1280px+): 1920px full resolution
+  @media (min-width: 1280px) {
+    background-image: url('/assets/img/hero/hero-background-large.avif');
+  }
+}
+```
+
+### 5.4.3 Atributo `loading` (Lazy Loading)
+
+El atributo `loading` controla cuándo se cargan las imágenes:
+
+| Valor | Uso | Elementos |
+|-------|-----|----------|
+| `eager` | Imágenes críticas above-the-fold | Header logo |
+| `lazy` | Imágenes below-the-fold | Footer logo, game covers, avatars |
+
+**Ejemplo de implementación:**
+```html
+<!-- Imagen crítica - carga inmediata -->
+<img src="logo.webp" loading="eager" />
+
+<!-- Imagen no crítica - carga diferida -->
+<img src="cover.webp" loading="lazy" />
+```
+
+## 5.5 Animaciones CSS
+
+### Principio: Solo `transform` y `opacity`
+
+**¿Por qué solo estas propiedades?**
+
+Las propiedades `transform` y `opacity` son las únicas que el navegador puede animar usando la **GPU (Graphics Processing Unit)** sin provocar repaint o reflow del DOM:
+
+**Beneficios:**
+- Animaciones a 60fps consistentes
+- Menor consumo de CPU
+- Mejor experiencia en dispositivos móviles
+- No causa Layout Shift
+
+### 5.5.1 Loading Spinner
+
+**Descripción:** Spinner de doble círculo con rotación en direcciones opuestas.
+
+**Archivo:** `frontend/src/app/components/shared/spinner-inline/spinner-inline.scss`
+
+```scss
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  to { transform: rotate(-360deg); }
+}
+
+.spinner-inline__circle {
+  animation: spin 1.2s linear infinite;
+}
+
+.spinner-inline__circle-inner {
+  animation: spin-reverse 0.9s linear infinite;
+  opacity: 0.6;
+}
+```
+
+**Propiedades animadas:** `transform: rotate()`
+
+### 5.5.2 Star Pulse (Micro-interacción bounce)
+
+**Descripción:** Efecto de pulso al seleccionar una estrella en el rating.
+
+**Archivo:** `frontend/src/app/components/shared/star-rating/star-rating.scss`
+
+```scss
+@keyframes starPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.star-rating__icon--selected {
+  animation: starPulse 0.3s ease-out;
+}
+```
+
+**Propiedades animadas:** `transform: scale()`
+**Duración:** 300ms (dentro del rango 150-500ms)
+
+### 5.5.3 Tooltip Fade In
+
+**Descripción:** Aparición suave del tooltip con desplazamiento.
+
+**Archivo:** `frontend/src/app/components/shared/tooltip/tooltip.scss`
+
+```scss
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltip__content {
+  animation: tooltipFadeIn 0.15s ease forwards;
+}
+```
+
+**Propiedades animadas:** `opacity`, `transform: translateY()`  
+**Duración:** 150ms
+
+### 5.5.4 Notification Slide In/Out
+
+**Descripción:** Notificaciones que entran y salen deslizándose desde los bordes.
+
+**Archivo:** `frontend/src/app/components/shared/notification/notification.scss`
+
+```scss
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.notification--entering {
+  animation: slideInRight $transition-base $transition-ease;
+}
+
+.notification--exiting {
+  animation: slideOutRight $transition-base $transition-ease forwards;
+}
+```
+
+**Propiedades animadas:** `transform: translateX()`, `opacity`   
+**Duración:** 300ms ($transition-base) 
+
+### 5.5.5 Transiciones Hover/Focus (8+ elementos)
+
+**Configuración global de transiciones:**
+```scss
+// frontend/src/styles/00-settings/_variables.scss
+$transition-fast: 150ms;
+$transition-base: 300ms;
+$transition-ease: ease-in-out;
+```
+
+**Elementos con transiciones implementadas:**
+
+| Elemento | Archivo | Propiedad | Duración |
+|----------|---------|-----------|----------|
+| Botones | button.scss | `transform`, `box-shadow` | 200ms |
+| Links | game-detail.scss | `color` | 200ms |
+| Star rating | star-rating.scss | `transform` | 150ms |
+| Search box | search-box.scss | `border-color` | 300ms |
+| Theme toggle | theme-toggle.scss | `transform` | 300ms |
+| User dropdown | user-dropdown.scss | `background` | 200ms |
+| Cards | search-game-card.scss | `transform`, `box-shadow` | 300ms |
+| Tabs | tabs.scss | `color`, `border` | 200ms |
+
+**Ejemplo de transición hover:**
+```scss
+// frontend/src/app/components/shared/star-rating/star-rating.scss
+.star-rating__button {
+  transition: transform $transition-fast $transition-ease;
+  
+  &:hover:not(:disabled) {
+    transform: scale(1.15);
+  }
+}
+```
+
+### Resumen de animaciones
+
+| Animación | Tipo | Propiedades | Duración |
+|-----------|------|-------------|----------|
+| spin/spin-reverse | Spinner | transform | 1.2s/0.9s (infinite) |
+| starPulse | Bounce | transform | 300ms |
+| tooltipFadeIn | Fade-in | opacity, transform | 150ms |
+| slideIn/Out | Slide | transform, opacity | 300ms |
+| Hover transitions | Transition | transform, opacity | 150-300ms |
+
+**Total:** 9 animaciones diferentes, todas cumpliendo las reglas de rendimiento.

@@ -30,8 +30,20 @@
   margin: calc(-1 * $spacing-6) calc(-1 * $spacing-12) 0;
   width: calc(100% + 2 * $spacing-12);
   
-  // Imagen de fondo centrada
-  background: url('/assets/img/hero-background.jpg') center center / cover no-repeat;
+  // Imagen de fondo responsive - tamaños grandes para evitar blur
+  // AVIF para mejor compresión sin perder calidad
+  // Por defecto: 800px para móviles
+  background: url('/assets/img/hero/hero-background-small.avif') center center / cover no-repeat;
+  
+  // Tablets - 768px+: usar 1400px
+  @media (min-width: 768px) {
+    background-image: url('/assets/img/hero/hero-background-medium.avif');
+  }
+  
+  // Desktop - 1280px+: usar 1920px full resolution
+  @media (min-width: 1280px) {
+    background-image: url('/assets/img/hero/hero-background-large.avif');
+  }
   
   // Overlay con gradientes laterales para efecto Letterboxd
   &__overlay {

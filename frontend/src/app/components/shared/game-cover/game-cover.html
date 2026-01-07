@@ -2,10 +2,26 @@
 
 @if (routerLink) {
   <a [routerLink]="routerLink" [class]="classes">
-    <img [src]="src" [alt]="alt" class="game-cover__image" loading="lazy" />
+    <img 
+      [src]="src" 
+      [alt]="alt" 
+      class="game-cover__image" 
+      width="300" 
+      height="400" 
+      loading="lazy"
+      decoding="async"
+    />
   </a>
 } @else {
   <figure [class]="classes">
-    <img [src]="src" [alt]="alt" class="game-cover__image" loading="lazy" />
+    <img 
+      [src]="src" 
+      [alt]="alt" 
+      class="game-cover__image" 
+      width="300" 
+      height="400" 
+      loading="lazy"
+      decoding="async"
+    />
   </figure>
 }

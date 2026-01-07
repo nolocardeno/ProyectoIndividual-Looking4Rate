@@ -1,7 +1,24 @@
 <footer class="footer">
   <nav class="footer__container">
     <figure class="footer__logo-info">
-      <img src="assets/img/logoL4R.png" alt="Looking4Rate Logo" class="footer__logo-img">
+      <picture>
+        <source
+          media="(max-width: 640px)"
+          srcset="assets/img/logos/logoL4R-favicon-small.webp"
+        >
+        <source
+          media="(max-width: 1024px)"
+          srcset="assets/img/logos/logoL4R-favicon-medium.webp"
+        >
+        <img
+          src="assets/img/logos/logoL4R-favicon-large.webp"
+          alt="Looking4Rate Logo"
+          class="footer__logo-img"
+          width="202"
+          height="201"
+          loading="lazy"
+        >
+      </picture>
       <section class="footer__info">
         <p class="footer__copyright">&copy; {{ currentYear }} Looking4Rate. Todos los derechos reservados.</p>
         <p class="footer__slogan">Made by <a href="#" class="footer__link">real player</a>, for players.</p>

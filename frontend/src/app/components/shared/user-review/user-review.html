@@ -4,6 +4,10 @@
     [src]="avatarUrl" 
     [alt]="'Avatar de ' + review.nombreUsuario"
     class="user-review__avatar"
+    width="48"
+    height="48"
+    loading="lazy"
+    decoding="async"
   />
   <section class="user-review__content">
     <h3 class="user-review__title">Review de <strong>{{ review.nombreUsuario }}</strong></h3>
