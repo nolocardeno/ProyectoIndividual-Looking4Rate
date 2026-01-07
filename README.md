@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="frontend/public/assets/img/logoL4R-grande.png" alt="Looking4Rate Logo" >
+  <img src="frontend/public/assets/img/logos/logoL4R-large.webp" alt="Looking4Rate Logo" >
 </p>
 
 **Looking4Rate** es una plataforma moderna de catálogo y valoración de videojuegos construida con Angular 19 y Spring Boot 3, donde los usuarios pueden descubrir juegos, valorarlos e interactuar con otros jugadores.
