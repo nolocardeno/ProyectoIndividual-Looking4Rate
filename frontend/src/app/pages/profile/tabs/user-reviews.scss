@@ -1,0 +1,241 @@
+@use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// USER REVIEWS TAB
+// Tab de reviews del usuario en el perfil
+// ==========================================================================
+
+.user-reviews {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  
+  // --------------------------------------------------------------------------
+  // LISTA DE REVIEWS
+  // --------------------------------------------------------------------------
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    // Skeleton list
+    &--skeleton {
+      opacity: 0.7;
+    }
+  }
+  
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-2;
+    padding: $spacing-3 0;
+    border-bottom: $border-thin solid var(--border-color);
+    
+    &:first-child {
+      padding-top: 0;
+    }
+    
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+  
+  // Carátula del juego (pequeña)
+  &__cover-link {
+    flex-shrink: 0;
+    display: block;
+    @include transition(transform);
+    
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+  
+  // Contenido de la review
+  &__content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: calc($spacing-1 / 2);
+  }
+  
+  // Título del juego
+  &__title {
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: $line-height-tight;
+  }
+  
+  &__title-link {
+    color: inherit;
+    text-decoration: none;
+    @include transition(color);
+    
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+  
+  // Meta (estrellas y fecha)
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    flex-wrap: wrap;
+  }
+  
+  &__date {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    color: var(--text-secondary);
+  }
+  
+  // Texto de la review
+  &__text {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    line-height: $line-height-normal;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+  
+  // --------------------------------------------------------------------------
+  // SKELETONS
+  // --------------------------------------------------------------------------
+  &__item-skeleton {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-2;
+    padding: $spacing-3 0;
+    border-bottom: $border-thin solid var(--border-color);
+  }
+  
+  &__cover-skeleton {
+    width: $spacing-10; // 80px - Carátula sm
+    height: calc($spacing-10 * 4 / 3); // aspect-ratio 3/4
+    flex-shrink: 0;
+    border-radius: $radius-md;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+  }
+  
+  &__content-skeleton {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+  
+  &__title-skeleton {
+    width: 60%;
+    height: $spacing-2 * 1.25; // ~20px
+    border-radius: $radius-sm;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+  }
+  
+  &__rating-skeleton {
+    width: $spacing-8; // 64px
+    height: $spacing-2; // 16px
+    border-radius: $radius-sm;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+  }
+  
+  &__text-skeleton {
+    width: 100%;
+    height: $font-size-sm; // 12px
+    border-radius: $radius-sm;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    
+    &--short {
+      width: 70%;
+    }
+  }
+  
+  // --------------------------------------------------------------------------
+  // ESTADOS (error, empty)
+  // --------------------------------------------------------------------------
+  &__error,
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: $spacing-6 * 5; // ~240px
+    gap: $spacing-2;
+  }
+  
+  &__error {
+    p {
+      font-family: $font-primary;
+      font-size: $font-size-md;
+      color: var(--color-error);
+      margin: 0;
+    }
+  }
+  
+  &__empty-text {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .user-reviews {
+    &__item {
+      gap: $spacing-1;
+    }
+    
+    &__title {
+      font-size: $font-size-md;
+    }
+    
+    &__text {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// Móvil (640px)
+@media (max-width: $breakpoint-sm) {
+  .user-reviews {
+    &__item {
+      flex-direction: column;
+    }
+    
+    &__cover-link {
+      align-self: flex-start;
+    }
+  }
+}

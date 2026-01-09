@@ -37,7 +37,7 @@ export class StarRating {
   @Input() readonly = false;
 
   /** Tamaño de las estrellas */
-  @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Input() size: 'sm' | 'base' | 'md' | 'lg' = 'md';
 
   /** Evento de cambio de puntuación */
   @Output() ratingChange = new EventEmitter<number | null>();

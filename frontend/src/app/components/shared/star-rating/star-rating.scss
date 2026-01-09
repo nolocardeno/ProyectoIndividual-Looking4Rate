@@ -12,7 +12,7 @@
 .star-rating {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: $spacing-1;
 
   // --------------------------------------------------------------------------
   // ESTRELLA INDIVIDUAL (CSS puro)
@@ -156,6 +156,15 @@
     }
   }
 
+  &--base {
+    gap: $spacing-1 * 0.7;
+
+    .star-rating__icon {
+      width: $spacing-3 * 0.7;
+      height: $spacing-3 * 0.7;
+    }
+  }
+
   &--md {
     gap: $spacing-1;
 
@@ -198,15 +207,15 @@
   .star-rating {
     &--md {
       .star-rating__icon {
-        width: 1rem;
-        height: 1rem;
+        width: $spacing-2; // 16px
+        height: $spacing-2;
       }
     }
 
     &--lg {
       .star-rating__icon {
-        width: 1.25rem;
-        height: 1.25rem;
+        width: $spacing-2 * 1.25; // 20px
+        height: $spacing-2 * 1.25;
       }
     }
   }

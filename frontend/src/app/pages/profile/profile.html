@@ -1,19 +1,98 @@
 <section class="profile">
-  <article class="profile__container">
-    <h1 class="profile__title">👤 Página de Perfil de Usuario</h1>
-    
-    @if (userId) {
-      <p class="profile__id">ID del usuario: <strong>{{ userId }}</strong></p>
-    }
+  <!-- ============================================ -->
+  <!-- HEADER DEL PERFIL -->
+  <!-- ============================================ -->
+  @if (loading()) {
+    <header class="profile-header profile-header--loading">
+      <span class="profile-header__avatar-skeleton"></span>
+      <span class="profile-header__info-skeleton">
+        <span class="skeleton-line skeleton-line--name"></span>
+        <span class="skeleton-line skeleton-line--button"></span>
+      </span>
+      <span class="profile-header__stats-skeleton">
+        <span class="skeleton-stat"></span>
+        <span class="skeleton-stat"></span>
+        <span class="skeleton-stat"></span>
+      </span>
+    </header>
+  } @else if (error()) {
+    <header class="profile-header profile-header--error">
+      <p class="profile-header__error">{{ error() }}</p>
+      <a routerLink="/" class="profile__back">← Volver al inicio</a>
+    </header>
+  } @else if (usuario()) {
+    <header class="profile-header">
+      <!-- Avatar del usuario -->
+      <figure class="profile-header__avatar-container">
+        <img 
+          [src]="avatarUrl()" 
+          [alt]="'Avatar de ' + usuario()!.nombre"
+          class="profile-header__avatar"
+          loading="lazy"
+        />
+      </figure>
+      
+      <!-- Información y acciones -->
+      <section class="profile-header__info">
+        <h1 class="profile-header__name">{{ usuario()!.nombre | uppercase }}</h1>
+        @if (isOwnProfile()) {
+          <app-button 
+            variant="primary" 
+            size="md"
+            (btnClick)="editProfile()"
+          >
+            Editar perfil
+          </app-button>
+        }
+      </section>
+      
+      <!-- Estadísticas del usuario -->
+      <dl class="profile-header__stats">
+        <div class="profile-header__stat">
+          <dt class="profile-header__stat-label">JUEGOS</dt>
+          <dd class="profile-header__stat-value">{{ stats().juegosJugados }}</dd>
+        </div>
+        <span class="profile-header__stat-divider" aria-hidden="true"></span>
+        <div class="profile-header__stat">
+          <dt class="profile-header__stat-label">REVIEWS</dt>
+          <dd class="profile-header__stat-value">{{ stats().reviews }}</dd>
+        </div>
+        <span class="profile-header__stat-divider" aria-hidden="true"></span>
+        <div class="profile-header__stat">
+          <dt class="profile-header__stat-label">SEGUIDORES</dt>
+          <dd class="profile-header__stat-value">{{ stats().seguidores }}</dd>
+        </div>
+      </dl>
+    </header>
+  }
 
-    <p class="profile__info">
-      Esta es la página de perfil de un usuario.
-      <br>Aquí se mostrará la información del usuario, sus juegos y reviews.
-    </p>
+  <!-- ============================================ -->
+  <!-- TABS DE NAVEGACIÓN -->
+  <!-- ============================================ -->
+  @if (!loading() && !error() && usuario()) {
+    <nav class="profile-tabs">
+      <a 
+        class="profile-tabs__tab"
+        [routerLink]="['juegos']"
+        routerLinkActive="profile-tabs__tab--active"
+      >
+        JUEGOS
+      </a>
+      <a 
+        class="profile-tabs__tab"
+        [routerLink]="['reviews']"
+        routerLinkActive="profile-tabs__tab--active"
+      >
+        REVIEWS
+      </a>
+    </nav>
+  }
 
+  <!-- ============================================ -->
+  <!-- CONTENIDO DEL PERFIL (Tabs) -->
+  <!-- ============================================ -->
+  <article class="profile__content">
     <!-- Outlet para rutas hijas (tabs) -->
     <router-outlet></router-outlet>
-
-    <a routerLink="/" class="profile__back">← Volver al inicio</a>
   </article>
 </section>

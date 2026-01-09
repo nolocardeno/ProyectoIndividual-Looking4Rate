@@ -1,0 +1,112 @@
+<!-- ============================================ -->
+<!-- USER REVIEWS TAB -->
+<!-- Tab de reviews del usuario en el perfil -->
+<!-- ============================================ -->
+
+<section class="user-reviews">
+  <!-- Estado de carga -->
+  @if (loading()) {
+    <app-featured-section title="REVIEWS">
+      <ul class="user-reviews__list user-reviews__list--skeleton" aria-hidden="true">
+        @for (i of skeletonItems; track i) {
+          <li class="user-reviews__item-skeleton">
+            <span class="user-reviews__cover-skeleton"></span>
+            <span class="user-reviews__content-skeleton">
+              <span class="user-reviews__title-skeleton"></span>
+              <span class="user-reviews__rating-skeleton"></span>
+              <span class="user-reviews__text-skeleton"></span>
+              <span class="user-reviews__text-skeleton user-reviews__text-skeleton--short"></span>
+            </span>
+          </li>
+        }
+      </ul>
+    </app-featured-section>
+    
+    <!-- Paginación (desactivada durante carga) -->
+    <app-pagination
+      [currentPage]="1"
+      [totalPages]="1"
+      (pageChange)="onPageChange($event)"
+    />
+  } @else if (error()) {
+    <!-- Estado de error -->
+    <app-featured-section title="REVIEWS">
+      <aside class="user-reviews__error" role="alert">
+        <p>{{ error() }}</p>
+        <app-button variant="secondary" size="sm" (btnClick)="loadReviews()">
+          Reintentar
+        </app-button>
+      </aside>
+    </app-featured-section>
+    
+    <!-- Paginación (desactivada en error) -->
+    <app-pagination
+      [currentPage]="1"
+      [totalPages]="1"
+      (pageChange)="onPageChange($event)"
+    />
+  } @else if (reviews().length === 0) {
+    <!-- Estado vacío -->
+    <app-featured-section title="REVIEWS">
+      <aside class="user-reviews__empty">
+        <p class="user-reviews__empty-text">No hay reviews todavía</p>
+      </aside>
+    </app-featured-section>
+    
+    <!-- Paginación (desactivada si no hay reviews) -->
+    <app-pagination
+      [currentPage]="1"
+      [totalPages]="1"
+      (pageChange)="onPageChange($event)"
+    />
+  } @else {
+    <!-- Sección de reviews -->
+    <app-featured-section title="REVIEWS">
+      <!-- Lista de reviews -->
+      <ul class="user-reviews__list">
+        @for (review of paginatedReviews(); track review.id) {
+          <li class="user-reviews__item">
+            <!-- Carátula del juego -->
+            <a [routerLink]="'/juego/' + review.juegoId" class="user-reviews__cover-link">
+              <app-game-cover
+                [src]="review.imagenJuego ?? 'assets/img/games/placeholder.jpg'"
+                [alt]="review.nombreJuego"
+                size="sm"
+              />
+            </a>
+            
+            <!-- Contenido de la review -->
+            <article class="user-reviews__content">
+              <!-- Título del juego -->
+              <h3 class="user-reviews__title">
+                <a [routerLink]="'/juego/' + review.juegoId" class="user-reviews__title-link">
+                  {{ review.nombreJuego | uppercase }}
+                </a>
+              </h3>
+              
+              <!-- Estrellas y fecha -->
+              <footer class="user-reviews__meta">
+                <app-star-rating
+                  [rating]="convertToStars(review.puntuacion)"
+                  [readonly]="true"
+                  size="base"
+                />
+                <span class="user-reviews__date">Fecha review - {{ formatDate(review.fechaInteraccion) }}</span>
+              </footer>
+              
+              <!-- Texto de la review -->
+              <p class="user-reviews__text">{{ review.review }}</p>
+            </article>
+          </li>
+        }
+      </ul>
+    </app-featured-section>
+    
+    <!-- Paginación (siempre visible) -->
+    <app-pagination
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages() || 1"
+      (pageChange)="onPageChange($event)"
+    />
+  }
+</section>

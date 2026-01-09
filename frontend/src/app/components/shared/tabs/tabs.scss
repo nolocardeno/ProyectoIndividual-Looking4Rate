@@ -90,7 +90,7 @@
     gap: $spacing-2;
     padding: $spacing-2 $spacing-4;
     cursor: pointer;
-    color: var(--text-primary);
+    color: $color-text-dark; // Siempre blanco en ambos modos
     font-family: $font-primary;
     font-size: $font-size-md;
     font-weight: $font-weight-medium;
@@ -117,7 +117,7 @@
 
     // Hover estilo botón - igual que acordeón
     &:hover:not(&--disabled):not(&--active) {
-      color: var(--text-primary);
+      color: $color-text-dark; // Siempre blanco en ambos modos
       background: linear-gradient(
         180deg, 
         $color-primary-dark 0%,
@@ -144,7 +144,7 @@
 
     // Tab activa - estilo botón completo
     &--active {
-      color: var(--text-primary);
+      color: $color-text-dark; // Siempre blanco en ambos modos
       font-weight: $font-weight-semibold;
       background: linear-gradient(
         180deg, 

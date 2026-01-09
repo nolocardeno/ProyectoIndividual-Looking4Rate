@@ -1,0 +1,154 @@
+@use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// USER GAMES TAB
+// Tab de juegos del usuario en el perfil
+// ==========================================================================
+
+.user-games {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  
+  // --------------------------------------------------------------------------
+  // CUADRÍCULA DE JUEGOS
+  // --------------------------------------------------------------------------
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: $spacing-3;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    // Skeleton grid
+    &--skeleton {
+      opacity: 0.7;
+    }
+  }
+  
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc($spacing-1 / 2);
+  }
+  
+  &__link {
+    display: block;
+    width: 100%;
+    @include transition(transform);
+    
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+  
+  // --------------------------------------------------------------------------
+  // SKELETONS
+  // --------------------------------------------------------------------------
+  &__item-skeleton {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-1;
+  }
+  
+  &__cover-skeleton {
+    width: 100%;
+    aspect-ratio: 3/4;
+    border-radius: $radius-md;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+  }
+  
+  &__rating-skeleton {
+    width: $spacing-10; // 80px
+    height: $spacing-2; // 16px
+    border-radius: $radius-sm;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+  }
+  
+  // --------------------------------------------------------------------------
+  // ESTADOS (error, empty)
+  // --------------------------------------------------------------------------
+  &__error,
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: $spacing-6 * 5; // ~240px
+    gap: $spacing-2;
+  }
+  
+  &__error {
+    p {
+      font-family: $font-primary;
+      font-size: $font-size-md;
+      color: var(--color-error);
+      margin: 0;
+    }
+  }
+  
+  &__empty-text {
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// Desktop grande (1280px)
+@media (max-width: $breakpoint-xl) {
+  .user-games {
+    &__grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+}
+
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  .user-games {
+    &__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: $spacing-1;
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .user-games {
+    &__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
+
+// Móvil (640px)
+@media (max-width: $breakpoint-sm) {
+  .user-games {
+    &__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}

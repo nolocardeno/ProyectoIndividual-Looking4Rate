@@ -177,6 +177,171 @@ INSERT INTO juego_genero (juego_id, genero_id) VALUES (9, 4);
 -- Hollow Knight Silksong: Acción, Plataformas
 INSERT INTO juego_genero (juego_id, genero_id) VALUES (10, 1);
 INSERT INTO juego_genero (juego_id, genero_id) VALUES (10, 9);
+
+-- ============================================
+-- JUEGOS ADICIONALES PARA TESTING DE PAGINACIÓN
+-- ============================================
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Dark Souls III', 'El capítulo final de la aclamada serie Dark Souls. Enfréntate a jefes épicos en un mundo oscuro y decadente.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/374320/library_600x900.jpg', '2016-04-12');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Sekiro: Shadows Die Twice', 'Un shinobi busca venganza en el Japón de la era Sengoku. Combate preciso y mecánicas de sigilo únicas.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/814380/library_600x900.jpg', '2019-03-22');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Ghost of Tsushima', 'Jin Sakai defiende la isla de Tsushima contra la invasión mongola. Un épico mundo abierto en el Japón feudal.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/2215430/library_600x900.jpg', '2020-07-17');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Horizon Zero Dawn', 'Aloy caza máquinas en un futuro post-apocalíptico. Descubre los secretos de un mundo dominado por robots.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/1151640/library_600x900.jpg', '2017-02-28');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Horizon Forbidden West', 'Aloy viaja al oeste prohibido para descubrir la fuente de una misteriosa plaga. Secuela épica con nuevas máquinas.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/2420110/library_600x900.jpg', '2022-02-18');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Spider-Man Remastered', 'Conviértete en Spider-Man y protege Nueva York. Combate fluido y traversal por la ciudad abierta.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/1817070/library_600x900.jpg', '2018-09-07');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Spider-Man: Miles Morales', 'Miles Morales asume el manto de Spider-Man. Una historia personal con nuevos poderes eléctricos.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/1817190/library_600x900.jpg', '2020-11-12');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Death Stranding', 'Sam Bridges reconecta una América fragmentada. Un juego único de Hideo Kojima sobre conexión humana.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/1190460/library_600x900.jpg', '2019-11-08');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Resident Evil Village', 'Ethan Winters busca a su hija en un pueblo misterioso. Terror en primera persona con acción intensa.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/1196590/library_600x900.jpg', '2021-05-07');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Resident Evil 4 Remake', 'El clásico reinventado. Leon S. Kennedy rescata a la hija del presidente en la España rural.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/library_600x900.jpg', '2023-03-24');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Final Fantasy XVI', 'Clive Rosfield busca venganza en un mundo de fantasía. Combate de acción en tiempo real y Eikons épicos.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/1651560/library_600x900.jpg', '2023-06-22');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Final Fantasy VII Rebirth', 'La segunda parte del remake de FF7. Cloud y sus aliados continúan su viaje fuera de Midgar.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/2484110/library_600x900.jpg', '2024-02-29');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Monster Hunter Rise', 'Caza monstruos en un mundo inspirado en Japón feudal. Nuevas mecánicas de traversal con el Wirebugs.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/1446780/library_600x900.jpg', '2021-03-26');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Monster Hunter World', 'La entrega más accesible de Monster Hunter. Caza criaturas gigantes en ecosistemas vivos.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/582010/library_600x900.jpg', '2018-01-26');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Persona 5 Royal', 'Los Phantom Thieves roban corazones corruptos. JRPG con estilo único y simulación de vida escolar.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/1687950/library_600x900.jpg', '2019-10-31');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('NieR: Automata', 'Androides 2B y 9S luchan contra máquinas en una Tierra post-apocalíptica. Acción con narrativa profunda.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/524220/library_600x900.jpg', '2017-02-23');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Disco Elysium', 'Un RPG de detectives sin combate. Resuelve un asesinato mientras lidias con tus demonios internos.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/632470/library_600x900.jpg', '2019-10-15');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Stardew Valley', 'Hereda una granja y reconstruye tu vida en el campo. Farming sim con relaciones y exploración.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/413150/library_600x900.jpg', '2016-02-26');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Celeste', 'Madeline escala la montaña Celeste. Un plataformas desafiante con mensaje sobre salud mental.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/504230/library_600x900.jpg', '2018-01-25');
+
+INSERT INTO juego (nombre, descripcion, imagen_portada, fecha_salida) VALUES 
+('Hollow Knight', 'Explora Hallownest en este metroidvania. Un caballero insecto descubre los secretos de un reino caído.', 'https://cdn.cloudflare.steamstatic.com/steam/apps/367520/library_600x900.jpg', '2017-02-24');
+
+-- Relaciones juegos adicionales con plataformas
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (11, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (11, 2);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (11, 3);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (11, 4);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (11, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (12, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (12, 2);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (12, 3);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (12, 4);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (12, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (13, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (13, 2);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (13, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (14, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (14, 2);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (14, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (15, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (15, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (16, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (16, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (17, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (17, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (18, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (18, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (19, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (19, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (20, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (20, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (21, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (21, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (22, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (22, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (23, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (23, 5);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (23, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (24, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (24, 3);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (24, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (25, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (25, 5);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (25, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (26, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (26, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (27, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (28, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (28, 5);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (28, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (29, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (29, 5);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (29, 6);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (30, 1);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (30, 5);
+INSERT INTO juego_plataforma (juego_id, plataforma_id) VALUES (30, 6);
+
+-- Relaciones juegos adicionales con desarrolladoras
+INSERT INTO juego_desarrolladora (juego_id, desarrolladora_id) VALUES (11, 1);
+INSERT INTO juego_desarrolladora (juego_id, desarrolladora_id) VALUES (12, 1);
+
+-- Relaciones juegos adicionales con géneros
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (11, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (11, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (12, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (12, 3);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (13, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (13, 3);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (14, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (14, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (14, 3);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (15, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (15, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (15, 3);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (16, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (16, 3);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (17, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (17, 3);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (18, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (18, 3);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (19, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (19, 7);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (20, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (20, 7);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (21, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (21, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (22, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (23, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (23, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (24, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (24, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (25, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (26, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (26, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (27, 2);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (27, 3);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (28, 8);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (29, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (29, 9);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (30, 1);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (30, 3);
+INSERT INTO juego_genero (juego_id, genero_id) VALUES (30, 9);
+
 -- ============================================
 -- USUARIO ADMINISTRADOR
 -- ============================================

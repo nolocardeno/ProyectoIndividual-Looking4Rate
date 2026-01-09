@@ -1,0 +1,88 @@
+<!-- ============================================ -->
+<!-- USER GAMES TAB -->
+<!-- Tab de juegos del usuario en el perfil -->
+<!-- ============================================ -->
+
+<section class="user-games">
+  <!-- Estado de carga -->
+  @if (loading()) {
+    <app-featured-section title="JUGADOS">
+      <ul class="user-games__grid user-games__grid--skeleton">
+        @for (i of skeletonItems; track i) {
+          <li class="user-games__item-skeleton">
+            <span class="user-games__cover-skeleton"></span>
+            <span class="user-games__rating-skeleton"></span>
+          </li>
+        }
+      </ul>
+    </app-featured-section>
+    
+    <!-- Paginación (desactivada durante carga) -->
+    <app-pagination
+      [currentPage]="1"
+      [totalPages]="1"
+      (pageChange)="onPageChange($event)"
+    />
+  } @else if (error()) {
+    <!-- Estado de error -->
+    <app-featured-section title="JUGADOS">
+      <aside class="user-games__error">
+        <p>{{ error() }}</p>
+        <app-button variant="secondary" size="sm" (btnClick)="loadGames()">
+          Reintentar
+        </app-button>
+      </aside>
+    </app-featured-section>
+    
+    <!-- Paginación (desactivada en error) -->
+    <app-pagination
+      [currentPage]="1"
+      [totalPages]="1"
+      (pageChange)="onPageChange($event)"
+    />
+  } @else if (games().length === 0) {
+    <!-- Estado vacío -->
+    <app-featured-section title="JUGADOS">
+      <aside class="user-games__empty">
+        <p class="user-games__empty-text">No hay juegos en la biblioteca</p>
+      </aside>
+    </app-featured-section>
+    
+    <!-- Paginación (desactivada si no hay juegos) -->
+    <app-pagination
+      [currentPage]="1"
+      [totalPages]="1"
+      (pageChange)="onPageChange($event)"
+    />
+  } @else {
+    <!-- Sección de juegos -->
+    <app-featured-section title="JUGADOS">
+      <!-- Cuadrícula de juegos -->
+      <ul class="user-games__grid">
+        @for (game of paginatedGames(); track game.id) {
+          <li class="user-games__item">
+            <a [routerLink]="'/juego/' + game.juegoId" class="user-games__link">
+              <app-game-cover
+                [src]="game.imagenJuego ?? 'assets/img/games/placeholder.jpg'"
+                [alt]="game.nombreJuego"
+                size="lg"
+              />
+            </a>
+            <app-star-rating
+              [rating]="convertToStars(game.puntuacion)"
+              [readonly]="true"
+              size="base"
+            />
+          </li>
+        }
+      </ul>
+    </app-featured-section>
+    
+    <!-- Paginación (siempre visible) -->
+    <app-pagination
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages() || 1"
+      (pageChange)="onPageChange($event)"
+    />
+  }
+</section>
