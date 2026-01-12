@@ -3,6 +3,8 @@ package com.looking4rate.backend.services;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,12 +45,13 @@ public class JuegoService {
     // ==================== CRUD ====================
 
     /**
-     * Lista todos los juegos
+     * Lista todos los juegos (OPTIMIZADO - una sola query)
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "juegos-listado")
     public List<JuegoResumenDTO> listarTodos() {
-        return juegoRepository.findAll().stream()
-                .map(this::convertirAResumenDTO)
+        return juegoRepository.findAllWithAvgPuntuacion().stream()
+                .map(this::convertirArrayAResumenDTO)
                 .toList();
     }
 
@@ -56,6 +59,7 @@ public class JuegoService {
      * Obtiene un juego por su ID con información completa
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "juego-detalle", key = "#id")
     public JuegoDTO obtenerPorId(Long id) {
         @SuppressWarnings("null")
         Juego juego = juegoRepository.findById(id)
@@ -67,6 +71,7 @@ public class JuegoService {
      * Crea un nuevo juego
      */
     @SuppressWarnings("null")
+    @CacheEvict(value = {"juegos-listado", "juegos-novedades", "juegos-proximos", "juegos-top", "juegos-populares"}, allEntries = true)
 public JuegoDTO crear(JuegoCreacionDTO dto) {
         Juego juego = Juego.builder()
                 .nombre(dto.nombre())
@@ -128,6 +133,7 @@ public JuegoDTO crear(JuegoCreacionDTO dto) {
      * Actualiza un juego existente
      */
     @SuppressWarnings("null")
+    @CacheEvict(value = {"juegos-listado", "juegos-novedades", "juegos-proximos", "juegos-top", "juegos-populares", "juego-detalle"}, allEntries = true)
 public JuegoDTO actualizar(Long id, JuegoCreacionDTO dto) {
         @SuppressWarnings("null")
         Juego juegoExistente = juegoRepository.findById(id)
@@ -196,6 +202,7 @@ public JuegoDTO actualizar(Long id, JuegoCreacionDTO dto) {
      * Elimina un juego
      */
     @SuppressWarnings("null")
+    @CacheEvict(value = {"juegos-listado", "juegos-novedades", "juegos-proximos", "juegos-top", "juegos-populares", "juego-detalle"}, allEntries = true)
 public void eliminar(Long id) {
         if (!juegoRepository.existsById(id)) {
             throw new ResourceNotFoundException("Juego", id);
@@ -206,54 +213,63 @@ public void eliminar(Long id) {
     // ==================== BÚSQUEDAS ====================
 
     /**
-     * Busca juegos que contengan el texto en su nombre
+     * Busca juegos que contengan el texto en su nombre (OPTIMIZADO)
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "juegos-busqueda", key = "#nombre")
     public List<JuegoResumenDTO> buscarPorNombre(String nombre) {
-        return juegoRepository.findByNombreContainingIgnoreCase(nombre).stream()
-                .map(this::convertirAResumenDTO)
+        return juegoRepository.findByNombreWithAvgPuntuacion(nombre).stream()
+                .map(this::convertirArrayAResumenDTO)
                 .toList();
     }
 
     /**
-     * Obtiene los juegos más recientes
+     * Obtiene los juegos más recientes (OPTIMIZADO - una sola query)
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "juegos-novedades")
     public List<JuegoResumenDTO> obtenerNovedades() {
-        return juegoRepository.findAllOrderByFechaSalidaDesc().stream()
-                .limit(10)
-                .map(this::convertirAResumenDTO)
-                .toList();
+        return juegoRepository.findNovedadesWithAvgPuntuacion(
+                LocalDate.now(), 
+                PageRequest.of(0, 10)
+            ).stream()
+            .map(this::convertirArrayAResumenDTO)
+            .toList();
     }
 
     /**
-     * Obtiene los próximos lanzamientos
+     * Obtiene los próximos lanzamientos (OPTIMIZADO - una sola query)
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "juegos-proximos")
     public List<JuegoResumenDTO> obtenerProximosLanzamientos() {
-        return juegoRepository.findByFechaSalidaAfterOrderByFechaSalidaAsc(LocalDate.now()).stream()
-                .limit(10)
-                .map(this::convertirAResumenDTO)
-                .toList();
+        return juegoRepository.findProximosWithAvgPuntuacion(
+                LocalDate.now(),
+                PageRequest.of(0, 10)
+            ).stream()
+            .map(this::convertirArrayAResumenDTO)
+            .toList();
     }
 
     /**
-     * Obtiene los juegos mejor valorados
+     * Obtiene los juegos mejor valorados (OPTIMIZADO - una sola query)
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "juegos-top", key = "#limite")
     public List<JuegoResumenDTO> obtenerMejorValorados(int limite) {
-        return juegoRepository.findTopRatedGames(PageRequest.of(0, limite)).stream()
-                .map(this::convertirAResumenDTO)
+        return juegoRepository.findTopRatedWithAvgPuntuacion(PageRequest.of(0, limite)).stream()
+                .map(this::convertirArrayAResumenDTO)
                 .toList();
     }
 
     /**
-     * Obtiene los juegos con más reviews
+     * Obtiene los juegos con más reviews (OPTIMIZADO - una sola query)
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "juegos-populares", key = "#limite")
     public List<JuegoResumenDTO> obtenerMasReviewados(int limite) {
-        return juegoRepository.findMostReviewedGames(PageRequest.of(0, limite)).stream()
-                .map(this::convertirAResumenDTO)
+        return juegoRepository.findMostPopularWithAvgPuntuacion(PageRequest.of(0, limite)).stream()
+                .map(this::convertirArrayAResumenDTO)
                 .toList();
     }
 
@@ -299,6 +315,24 @@ public void eliminar(Long id) {
         );
     }
 
+    /**
+     * Convierte el resultado de la query optimizada (Object[]) a JuegoResumenDTO
+     * El array contiene: [id, nombre, imagenPortada, fechaSalida, puntuacionMedia]
+     */
+    private JuegoResumenDTO convertirArrayAResumenDTO(Object[] row) {
+        return new JuegoResumenDTO(
+                (Long) row[0],
+                (String) row[1],
+                (String) row[2],
+                (LocalDate) row[3],
+                (Double) row[4]
+        );
+    }
+
+    /**
+     * @deprecated Usar convertirArrayAResumenDTO con queries optimizadas
+     */
+    @Deprecated
     private JuegoResumenDTO convertirAResumenDTO(Juego juego) {
         Double puntuacionMedia = interaccionRepository.findAveragePuntuacionByJuegoId(juego.getId());
         return new JuegoResumenDTO(

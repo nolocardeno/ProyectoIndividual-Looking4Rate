@@ -39,9 +39,10 @@ services:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
       - DDL_AUTO=create-drop
-      - SHOW_SQL=true
+      - SHOW_SQL=false
       - SQL_INIT_MODE=always
-      - SPRING_PROFILES_ACTIVE=default
+      - LOG_LEVEL=INFO
+      - SECURITY_LOG_LEVEL=WARN
       - JAVA_OPTS=-Xms256m -Xmx512m
     depends_on:
       postgres:
