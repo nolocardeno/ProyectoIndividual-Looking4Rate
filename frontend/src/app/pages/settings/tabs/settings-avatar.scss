@@ -1,0 +1,77 @@
+@use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// SETTINGS AVATAR TAB
+// Tab de cambio de avatar
+// ==========================================================================
+
+.settings-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-4;
+  width: 100%;
+  
+  // --------------------------------------------------------------------------
+  // PREVIEW
+  // --------------------------------------------------------------------------
+  &__preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+  }
+  
+  &__image {
+    width: $spacing-10 * 2; // 160px
+    height: $spacing-10 * 2;
+    border-radius: $radius-full;
+    object-fit: cover;
+    border: $border-thick solid var(--border-color);
+    @include transition(border-color);
+  }
+  
+  // --------------------------------------------------------------------------
+  // INPUT DE ARCHIVO (oculto)
+  // --------------------------------------------------------------------------
+  &__file-input {
+    display: none;
+  }
+  
+  // --------------------------------------------------------------------------
+  // ACCIONES
+  // --------------------------------------------------------------------------
+  &__actions {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .settings-avatar {
+    gap: $spacing-3;
+    
+    &__image {
+      width: $spacing-8 * 2; // 128px
+      height: $spacing-8 * 2;
+    }
+  }
+}
+
+// Móvil estándar (375px)
+@media (max-width: $breakpoint-sm) {
+  .settings-avatar {
+    gap: $spacing-2;
+    
+    &__image {
+      width: $spacing-6 * 2; // 96px
+      height: $spacing-6 * 2;
+    }
+  }
+}

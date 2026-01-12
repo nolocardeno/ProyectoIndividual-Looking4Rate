@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 
 import { HttpBaseService, HttpOptions } from './http-base.service';
 import { ENDPOINTS } from '../core/constants';
@@ -185,40 +185,24 @@ export class InteraccionesService extends HttpBaseService {
     juegoId: number,
     datos: Partial<InteraccionCreacionDTO>
   ): Observable<InteraccionDTO> {
-    return new Observable(subscriber => {
-      // Primero verificamos si existe
-      this.getByUsuarioYJuego(usuarioId, juegoId).subscribe({
-        next: (existente) => {
-          const interaccion: InteraccionCreacionDTO = {
-            juegoId,
-            puntuacion: datos.puntuacion ?? existente?.puntuacion ?? null,
-            review: datos.review ?? existente?.review ?? null,
-            estadoJugado: datos.estadoJugado ?? existente?.estadoJugado ?? false
-          };
+    return this.getByUsuarioYJuego(usuarioId, juegoId).pipe(
+      switchMap(existente => {
+        // Construir el objeto de interacción
+        // Usar 'in' para detectar si la propiedad fue pasada explícitamente
+        const interaccion: InteraccionCreacionDTO = {
+          juegoId,
+          puntuacion: 'puntuacion' in datos ? datos.puntuacion! : (existente?.puntuacion ?? null),
+          review: 'review' in datos ? datos.review! : (existente?.review ?? null),
+          estadoJugado: 'estadoJugado' in datos ? datos.estadoJugado! : (existente?.estadoJugado ?? false)
+        };
 
-          if (existente) {
-            // Actualizar
-            this.actualizar(existente.id, usuarioId, interaccion).subscribe({
-              next: result => {
-                subscriber.next(result);
-                subscriber.complete();
-              },
-              error: err => subscriber.error(err)
-            });
-          } else {
-            // Crear
-            this.crear(usuarioId, interaccion).subscribe({
-              next: result => {
-                subscriber.next(result);
-                subscriber.complete();
-              },
-              error: err => subscriber.error(err)
-            });
-          }
-        },
-        error: err => subscriber.error(err)
-      });
-    });
+        if (existente) {
+          return this.actualizar(existente.id, usuarioId, interaccion);
+        } else {
+          return this.crear(usuarioId, interaccion);
+        }
+      })
+    );
   }
 
   /**

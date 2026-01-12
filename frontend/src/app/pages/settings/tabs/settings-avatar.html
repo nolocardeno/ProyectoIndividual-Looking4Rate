@@ -1,0 +1,37 @@
+<section class="settings-avatar">
+  <!-- Preview del avatar actual -->
+  <figure class="settings-avatar__preview">
+    <img 
+      [src]="avatarUrl()" 
+      [alt]="'Avatar de ' + userName()"
+      class="settings-avatar__image"
+      loading="lazy"
+    />
+  </figure>
+
+  <!-- Input oculto para subir imagen -->
+  <input
+    #fileInput
+    type="file"
+    accept="image/png, image/jpeg, image/jpg, image/webp"
+    class="settings-avatar__file-input"
+    (change)="onFileSelected($event)"
+    [disabled]="saving()"
+  />
+
+  <!-- Botón para seleccionar archivo -->
+  <footer class="settings-avatar__actions">
+    <app-button 
+      variant="primary" 
+      size="md"
+      [disabled]="saving()"
+      (btnClick)="triggerFileInput()"
+    >
+      @if (saving()) {
+        Subiendo...
+      } @else {
+        Seleccionar nuevo avatar
+      }
+    </app-button>
+  </footer>
+</section>

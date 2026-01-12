@@ -50,23 +50,25 @@ export class StarRating {
     return Array.from({ length: this.maxStars }, (_, i) => i + 1);
   }
 
-  /** Determina si una estrella está activa (seleccionada permanentemente) */
-  isStarActive(star: number): boolean {
-    if (this.hoverRating !== null) return false;
-    return star <= (this.rating ?? 0);
+  /** Puntuación a mostrar (hover tiene prioridad sobre rating real) */
+  get displayRating(): number {
+    return this.hoverRating ?? this.rating ?? 0;
   }
 
-  /** Determina si una estrella está en hover */
+  /** Determina si una estrella está activa */
+  isStarActive(star: number): boolean {
+    return star <= this.displayRating;
+  }
+
+  /** Determina si una estrella está en hover (para estilo diferente) */
   isStarHovered(star: number): boolean {
-    // No mostrar hover si ya hay un rating activo
-    if (this.rating !== null && this.rating !== undefined) return false;
     if (this.hoverRating === null) return false;
     return star <= this.hoverRating;
   }
 
   /** Maneja el hover sobre una estrella */
   onStarHover(star: number): void {
-    if (!this.readonly && this.rating === null) {
+    if (!this.readonly) {
       this.hoverRating = star;
     }
   }
@@ -78,15 +80,13 @@ export class StarRating {
 
   /** Selecciona una puntuación */
   onStarClick(star: number): void {
-    if (!this.readonly) {
-      // Si pulsamos la última estrella activa, desactivar todas
-      if (this.rating === star) {
-        this.rating = null;
-        this.ratingChange.emit(null);
-      } else {
-        this.rating = star;
-        this.ratingChange.emit(star);
-      }
+    if (this.readonly) return;
+    
+    // Si pulsamos la misma estrella que ya está activa, desactivar
+    if (this.rating === star) {
+      this.ratingChange.emit(null);
+    } else {
+      this.ratingChange.emit(star);
     }
   }
 

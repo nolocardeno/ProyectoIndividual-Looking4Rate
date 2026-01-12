@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use 'styles/00-settings/variables' as *;
 @use 'styles/01-tools/mixins' as *;
 
@@ -7,13 +8,15 @@
 // ==========================================================================
 
 .settings {
-  min-height: 100vh;
-  padding: $spacing-4;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
   
-  &__container {
-    max-width: 50rem;
-    margin: 0 auto;
-    text-align: center;
+  // --------------------------------------------------------------------------
+  // HEADER
+  // --------------------------------------------------------------------------
+  &__header {
+    margin-bottom: $spacing-1;
   }
   
   &__title {
@@ -21,36 +24,125 @@
     font-size: $font-size-xl;
     font-weight: $font-weight-bold;
     color: var(--text-primary);
-    margin-bottom: $spacing-2;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
   
-  &__info {
-    margin: $spacing-4 0;
+  // --------------------------------------------------------------------------
+  // CONTENIDO
+  // --------------------------------------------------------------------------
+  &__content {
+    width: 100%;
+  }
+}
+
+// ==========================================================================
+// SETTINGS TABS
+// Navegación entre pestañas (Perfil / Contraseña / Avatar)
+// ==========================================================================
+
+.settings-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: $spacing-1;
+  gap: $spacing-1;
+  width: 100%;
+  background: linear-gradient(
+    180deg, 
+    $color-primary-dark 0%,
+    color.mix($color-primary-dark, $color-accent-dark, 90%) 100%
+  );
+  border-radius: $radius-xl;
+  position: relative;
+
+  // Borde con gradiente del contenedor
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-xl;
+    padding: $border-thin;
+    background: linear-gradient(180deg, #{rgba($color-text-alt-dark, 0.5)} 0%, #{rgba($color-text-alt-dark, 0.1)} 100%);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  
+  &__tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+    padding: $spacing-2 $spacing-4;
+    cursor: pointer;
+    color: $color-text-dark; // Siempre blanco en ambos modos
     font-family: $font-primary;
     font-size: $font-size-md;
-    color: var(--text-secondary);
-    line-height: $line-height-normal;
-  }
-  
-  &__note {
-    margin: $spacing-2 0;
-    font-family: $font-primary;
-    font-size: $font-size-sm;
-    color: var(--color-warning);
-    font-style: italic;
-  }
-  
-  &__back {
-    display: inline-block;
-    margin-top: $spacing-4;
-    font-family: $font-primary;
-    font-size: $font-size-md;
-    color: var(--color-accent);
+    font-weight: $font-weight-medium;
     text-decoration: none;
-    @include transition(color);
-    
-    &:hover {
-      text-decoration: underline;
+    @include transition(all);
+    position: relative;
+    border: none;
+    border-radius: $radius-lg;
+    background: transparent;
+
+    // Borde sutil para tabs inactivas
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      padding: $border-thin;
+      background: linear-gradient(180deg, #{rgba($color-text-alt-dark, 0.3)} 0%, #{rgba($color-text-alt-dark, 0.05)} 100%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0;
+      @include transition(opacity);
+    }
+
+    // Hover estilo botón
+    &:hover:not(&--active) {
+      color: $color-text-dark; // Siempre blanco en ambos modos
+      background: linear-gradient(
+        180deg, 
+        $color-primary-dark 0%,
+        color.mix($color-primary-dark, $color-accent-dark, 75%) 100%
+      );
+      transform: translateY(-1px);
+      box-shadow: $shadow-hover-accent;
+
+      &::before {
+        opacity: 1;
+        background: linear-gradient(180deg, #{rgba($color-text-dark, 0.8)} 0%, #{rgba($color-text-dark, 0.1)} 100%);
+      }
+    }
+
+    &:active:not(&--active) {
+      transform: translateY(0);
+      box-shadow: $shadow-active-accent;
+    }
+
+    // Tab activa - estilo botón completo
+    &--active {
+      color: $color-text-dark; // Siempre blanco en ambos modos
+      font-weight: $font-weight-semibold;
+      background: linear-gradient(
+        180deg, 
+        color.mix($color-primary-dark, $color-accent-dark, 75%) 0%,
+        color.mix($color-primary-dark, $color-accent-dark, 55%) 100%
+      );
+      box-shadow: $shadow-sm;
+
+      // Borde con gradiente para tab activa
+      &::before {
+        opacity: 1;
+        background: linear-gradient(180deg, #{rgba($color-accent-dark, 0.6)} 0%, #{rgba($color-accent-dark, 0.15)} 100%);
+      }
     }
   }
 }
@@ -62,8 +154,8 @@
 // Desktop grande (1280px)
 @media (max-width: $breakpoint-xl) {
   .settings {
-    &__container {
-      max-width: 45rem;
+    &__title {
+      font-size: $font-size-lg;
     }
   }
 }
@@ -71,14 +163,17 @@
 // Desktop pequeño (1024px)
 @media (max-width: $breakpoint-lg) {
   .settings {
-    padding: $spacing-3;
-
-    &__container {
-      max-width: 40rem;
-    }
+    gap: $spacing-2;
 
     &__title {
       font-size: $font-size-lg;
+    }
+  }
+
+  .settings-tabs {
+    &__tab {
+      padding: $spacing-2 $spacing-3;
+      font-size: $font-size-sm;
     }
   }
 }
@@ -86,27 +181,18 @@
 // Tablet (768px)
 @media (max-width: $breakpoint-md) {
   .settings {
-    padding: $spacing-3 $spacing-2;
-
-    &__container {
-      max-width: 100%;
+    &__header {
+      margin-bottom: 0;
     }
 
     &__title {
-      font-size: $font-size-lg;
+      font-size: $font-size-md;
     }
+  }
 
-    &__info {
-      margin: $spacing-3 0;
-      font-size: $font-size-sm;
-    }
-
-    &__note {
-      font-size: $font-size-xs;
-    }
-
-    &__back {
-      margin-top: $spacing-3;
+  .settings-tabs {
+    &__tab {
+      padding: $spacing-1 $spacing-3;
       font-size: $font-size-sm;
     }
   }
@@ -115,20 +201,27 @@
 // Móvil estándar (375px)
 @media (max-width: $breakpoint-sm) {
   .settings {
-    padding: $spacing-2;
+    gap: $spacing-2;
 
     &__title {
       font-size: $font-size-md;
     }
+  }
 
-    &__info {
-      margin: $spacing-2 0;
-      font-size: $font-size-xs;
+  .settings-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    
+    &::-webkit-scrollbar {
+      display: none;
     }
 
-    &__back {
-      margin-top: $spacing-2;
+    &__tab {
+      padding: $spacing-1 $spacing-2;
       font-size: $font-size-xs;
+      white-space: nowrap;
     }
   }
 }
@@ -136,8 +229,6 @@
 // Móvil pequeño (320px)
 @media (max-width: $breakpoint-xs) {
   .settings {
-    padding: $spacing-2 $spacing-1;
-
     &__title {
       font-size: $font-size-sm;
     }

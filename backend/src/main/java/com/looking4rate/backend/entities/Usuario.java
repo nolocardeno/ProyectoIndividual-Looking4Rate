@@ -50,7 +50,7 @@ public class Usuario {
     @Column(nullable = false)
     private LocalDate fecha_registro;
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String avatar;
     
     @Enumerated(EnumType.STRING)

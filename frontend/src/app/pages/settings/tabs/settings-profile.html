@@ -1,0 +1,63 @@
+<section class="settings-profile">
+  <form class="settings-profile__form" (ngSubmit)="onSubmit()">
+    <!-- Campo: Nombre de usuario -->
+    <fieldset class="settings-profile__field">
+      <label for="username" class="settings-profile__label">Nombre de usuario</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        class="settings-profile__input"
+        [value]="formData().nombre"
+        (input)="updateField('nombre', $event)"
+        [disabled]="saving()"
+      />
+    </fieldset>
+
+    <!-- Campo: Email -->
+    <fieldset class="settings-profile__field">
+      <label for="email" class="settings-profile__label">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        class="settings-profile__input"
+        [value]="formData().email"
+        (input)="updateField('email', $event)"
+        [disabled]="saving()"
+      />
+    </fieldset>
+
+    <!-- Campo: Biografía -->
+    <fieldset class="settings-profile__field">
+      <label for="biografia" class="settings-profile__label">Biografía</label>
+      <textarea
+        id="biografia"
+        name="biografia"
+        class="settings-profile__textarea"
+        rows="6"
+        placeholder="Escribe tu biografía..."
+        [value]="formData().biografia"
+        (input)="updateField('biografia', $event)"
+        [disabled]="saving()"
+      ></textarea>
+    </fieldset>
+
+    <!-- Botón de guardar -->
+    <footer class="settings-profile__actions">
+      <app-button 
+        type="button" 
+        variant="primary" 
+        size="md"
+        [disabled]="saving() || !hasChanges()"
+        (btnClick)="onSubmit()"
+      >
+        @if (saving()) {
+          Guardando...
+        } @else {
+          Guardar cambios
+        }
+      </app-button>
+    </footer>
+  </form>
+</section>

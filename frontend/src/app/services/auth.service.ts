@@ -181,6 +181,24 @@ export class AuthService {
     return this.getCurrentUserId() === userId;
   }
 
+  /**
+   * Actualiza los datos del usuario autenticado en el estado
+   */
+  updateCurrentUser(userData: Partial<AuthUser>): void {
+    const currentState = this.authStateSubject.getValue();
+    if (currentState.user) {
+      const updatedUser = { ...currentState.user, ...userData };
+      this.setAuthState({
+        ...currentState,
+        user: updatedUser
+      });
+      // Actualizar en localStorage
+      if (currentState.token) {
+        this.saveToStorage(updatedUser, currentState.token);
+      }
+    }
+  }
+
   // ========================================
   // REDIRECCIÓN
   // ========================================

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.looking4rate.backend.dtos.AvatarDTO;
+import com.looking4rate.backend.dtos.CambioContraseniaDTO;
+import com.looking4rate.backend.dtos.UsuarioActualizacionDTO;
 import com.looking4rate.backend.dtos.UsuarioDTO;
 import com.looking4rate.backend.dtos.UsuarioRegistroDTO;
 import com.looking4rate.backend.services.UsuarioService;
@@ -59,12 +62,13 @@ public class UsuarioController {
 
     /**
      * PUT /api/usuarios/{id} - Actualiza un usuario (propio usuario o ADMIN)
+     * La contraseña es opcional - si no se envía o está vacía, se mantiene la actual
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<UsuarioDTO> actualizar(
             @PathVariable Long id,
-            @RequestBody UsuarioRegistroDTO dto) {
+            @RequestBody UsuarioActualizacionDTO dto) {
         return ResponseEntity.ok(usuarioService.actualizar(id, dto));
     }
 
@@ -75,8 +79,20 @@ public class UsuarioController {
     @PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<UsuarioDTO> actualizarAvatar(
             @PathVariable Long id,
-            @RequestBody String avatarUrl) {
-        return ResponseEntity.ok(usuarioService.actualizarAvatar(id, avatarUrl));
+            @RequestBody AvatarDTO dto) {
+        return ResponseEntity.ok(usuarioService.actualizarAvatar(id, dto.avatarUrl()));
+    }
+
+    /**
+     * PUT /api/usuarios/{id}/contrasenia - Cambia la contraseña de un usuario (propio usuario o ADMIN)
+     * Requiere validar la contraseña actual
+     */
+    @PutMapping("/{id}/contrasenia")
+    @PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
+    public ResponseEntity<UsuarioDTO> cambiarContrasenia(
+            @PathVariable Long id,
+            @RequestBody CambioContraseniaDTO dto) {
+        return ResponseEntity.ok(usuarioService.cambiarContrasenia(id, dto));
     }
 
     /**

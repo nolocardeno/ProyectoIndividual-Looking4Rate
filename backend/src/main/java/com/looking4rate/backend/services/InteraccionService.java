@@ -58,7 +58,6 @@ public class InteraccionService {
      * LÓGICA DE NEGOCIO:
      * - Un usuario solo puede tener UNA interacción por juego
      * - La puntuación debe estar entre 1 y 10 (si se proporciona)
-     * - Para poner una puntuación, debe marcar el juego como jugado
      */
     public InteraccionDTO crear(Long usuarioId, InteraccionCreacionDTO dto) {
         // Verificar que no exista ya una interacción de este usuario con este juego
@@ -67,7 +66,7 @@ public class InteraccionService {
         }
         
         // Validar puntuación
-        validarPuntuacion(dto.puntuacion(), dto.estadoJugado());
+        validarPuntuacion(dto.puntuacion());
         
         @SuppressWarnings("null")
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -108,7 +107,7 @@ public class InteraccionService {
         }
         
         // Validar puntuación
-        validarPuntuacion(dto.puntuacion(), dto.estadoJugado());
+        validarPuntuacion(dto.puntuacion());
         
         Interaccion actualizada = Interaccion.builder()
                 .id(interaccion.getId())
@@ -208,15 +207,11 @@ public class InteraccionService {
     /**
      * Valida la puntuación según las reglas de negocio
      */
-    private void validarPuntuacion(Integer puntuacion, boolean estadoJugado) {
+    private void validarPuntuacion(Integer puntuacion) {
         if (puntuacion != null) {
             // La puntuación debe estar entre 1 y 10
             if (puntuacion < 1 || puntuacion > 10) {
                 throw new BusinessLogicException("La puntuación debe estar entre 1 y 10");
-            }
-            // Para poner puntuación, debe haber jugado el juego
-            if (!estadoJugado) {
-                throw new BusinessLogicException("No puedes puntuar un juego que no has jugado");
             }
         }
     }
@@ -226,7 +221,7 @@ public class InteraccionService {
      */
     public Interaccion guardarInteraccion(Interaccion interaccion) {
         // Validar puntuación si existe
-        validarPuntuacion(interaccion.getPuntuacion(), interaccion.isEstado_jugado());
+        validarPuntuacion(interaccion.getPuntuacion());
         return interaccionRepository.save(interaccion);
     }
 

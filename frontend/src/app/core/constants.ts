@@ -53,6 +53,7 @@ export const ENDPOINTS = {
     BASE: '/usuarios',
     BY_ID: (id: number) => `/usuarios/${id}`,
     AVATAR: (id: number) => `/usuarios/${id}/avatar`,
+    CONTRASENIA: (id: number) => `/usuarios/${id}/contrasenia`,
     BUSCAR: '/usuarios/buscar',
     BY_EMAIL: (email: string) => `/usuarios/email/${encodeURIComponent(email)}`
   },

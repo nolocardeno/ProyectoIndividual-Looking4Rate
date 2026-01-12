@@ -18,11 +18,7 @@ import { Observable } from 'rxjs';
 
 import { HttpBaseService, HttpOptions } from './http-base.service';
 import { ENDPOINTS } from '../core/constants';
-import { 
-  UsuarioDTO, 
-  UsuarioRegistroDTO,
-  UsuarioUpdateDTO 
-} from '../models';
+import { UsuarioDTO, UsuarioRegistroDTO } from '../models';
 
 /**
  * UsuariosService
@@ -91,18 +87,6 @@ export class UsuariosService extends HttpBaseService {
   }
 
   /**
-   * Actualiza un usuario
-   * PUT /api/usuarios/{id}
-   */
-  actualizar(
-    id: number, 
-    datos: UsuarioUpdateDTO, 
-    options?: HttpOptions
-  ): Observable<UsuarioDTO> {
-    return this.put<UsuarioDTO>(ENDPOINTS.USUARIOS.BY_ID(id), datos, options);
-  }
-
-  /**
    * Actualiza el avatar de un usuario
    * PUT /api/usuarios/{id}/avatar
    */
@@ -111,7 +95,7 @@ export class UsuariosService extends HttpBaseService {
     avatarUrl: string, 
     options?: HttpOptions
   ): Observable<UsuarioDTO> {
-    return this.put<UsuarioDTO>(ENDPOINTS.USUARIOS.AVATAR(id), avatarUrl, options);
+    return this.put<UsuarioDTO>(ENDPOINTS.USUARIOS.AVATAR(id), { avatarUrl }, options);
   }
 
   /**
@@ -127,23 +111,33 @@ export class UsuariosService extends HttpBaseService {
   // ========================================
 
   /**
-   * Actualiza el nombre de usuario
+   * Actualiza el perfil del usuario (nombre y email)
+   * La contraseña es opcional - si no se envía, se mantiene la actual
    */
-  actualizarNombre(id: number, nombre: string): Observable<UsuarioDTO> {
-    return this.actualizar(id, { nombre });
+  actualizarPerfil(
+    id: number, 
+    datos: { nombre: string; email: string; contrasenia?: string }
+  ): Observable<UsuarioDTO> {
+    return this.put<UsuarioDTO>(ENDPOINTS.USUARIOS.BY_ID(id), datos);
   }
 
   /**
-   * Actualiza el email
+   * Cambia la contraseña del usuario
+   * Requiere la contraseña actual para validación
+   * PUT /api/usuarios/{id}/contrasenia
+   * 
+   * NOTA: Usa header X-Skip-Error-Handler para evitar que el interceptor
+   * cierre la sesión cuando la contraseña actual es incorrecta (401)
    */
-  actualizarEmail(id: number, email: string): Observable<UsuarioDTO> {
-    return this.actualizar(id, { email });
-  }
-
-  /**
-   * Cambia la contraseña
-   */
-  cambiarContrasenia(id: number, nuevaContrasenia: string): Observable<UsuarioDTO> {
-    return this.actualizar(id, { contrasenia: nuevaContrasenia });
+  cambiarContrasenia(
+    id: number, 
+    contraseniaActual: string,
+    contraseniaNueva: string
+  ): Observable<UsuarioDTO> {
+    return this.put<UsuarioDTO>(
+      ENDPOINTS.USUARIOS.CONTRASENIA(id), 
+      { contraseniaActual, contraseniaNueva },
+      { headers: { 'X-Skip-Error-Handler': 'true' } }
+    );
   }
 }

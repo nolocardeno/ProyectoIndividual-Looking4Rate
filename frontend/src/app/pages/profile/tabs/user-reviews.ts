@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, takeUntil, catchError, of } from 'rxjs';
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 
 import { GameCover } from '../../../components/shared/game-cover/game-cover';
 import { StarRating } from '../../../components/shared/star-rating/star-rating';
@@ -20,7 +20,7 @@ const REVIEWS_PER_PAGE = 5;
  */
 @Component({
   selector: 'app-user-reviews',
-  imports: [RouterLink, GameCover, StarRating, Pagination, Button, FeaturedSection, DatePipe, UpperCasePipe],
+  imports: [RouterLink, GameCover, StarRating, Pagination, Button, FeaturedSection, UpperCasePipe],
   templateUrl: './user-reviews.html',
   styleUrl: './user-reviews.scss'
 })

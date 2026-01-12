@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 /**
  * @component SettingsPage
  * @description Página de ajustes de cuenta del usuario.
+ * Contiene tabs para editar perfil, contraseña y avatar.
  * 
  * @example
  * // Ruta: /ajustes
  */
 @Component({
   selector: 'app-settings',
-  imports: [RouterLink, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './settings.html',
   styleUrl: './settings.scss'
 })

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, finalize } from 'rxjs';
 import { JuegosService } from '../../services';
 import { JuegoDTO } from '../../models';
@@ -21,7 +21,7 @@ const RESULTS_PER_PAGE = 5;
  */
 @Component({
   selector: 'app-search',
-  imports: [RouterLink, SearchGameCard, Button, EmptyStateComponent, SpinnerComponent, FeaturedSection],
+  imports: [SearchGameCard, Button, EmptyStateComponent, SpinnerComponent, FeaturedSection],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })

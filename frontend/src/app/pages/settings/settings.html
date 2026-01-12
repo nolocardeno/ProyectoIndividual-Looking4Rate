@@ -1,19 +1,42 @@
 <section class="settings">
-  <article class="settings__container">
-    <h1 class="settings__title">⚙️ Página de Ajustes</h1>
+  <!-- ============================================ -->
+  <!-- TÍTULO DE LA PÁGINA -->
+  <!-- ============================================ -->
+  <header class="settings__header">
+    <h1 class="settings__title">Ajustes de cuenta</h1>
+  </header>
 
-    <p class="settings__info">
-      Esta es la página de ajustes de cuenta.
-      <br>Aquí el usuario podrá modificar su perfil, contraseña y avatar.
-    </p>
+  <!-- ============================================ -->
+  <!-- TABS DE NAVEGACIÓN -->
+  <!-- ============================================ -->
+  <nav class="settings-tabs">
+    <a 
+      class="settings-tabs__tab"
+      [routerLink]="['perfil']"
+      routerLinkActive="settings-tabs__tab--active"
+    >
+      PERFIL
+    </a>
+    <a 
+      class="settings-tabs__tab"
+      [routerLink]="['password']"
+      routerLinkActive="settings-tabs__tab--active"
+    >
+      CONTRASEÑA
+    </a>
+    <a 
+      class="settings-tabs__tab"
+      [routerLink]="['avatar']"
+      routerLinkActive="settings-tabs__tab--active"
+    >
+      AVATAR
+    </a>
+  </nav>
 
-    <p class="settings__note">
-      <em>Nota: Esta página requiere autenticación.</em>
-    </p>
-
-    <!-- Outlet para rutas hijas (tabs) -->
+  <!-- ============================================ -->
+  <!-- CONTENIDO DE LAS TABS -->
+  <!-- ============================================ -->
+  <article class="settings__content">
     <router-outlet></router-outlet>
-
-    <a routerLink="/" class="settings__back">← Volver al inicio</a>
   </article>
 </section>

@@ -36,8 +36,8 @@
 
         <!-- Panel de interacción -->
         <app-game-interaction-panel
-          [isPlayed]="isPlayed"
-          [rating]="userRating"
+          [isPlayed]="isPlayed()"
+          [rating]="userRating()"
           [loading]="interactionLoading()"
           [isAuthenticated]="isAuthenticated"
           [hasReview]="hasReview"

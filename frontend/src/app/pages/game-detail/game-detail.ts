@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, takeUntil, forkJoin, of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
@@ -95,17 +95,15 @@ export default class GameDetailPage implements OnInit, OnDestroy {
   }
 
   /** Puntuación del usuario convertida a escala 1-5 */
-  get userRating(): number | null {
+  userRating = computed(() => {
     const interaction = this.userInteraction();
-    if (!interaction?.puntuacion) return null;
+    if (interaction?.puntuacion === null || interaction?.puntuacion === undefined) return null;
     // La puntuación del backend es 1-10, convertimos a 1-5
     return Math.round(interaction.puntuacion / 2);
-  }
+  });
 
   /** Indica si el usuario ha marcado el juego como jugado */
-  get isPlayed(): boolean {
-    return this.userInteraction()?.estadoJugado ?? false;
-  }
+  isPlayed = computed(() => this.userInteraction()?.estadoJugado ?? false);
 
   /** Desarrolladores como string */
   get developerName(): string {
@@ -262,11 +260,24 @@ export default class GameDetailPage implements OnInit, OnDestroy {
   onRatingChange(rating: number | null): void {
     if (!this.currentUserId || !this.gameId) return;
 
-    this.interactionLoading.set(true);
-    
     const currentInteraction = this.userInteraction();
     // Convertimos la puntuación de 1-5 a 1-10 (o null si se deselecciona)
     const puntuacion10 = rating !== null ? rating * 2 : null;
+    
+    // Actualización optimista - mostrar el cambio inmediatamente
+    const previousInteraction = currentInteraction;
+    this.userInteraction.set({
+      ...currentInteraction,
+      id: currentInteraction?.id ?? 0,
+      usuarioId: this.currentUserId,
+      nombreUsuario: currentInteraction?.nombreUsuario ?? '',
+      juegoId: this.gameId,
+      nombreJuego: currentInteraction?.nombreJuego ?? '',
+      puntuacion: puntuacion10,
+      review: currentInteraction?.review ?? null,
+      estadoJugado: currentInteraction?.estadoJugado ?? false,
+      fechaInteraccion: currentInteraction?.fechaInteraccion ?? new Date().toISOString()
+    });
     
     this.interaccionesService.crearOActualizar(
       this.currentUserId,
@@ -281,11 +292,11 @@ export default class GameDetailPage implements OnInit, OnDestroy {
     ).subscribe({
       next: (interaction) => {
         this.userInteraction.set(interaction);
-        this.interactionLoading.set(false);
       },
       error: (err) => {
         console.error('Error actualizando puntuación:', err);
-        this.interactionLoading.set(false);
+        // Revertir al estado anterior en caso de error
+        this.userInteraction.set(previousInteraction);
       }
     });
   }

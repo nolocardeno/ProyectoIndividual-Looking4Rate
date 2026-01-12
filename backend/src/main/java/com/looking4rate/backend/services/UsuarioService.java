@@ -6,6 +6,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.looking4rate.backend.dtos.CambioContraseniaDTO;
+import com.looking4rate.backend.dtos.UsuarioActualizacionDTO;
 import com.looking4rate.backend.dtos.UsuarioDTO;
 import com.looking4rate.backend.dtos.UsuarioLoginDTO;
 import com.looking4rate.backend.dtos.UsuarioRegistroDTO;
@@ -86,7 +88,7 @@ public class UsuarioService {
     /**
      * Actualiza un usuario existente
      */
-    public UsuarioDTO actualizar(Long id, UsuarioRegistroDTO dto) {
+    public UsuarioDTO actualizar(Long id, UsuarioActualizacionDTO dto) {
         @SuppressWarnings("null")
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
@@ -97,18 +99,12 @@ public class UsuarioService {
         }
         
         // Crear nuevo usuario con datos actualizados (inmutabilidad con Lombok @Builder)
-        Usuario actualizado = Usuario.builder()
-                .id(usuario.getId())
+        Usuario actualizado = builderDesdeExistente(usuario)
                 .nombre(dto.nombre())
                 .email(dto.email())
                 .contrasenia(dto.contrasenia() != null && !dto.contrasenia().isEmpty() 
                         ? passwordEncoder.encode(dto.contrasenia()) 
                         : usuario.getContrasenia())
-                .fecha_registro(usuario.getFecha_registro())
-                .avatar(usuario.getAvatar())
-                .rol(usuario.getRol())
-                .activo(usuario.isActivo())
-                .interacciones(usuario.getInteracciones())
                 .build();
         
         @SuppressWarnings("null")
@@ -124,16 +120,8 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
         
-        Usuario actualizado = Usuario.builder()
-                .id(usuario.getId())
-                .nombre(usuario.getNombre())
-                .email(usuario.getEmail())
-                .contrasenia(usuario.getContrasenia())
-                .fecha_registro(usuario.getFecha_registro())
+        Usuario actualizado = builderDesdeExistente(usuario)
                 .avatar(avatarUrl)
-                .rol(usuario.getRol())
-                .activo(usuario.isActivo())
-                .interacciones(usuario.getInteracciones())
                 .build();
         
         @SuppressWarnings("null")
@@ -150,6 +138,29 @@ public class UsuarioService {
             throw new ResourceNotFoundException("Usuario", id);
         }
         usuarioRepository.deleteById(id);
+    }
+    
+    /**
+     * Cambia la contraseña de un usuario validando la contraseña actual
+     */
+    public UsuarioDTO cambiarContrasenia(Long id, CambioContraseniaDTO dto) {
+        @SuppressWarnings("null")
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
+        
+        // Verificar que la contraseña actual es correcta
+        if (!passwordEncoder.matches(dto.contraseniaActual(), usuario.getContrasenia())) {
+            throw new UnauthorizedException("WRONG_CURRENT_PASSWORD");
+        }
+        
+        // Crear usuario actualizado con nueva contraseña
+        Usuario actualizado = builderDesdeExistente(usuario)
+                .contrasenia(passwordEncoder.encode(dto.contraseniaNueva()))
+                .build();
+        
+        @SuppressWarnings("null")
+        Usuario guardado = usuarioRepository.save(actualizado);
+        return convertirADTO(guardado);
     }
     
     // ==================== LÓGICA DE NEGOCIO ====================
@@ -206,6 +217,22 @@ public class UsuarioService {
     }
     
     // ==================== CONVERSIONES ====================
+    
+    /**
+     * Construye un Usuario actualizado preservando campos inmutables
+     */
+    private Usuario.UsuarioBuilder builderDesdeExistente(Usuario original) {
+        return Usuario.builder()
+                .id(original.getId())
+                .nombre(original.getNombre())
+                .email(original.getEmail())
+                .contrasenia(original.getContrasenia())
+                .fecha_registro(original.getFecha_registro())
+                .avatar(original.getAvatar())
+                .rol(original.getRol())
+                .activo(original.isActivo())
+                .interacciones(original.getInteracciones());
+    }
     
     private UsuarioDTO convertirADTO(Usuario usuario) {
         return new UsuarioDTO(
