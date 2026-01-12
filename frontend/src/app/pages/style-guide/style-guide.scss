@@ -5,7 +5,7 @@
 
 @use 'styles/00-settings/variables' as *;
 @use 'styles/01-tools/mixins' as *;
-@use 'styles/04-objects/grid' as *;
+@use 'styles/04-layout/grid' as *;
 
 .style-guide {
   display: flex;

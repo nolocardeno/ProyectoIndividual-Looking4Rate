@@ -8,12 +8,12 @@ import { EventBusService } from '../../../services/event-bus.service';
 type ThemePreference = 'dark' | 'light' | 'system';
 
 @Component({
-  selector: 'app-theme-toggle',
+  selector: 'app-theme-switcher',
   standalone: true,
-  templateUrl: './theme-toggle.html',
-  styleUrl: './theme-toggle.scss',
+  templateUrl: './theme-switcher.html',
+  styleUrl: './theme-switcher.scss',
 })
-export class ThemeToggle implements OnInit, AfterViewInit, OnDestroy {
+export class ThemeSwitcher implements OnInit, AfterViewInit, OnDestroy {
   /** Servicios inyectados */
   private stateService = inject(StateService);
   private eventBus = inject(EventBusService);

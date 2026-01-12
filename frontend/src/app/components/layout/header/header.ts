@@ -5,13 +5,13 @@ import { Subscription } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SearchBox } from '../../shared/search-box/search-box';
 import { Button } from '../../shared/button/button';
-import { ThemeToggle } from '../../shared/theme-toggle/theme-toggle';
+import { ThemeSwitcher } from '../../shared/theme-switcher/theme-switcher';
 import { UserDropdown } from '../../shared/user-dropdown/user-dropdown';
 import { AuthService, AuthState } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink, FontAwesomeModule, SearchBox, Button, ThemeToggle, UserDropdown],
+  imports: [CommonModule, RouterLink, FontAwesomeModule, SearchBox, Button, ThemeSwitcher, UserDropdown],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

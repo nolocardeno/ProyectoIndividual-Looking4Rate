@@ -3,6 +3,7 @@
 // Variables CSS para temas claro y oscuro
 // ==========================================================================
 
+@use 'sass:color';
 @use 'variables' as *;
 
 // --------------------------------------------------------------------------
@@ -29,6 +30,24 @@
 
   // Color de borde
   --border-color: #{$color-secondary-dark};
+
+  // Colores de sombra
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 2px 0 var(--shadow-color);
+  --shadow-md: 0 4px 6px -1px var(--shadow-color);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-color);
+  --shadow-xl: 0 20px 25px -5px var(--shadow-color);
+  --shadow-glow-accent: 0 0 20px rgba(0, 184, 148, 0.3);
+
+  // Estados hover
+  --bg-hover: #{color.adjust($color-primary-dark, $lightness: 5%)};
+  --bg-active: #{color.adjust($color-primary-dark, $lightness: 3%)};
+  --border-hover: #{$color-accent-dark};
+  --text-hover: #{$color-accent-dark};
+
+  // Hero overlay - gradientes (valores para máscara)
+  --hero-gradient-side: 30%;
+  --hero-gradient-bottom: 50%;
 }
 
 // --------------------------------------------------------------------------
@@ -60,4 +79,22 @@
   // Color de borde
   --border-color: #{$color-secondary-light};
   --border-header-footer: #{$color-secondary-dark}; // Mantener oscuro
+
+  // Colores de sombra (más suaves en modo claro)
+  --shadow-color: rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 1px 2px 0 var(--shadow-color);
+  --shadow-md: 0 4px 6px -1px var(--shadow-color);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-color);
+  --shadow-xl: 0 20px 25px -5px var(--shadow-color);
+  --shadow-glow-accent: 0 0 20px rgba(10, 124, 255, 0.2);
+
+  // Estados hover
+  --bg-hover: #{color.adjust($color-primary-light, $lightness: -5%)};
+  --bg-active: #{color.adjust($color-primary-light, $lightness: -3%)};
+  --border-hover: #{$color-accent-light};
+  --text-hover: #{$color-accent-light};
+
+  // Hero overlay - gradientes más suaves para mostrar más imagen
+  --hero-gradient-side: 22%;
+  --hero-gradient-bottom: 40%;
 }

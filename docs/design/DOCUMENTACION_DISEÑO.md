@@ -29,6 +29,10 @@
 	- [5.3 Resultados de optimización](#53-resultados-de-optimización)
 	- [5.4 Tecnologías implementadas](#54-tecnologías-implementadas)
 	- [5.5 Animaciones CSS](#55-animaciones-css)
+- [Sección 6: Sistema de temas](#sección-6-sistema-de-temas)
+	- [6.1 Variables de tema](#61-variables-de-tema)
+	- [6.2 Implementación del Theme Switcher](#62-implementación-del-theme-switcher)
+	- [6.3 Capturas de pantalla](#63-capturas-de-pantalla)
 # Sección 1: Arquitectura CSS y comunicación visual.
 ## 1.1 Principios de comunicación visual
 
@@ -51,7 +55,9 @@ Se repiten patrones visuales como el estilo de botones, tarjetas, iconografía y
 
 ### Ejemplo visual
 
-![Captura de pantalla de la interfaz de Looking4Rate](./img/pagina-inicio-figma.png)
+| Diseño en Figma |
+|:---------------:|
+| ![Captura de pantalla de la interfaz de Looking4Rate](./img/pagina-inicio-figma.png) |
 
 A continuación se señalan ejemplos concretos de cada principio en la interfaz de Looking4Rate, según la captura de pantalla:
 
@@ -105,7 +111,7 @@ El orden de las carpetas sigue el principio de menor a mayor especificidad:
 2. **01-tools:** Mixins y funciones Sass que ayudan a generar estilos reutilizables y dinámicos.
 3. **02-generic:** Estilos genéricos como resets y normalizaciones que afectan a todos los elementos.
 4. **03-elements:** Estilos para elementos HTML básicos (`h1`, `p`, `ul`, `button`, etc.), sin clases.
-5. **04-objects:** Estructuras de layout y sistemas de grid, que definen la organización visual sin aplicar estilos específicos.
+5. **04-layout:** Estructuras de layout y sistemas de grid, que definen la organización visual sin aplicar estilos específicos.
 6. **05-components:** Componentes reutilizables y específicos de la interfaz, como tarjetas, botones, formularios, etc.
 7. **06-utilities:** Clases utilitarias para aplicar estilos rápidos y específicos (márgenes, alineaciones, colores, etc.).
 
@@ -123,7 +129,7 @@ src/
 			_reset.scss
 		03-elements/
 			_elements.scss
-		04-objects/
+		04-layout/
 			_grid.scss
 		05-components/
 			(vacío o componentes específicos)
@@ -659,7 +665,7 @@ Por tanto, se mantendrá la estrategia **Emulated** en la mayoría de los compon
 
 En Looking4Rate se utiliza un enfoque híbrido para la gestión de estilos, combinando la organización global mediante ITCSS y la encapsulación por componente que ofrece Angular.
 
-- **ITCSS** estructura los estilos globales en el archivo `main.scss`, donde se importan variables, mixins, resets, elementos, objetos, componentes y utilidades. Esto garantiza coherencia, escalabilidad y facilidad de mantenimiento en los estilos compartidos por toda la aplicación.
+- **ITCSS** estructura los estilos globales en el archivo `main.scss`, donde se importan variables, mixins, resets, elementos, layout, componentes y utilidades. Esto garantiza coherencia, escalabilidad y facilidad de mantenimiento en los estilos compartidos por toda la aplicación.
 - **Encapsulación Angular (ViewEncapsulation.Emulated)** se aplica en los estilos de cada componente, asegurando que las reglas CSS definidas en el archivo de estilos de un componente solo afecten a ese componente. Así se evitan fugas de estilos y conflictos entre componentes.
 
 Este enfoque permite:
@@ -685,7 +691,7 @@ Se utiliza para definir el encabezado principal de la aplicación, que contiene 
     </a>
 
     <nav class="header__actions">
-      <app-theme-toggle></app-theme-toggle>
+      <app-theme-switcher></app-theme-switcher>
       <app-button (click)="loginClick.emit()">INICIAR SESIÓN</app-button>
       <app-button (click)="registerClick.emit()">CREAR CUENTA</app-button>
       <app-search-box 
@@ -1280,17 +1286,17 @@ platformOptions: SelectOption[] = [
 
 ---
 
-### ThemeToggle (`app-theme-toggle`)
+### ThemeSwitcher (`app-theme-switcher`)
 
 **Propósito:** Botón toggle para cambiar entre modo oscuro y modo claro de la aplicación.
 
 **Estados que maneja:**
-- Modo oscuro (default): Muestra icono de sol
-- Modo claro: Muestra icono de luna
+- Modo oscuro (default): Muestra icono de luna
+- Modo claro: Muestra icono de sol
 
 **Ejemplo de uso:**
 ```html
-<app-theme-toggle></app-theme-toggle>
+<app-theme-switcher></app-theme-switcher>
 ```
 
 ---
@@ -2083,49 +2089,65 @@ El Style Guide está organizado en **7 pestañas** mediante navegación con tabs
 
 #### Vista general con Tabs
 
-![Style Guide - Vista General](./img/style-guide-overview.png)
+| Vista General |
+|:-------------:|
+| ![Style Guide - Vista General](./img/style-guide-overview.png) |
 
 *Vista general del Style Guide mostrando la navegación por tabs y el encabezado.*
 
 #### Tab de Botones
 
-![Style Guide - Botones](./img/style-guide-buttons.png)
+| Tab Botones |
+|:-----------:|
+| ![Style Guide - Botones](./img/style-guide-buttons.png) |
 
 *Tab de Botones mostrando las 4 variantes (primary, secondary, ghost, danger), los 3 tamaños (sm, md, lg) y estados (normal, disabled).*
 
 #### Tab de Formularios
 
-![Style Guide - Formularios](./img/style-guide-forms.png)
+| Tab Formularios |
+|:---------------:|
+| ![Style Guide - Formularios](./img/style-guide-forms.png) |
 
 *Tab de Formularios con Form Input (normal, con ayuda, con error, deshabilitado, password, email), Textarea (normal, con contador) y Select.*
 
 #### Tab de Navegación
 
-![Style Guide - Navegación](./img/style-guide-navigation.png)
+| Tab Navegación |
+|:--------------:|
+| ![Style Guide - Navegación](./img/style-guide-navigation.png) |
 
-*Tab de Navegación mostrando SearchBox, ThemeToggle y Pagination.*
+*Tab de Navegación mostrando SearchBox, ThemeSwitcher y Pagination.*
 
 #### Tab de Feedback
 
-![Style Guide - Feedback](./img/style-guide-feedback.png)
+| Tab Feedback |
+|:------------:|
+| ![Style Guide - Feedback](./img/style-guide-feedback.png) |
 
 *Tab de Feedback con Alertas (4 tipos), botones para disparar Notificaciones Toast, Spinner Global (3 variantes) y Spinner Inline (5 tamaños, 5 colores).*
 
 #### Tab de Cards
 
-![Style Guide - Cards](./img/style-guide-cards.png)
+| Tab Cards |
+|:---------:|
+| ![Style Guide - Cards](./img/style-guide-cards.png) |
 
 *Tab de Cards mostrando Platform Badges, Game Cover (3 tamaños) y Game Card completo.*
 
 #### Tab de Layout
 
-![Style Guide - Layout](./img/style-guide-layout.png)
+| Tab Layout |
+|:----------:|
+| ![Style Guide - Layout](./img/style-guide-layout.png) |
 
 *Tab de Layout con Featured Section y grid de portadas de juegos.*
 
 #### Tab de Interactivos
 
-![Style Guide - Interactivos](./img/style-guide-interactivos.png)
+| Tab Interactivos |
+|:----------------:|
+| ![Style Guide - Interactivos](./img/style-guide-interactivos.png) |
 
 *Tab de Interactivos mostrando Tabs anidadas y Accordion con múltiples items.*
 
@@ -2403,58 +2425,37 @@ Se creó un mixin genérico para facilitar la implementación de Container Queri
 
 ### Página Home
 
-#### Desktop (1280px)
-![Home Desktop](./img/pagina-home-1280px.png)
+| Desktop (1280px) | Tablet (768px) | Móvil (375px) |
+|:----------------:|:--------------:|:-------------:|
+| ![Home Desktop](./img/pagina-home-1280px.png) | ![Home Tablet](./img/pagina-home-768px.png) | ![Home Mobile](./img/pagina-home-375px.png) |
 
-*Vista desktop con hero a pantalla completa, navegación horizontal y grid de 5 carátulas por fila.*
-
-#### Tablet (768px)
-![Home Tablet](./img/pagina-home-768px.png)
-
-*Vista tablet con hero reducido, carátulas en flex-wrap centradas y menú hamburguesa.*
-
-#### Móvil (375px)
-![Home Mobile](./img/pagina-home-375px.png)
-
-*Vista móvil con menú hamburguesa, búsqueda expandible y carátulas centradas en filas flexibles.*
+*Desktop: hero a pantalla completa, navegación horizontal y grid de 5 carátulas por fila.  
+Tablet: hero reducido, carátulas en flex-wrap centradas y menú hamburguesa.  
+Móvil: menú hamburguesa, búsqueda expandible y carátulas centradas en filas flexibles.*
 
 ---
 
 ### Página Game Detail
 
-#### Desktop (1280px)
-![Game Detail Desktop](./img/pagina-game-detail-1280px.png)
+| Desktop (1280px) | Tablet (768px) | Móvil (375px) |
+|:----------------:|:--------------:|:-------------:|
+| ![Game Detail Desktop](./img/pagina-game-detail-1280px.png) | ![Game Detail Tablet](./img/pagina-game-detail-768px.png) | ![Game Detail Mobile](./img/pagina-game-detail-375px.png) |
 
-*Vista desktop con layout de 2 columnas: carátula a la izquierda, información y panel de interacción a la derecha.*
-
-#### Tablet (768px)
-![Game Detail Tablet](./img/pagina-game-detail-768px.png)
-
-*Vista tablet manteniendo 2 columnas pero con proporciones ajustadas.*
-
-#### Móvil (375px)
-![Game Detail Mobile](./img/pagina-game-detail-375px.png)
-
-*Vista móvil con layout de 1 columna: carátula arriba, información abajo, botones de interacción en fila horizontal.*
+*Desktop: layout de 2 columnas (carátula izquierda, información y panel de interacción derecha).  
+Tablet: mantiene 2 columnas con proporciones ajustadas.  
+Móvil: layout de 1 columna (carátula arriba, información abajo, botones de interacción en fila horizontal).*
 
 ---
 
 ### Página Search
 
-#### Desktop (1280px)
-![Search Desktop](./img/pagina-search-1280px.png)
+| Desktop (1280px) | Tablet (768px) | Móvil (375px) |
+|:----------------:|:--------------:|:-------------:|
+| ![Search Desktop](./img/pagina-search-1280px.png) | ![Search Tablet](./img/pagina-search-768px.png) | ![Search Mobile](./img/pagina-search-375px.png) |
 
-*Vista desktop con tarjetas de resultados amplias mostrando carátula, título, desarrollador y plataformas.*
-
-#### Tablet (768px)
-![Search Tablet](./img/pagina-search-768px.png)
-
-*Vista tablet con tarjetas adaptadas, carátulas de 10rem y badges legibles.*
-
-#### Móvil (375px)
-![Search Mobile](./img/pagina-search-375px.png)
-
-*Vista móvil con tarjetas compactas gracias a Container Queries, carátulas de 8rem y botón "Mostrar más" prominente.*
+*Desktop: tarjetas de resultados amplias mostrando carátula, título, desarrollador y plataformas.  
+Tablet: tarjetas adaptadas, carátulas de 10rem y badges legibles.  
+Móvil: tarjetas compactas gracias a Container Queries, carátulas de 8rem y botón "Mostrar más" prominente.*
 
 ---
 
@@ -2807,7 +2808,7 @@ $transition-ease: ease-in-out;
 | Links | game-detail.scss | `color` | 200ms |
 | Star rating | star-rating.scss | `transform` | 150ms |
 | Search box | search-box.scss | `border-color` | 300ms |
-| Theme toggle | theme-toggle.scss | `transform` | 300ms |
+| Theme switcher | theme-switcher.scss | `transform` | 300ms |
 | User dropdown | user-dropdown.scss | `background` | 200ms |
 | Cards | search-game-card.scss | `transform`, `box-shadow` | 300ms |
 | Tabs | tabs.scss | `color`, `border` | 200ms |
@@ -2835,3 +2836,340 @@ $transition-ease: ease-in-out;
 | Hover transitions | Transition | transform, opacity | 150-300ms |
 
 **Total:** 9 animaciones diferentes, todas cumpliendo las reglas de rendimiento.
+
+---
+
+# Sección 6: Sistema de temas
+
+El sistema de temas de Looking4Rate permite al usuario alternar entre modo oscuro (por defecto) y modo claro, con detección automática de preferencias del sistema y persistencia de la elección.
+
+## 6.1 Variables de tema
+
+Las variables CSS se definen en `frontend/src/styles/00-settings/_css-variables.scss` usando CSS Custom Properties que permiten el cambio dinámico de tema sin recargar la página.
+
+### Modo Oscuro (por defecto en `:root`)
+
+```scss
+:root {
+  // Colores de fondo
+  --bg-primary: #16181C;
+  --bg-secondary: #384A5B;
+  --bg-header-footer: #0D0E11;
+
+  // Colores de texto
+  --text-primary: #F2F4F8;
+  --text-secondary: #AAB4C0;
+
+  // Color de acento
+  --color-accent: #00B894;
+
+  // Colores semánticos
+  --color-error: #D46363;
+  --color-success: #B5D366;
+  --color-warning: #F59E42;
+  --color-info: #3B82F6;
+
+  // Color de borde
+  --border-color: #384A5B;
+
+  // Colores de sombra
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 2px 0 var(--shadow-color);
+  --shadow-md: 0 4px 6px -1px var(--shadow-color);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-color);
+  --shadow-xl: 0 20px 25px -5px var(--shadow-color);
+  --shadow-glow-accent: 0 0 20px rgba(0, 184, 148, 0.3);
+
+  // Estados hover/active
+  --bg-hover: #1E2127;
+  --bg-active: #1B1D22;
+  --border-hover: #00B894;
+  --text-hover: #00B894;
+
+  // Hero overlay
+  --hero-gradient-side: 30%;
+  --hero-gradient-bottom: 50%;
+}
+```
+
+### Modo Claro (`[data-theme='light']`)
+
+```scss
+[data-theme='light'] {
+  // Colores de fondo
+  --bg-primary: #E8EAED;
+  --bg-secondary: #C5C9CE;
+  --bg-header-footer: #0D0E11; // Mantiene oscuro para contraste
+
+  // Colores de texto
+  --text-primary: #1A1A1A;
+  --text-secondary: #2D2D2D;
+  
+  // Colores para header/footer (mantienen texto claro)
+  --text-header-footer: #F2F4F8;
+  --text-header-footer-alt: #AAB4C0;
+
+  // Color de acento (azul para modo claro)
+  --color-accent: #0A7CFF;
+
+  // Colores semánticos
+  --color-error: #EF4444;
+  --color-success: #22C55E;
+  --color-warning: #F59E42;
+  --color-info: #3B82F6;
+
+  // Color de borde
+  --border-color: #C5C9CE;
+  --border-header-footer: #384A5B;
+
+  // Colores de sombra (más suaves)
+  --shadow-color: rgba(0, 0, 0, 0.15);
+  --shadow-glow-accent: 0 0 20px rgba(10, 124, 255, 0.2);
+
+  // Estados hover/active
+  --bg-hover: #DFE1E4;
+  --bg-active: #E2E4E7;
+  --border-hover: #0A7CFF;
+  --text-hover: #0A7CFF;
+
+  // Hero overlay (más suave para mostrar más imagen)
+  --hero-gradient-side: 22%;
+  --hero-gradient-bottom: 40%;
+}
+```
+
+### Tabla comparativa de variables
+
+| Variable | Modo Oscuro | Modo Claro | Propósito |
+|----------|-------------|------------|-----------|
+| `--bg-primary` | #16181C | #E8EAED | Fondo principal |
+| `--bg-secondary` | #384A5B | #C5C9CE | Fondo secundario |
+| `--text-primary` | #F2F4F8 | #1A1A1A | Texto principal |
+| `--text-secondary` | #AAB4C0 | #2D2D2D | Texto secundario |
+| `--color-accent` | #00B894 | #0A7CFF | Color de acento |
+| `--border-color` | #384A5B | #C5C9CE | Bordes |
+| `--shadow-color` | rgba(0,0,0,0.3) | rgba(0,0,0,0.15) | Base de sombras |
+
+## 6.2 Implementación del Theme Switcher
+
+### Componente ThemeSwitcher
+
+**Ubicación:** `frontend/src/app/components/shared/theme-switcher/`
+
+El componente `ThemeSwitcher` es un toggle visual que permite cambiar entre temas y se ubica en el header de la aplicación.
+
+```typescript
+// theme-switcher.ts
+@Component({
+  selector: 'app-theme-switcher',
+  standalone: true,
+  templateUrl: './theme-switcher.html',
+  styleUrl: './theme-switcher.scss',
+})
+export class ThemeSwitcher implements OnInit, AfterViewInit, OnDestroy {
+  isDarkMode = true;
+  private prefersDarkScheme: MediaQueryList | null = null;
+
+  ngOnInit(): void {
+    if (this.isBrowser) {
+      this.initializeTheme();
+      this.setupSystemPreferenceListener();
+      this.subscribeToStateService();
+    }
+  }
+
+  // Inicializa el tema con prioridad:
+  // 1. Preferencia guardada en localStorage
+  // 2. Preferencia del sistema (prefers-color-scheme)
+  // 3. Tema oscuro por defecto
+  private initializeTheme(): void {
+    const stateTheme = this.stateService.getState().ui.theme;
+    
+    if (stateTheme === 'light') {
+      this.isDarkMode = false;
+      this.applyTheme('light');
+    } else if (stateTheme === 'dark') {
+      this.isDarkMode = true;
+      this.applyTheme('dark');
+    } else {
+      // Detectar preferencia del sistema
+      this.prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+      this.isDarkMode = this.prefersDarkScheme.matches;
+      this.applyTheme(this.isDarkMode ? 'dark' : 'light');
+    }
+  }
+
+  // Aplica el tema modificando data-theme en <html>
+  private applyTheme(theme: 'dark' | 'light'): void {
+    if (theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }
+
+  // Toggle del tema
+  toggleTheme(event?: Event): void {
+    this.isDarkMode = !this.isDarkMode;
+    const theme = this.isDarkMode ? 'dark' : 'light';
+    this.applyTheme(theme);
+    this.stateService.setTheme(theme); // Guarda en localStorage
+  }
+}
+```
+
+### Template del Toggle
+
+```html
+<!-- theme-switcher.html -->
+<button 
+  #toggleButton
+  class="theme-switcher" 
+  (click)="toggleTheme($event)"
+  (keydown)="onKeyDown($event)"
+  [attr.aria-label]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+  [attr.aria-pressed]="!isDarkMode"
+  role="switch"
+  type="button">
+  <span class="theme-switcher__track">
+    <!-- Icono Luna -->
+    <svg class="theme-switcher__icon theme-switcher__icon--moon" viewBox="0 0 24 24">
+      <path d="M21.752 15.002A9.718..."/>
+    </svg>
+    <!-- Icono Sol -->
+    <svg class="theme-switcher__icon theme-switcher__icon--sun" viewBox="0 0 24 24">
+      <path d="M12 2.25a.75.75..."/>
+    </svg>
+    <!-- Thumb deslizable -->
+    <span class="theme-switcher__thumb" 
+          [class.theme-switcher__thumb--light]="!isDarkMode">
+    </span>
+  </span>
+</button>
+```
+
+### Ubicación en Header
+
+El componente se incluye en el header tanto en versión desktop como móvil:
+
+```html
+<!-- header.html -->
+<header class="header">
+  <!-- Navegación desktop -->
+  <nav class="header__actions header__actions--desktop">
+    <app-theme-switcher></app-theme-switcher>
+    <!-- ... otros elementos -->
+  </nav>
+
+  <!-- Controles móvil -->
+  <menu class="header__mobile-controls">
+    <app-theme-switcher></app-theme-switcher>
+    <!-- ... otros elementos -->
+  </menu>
+</header>
+```
+
+### Detección de preferencia del sistema
+
+```typescript
+private setupSystemPreferenceListener(): void {
+  if (!this.prefersDarkScheme) {
+    this.prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+  }
+  
+  // Escuchar cambios en la preferencia del sistema
+  this.prefersDarkScheme.addEventListener('change', (e: MediaQueryListEvent) => {
+    const stateTheme = this.stateService.getState().ui.theme;
+    if (stateTheme === 'system') {
+      this.isDarkMode = e.matches;
+      this.applyTheme(this.isDarkMode ? 'dark' : 'light');
+    }
+  });
+}
+```
+
+### Prioridad de temas
+
+| Prioridad | Fuente | Descripción |
+|-----------|--------|-------------|
+| 1 | localStorage | Tema guardado por el usuario |
+| 2 | `prefers-color-scheme` | Preferencia del sistema operativo |
+| 3 | Tema oscuro | Valor por defecto |
+
+### Transiciones suaves entre temas
+
+Las transiciones están configuradas en `_elements.scss` para un cambio suave (300ms):
+
+```scss
+// frontend/src/styles/03-elements/_elements.scss
+html {
+  background-color: var(--bg-primary);
+  transition: background-color $transition-base $transition-ease; // 300ms
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color $transition-base $transition-ease,
+              color $transition-base $transition-ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  transition: color $transition-base $transition-ease;
+}
+
+p {
+  color: var(--text-secondary);
+  transition: color $transition-base $transition-ease;
+}
+
+input, textarea, select {
+  transition: border-color $transition-base $transition-ease,
+              color $transition-base $transition-ease;
+}
+```
+
+### Hero con transición suave
+
+El hero usa `mask-image` con CSS Custom Properties para transiciones suaves:
+
+```scss
+// frontend/src/app/pages/home/home.scss
+.hero__overlay {
+  background-color: var(--bg-primary);
+  transition: background-color $transition-base $transition-ease;
+  
+  // Máscara con variables CSS para intensidad diferente por tema
+  mask-image: 
+    linear-gradient(to right, black 0%, transparent var(--hero-gradient-side)),
+    linear-gradient(to left, black 0%, transparent var(--hero-gradient-side)),
+    linear-gradient(to top, black 0%, transparent var(--hero-gradient-bottom));
+}
+```
+
+## 6.3 Capturas de pantalla
+
+### Home - Modo Oscuro vs Modo Claro
+
+| Modo Oscuro | Modo Claro |
+|-------------|------------|
+| ![Home Dark](img/home-dark-mode.png) | ![Home Light](img/home-light-mode.png) |
+
+*La página principal muestra el hero con viñeta adaptativa y las tarjetas de juegos con colores invertidos.*
+
+### Perfil - Modo Oscuro vs Modo Claro
+
+| Modo Oscuro | Modo Claro |
+|-------------|------------|
+| ![Profile Dark](img/profile-dark-mode.png) | ![Profile Light](img/profile-light-mode.png) |
+
+*El perfil de usuario con estadísticas, tabs de navegación y grid de juegos adaptado a cada tema.*
+
+### Detalle de Juego - Modo Oscuro vs Modo Claro
+
+| Modo Oscuro | Modo Claro |
+|-------------|------------|
+| ![Game Detail Dark](img/details-dark-mode.png) | ![Game Detail Light](img/details-light-mode.png) |
+
+*La página de detalle con información del juego, panel de interacciones y reviews con colores adaptados.*

@@ -46,19 +46,27 @@
   }
   
   // Overlay con gradientes laterales para efecto Letterboxd
+  // Usa mask-image para que solo el background-color haga transición
   &__overlay {
     position: absolute;
     inset: 0;
     z-index: 1;
-    // Gradientes que se desvanecen desde el centro hacia los lados
-    // Usa var(--bg-primary) para adaptarse automáticamente al tema
-    background: 
-      // Gradiente izquierdo
-      linear-gradient(to right, var(--bg-primary) 0%, transparent 30%),
-      // Gradiente derecho  
-      linear-gradient(to left, var(--bg-primary) 0%, transparent 30%),
-      // Gradiente inferior
-      linear-gradient(to top, var(--bg-primary) 0%, transparent 50%);
+    // Color sólido que hace transición suave entre temas
+    background-color: var(--bg-primary);
+    transition: background-color $transition-base $transition-ease;
+    
+    // Máscara que define dónde se ve el color (negro = visible, transparente = invisible)
+    // Usa variables CSS para ajustar intensidad por tema
+    -webkit-mask-image: 
+      linear-gradient(to right, black 0%, transparent var(--hero-gradient-side)),
+      linear-gradient(to left, black 0%, transparent var(--hero-gradient-side)),
+      linear-gradient(to top, black 0%, transparent var(--hero-gradient-bottom));
+    -webkit-mask-composite: source-over;
+    mask-image: 
+      linear-gradient(to right, black 0%, transparent var(--hero-gradient-side)),
+      linear-gradient(to left, black 0%, transparent var(--hero-gradient-side)),
+      linear-gradient(to top, black 0%, transparent var(--hero-gradient-bottom));
+    mask-composite: add;
   }
   
   // Contenido centrado con padding

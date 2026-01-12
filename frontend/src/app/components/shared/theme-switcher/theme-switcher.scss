@@ -3,7 +3,7 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 // ==========================================================================
-// THEME TOGGLE COMPONENT
+// THEME SWITCHER COMPONENT
 // Boton toggle para cambiar entre modo oscuro y claro
 // ==========================================================================
 
@@ -11,7 +11,7 @@
   display: block;
 }
 
-.theme-toggle {
+.theme-switcher {
   // --------------------------------------------------------------------------
   // Estilos base
   // --------------------------------------------------------------------------
@@ -110,7 +110,7 @@
   &:hover {
     transform: translateY(-1px);
     
-    .theme-toggle__track {
+    .theme-switcher__track {
       background: linear-gradient(
         180deg, 
         $color-primary-dark 0%,
@@ -131,7 +131,7 @@
   &:active {
     transform: translateY(0);
     
-    .theme-toggle__track {
+    .theme-switcher__track {
       box-shadow: $shadow-active-accent;
     }
   }
@@ -149,7 +149,7 @@
 
 // Movil (640px)
 @media (max-width: $breakpoint-sm) {
-  .theme-toggle {
+  .theme-switcher {
     &__track {
       width: 42px;
       height: 22px;

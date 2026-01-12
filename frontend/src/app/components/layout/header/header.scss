@@ -403,12 +403,14 @@
       
       // Forzar que el buscador ocupe todo el ancho
       ::ng-deep .search-box {
-        width: 100% !important;
+        width: 100%;
+        max-width: none;
         height: 3rem;
         
         .search-box__input {
           flex: 1;
-          width: 100% !important;
+          width: 100%;
+          max-width: none;
           min-width: 0;
           font-size: $font-size-md;
           padding: $spacing-2 $spacing-3;

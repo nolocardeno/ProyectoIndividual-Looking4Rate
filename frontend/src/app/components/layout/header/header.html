@@ -23,7 +23,7 @@
 
     <!-- Navegación desktop -->
     <nav class="header__actions header__actions--desktop">
-      <app-theme-toggle></app-theme-toggle>
+      <app-theme-switcher></app-theme-switcher>
       
       <!-- Mostrar botones de login/registro si NO está autenticado -->
       @if (!authState.isAuthenticated) {
@@ -52,7 +52,7 @@
     <!-- Controles móvil (solo visibles en móvil) -->
     <menu class="header__mobile-controls">
       <!-- Toggle de tema -->
-      <app-theme-toggle></app-theme-toggle>
+      <app-theme-switcher></app-theme-switcher>
       
       <!-- Botón de búsqueda móvil (solo icono) - abre buscador expandido -->
       <app-search-box 

@@ -11,7 +11,7 @@ import { GameCover } from '../../components/shared/game-cover/game-cover';
 import { GameCard, GamePlatform } from '../../components/shared/game-card/game-card';
 import { PlatformBadge } from '../../components/shared/platform-badge/platform-badge';
 import { SearchBox } from '../../components/shared/search-box/search-box';
-import { ThemeToggle } from '../../components/shared/theme-toggle/theme-toggle';
+import { ThemeSwitcher } from '../../components/shared/theme-switcher/theme-switcher';
 import { Pagination } from '../../components/shared/pagination/pagination';
 import { FeaturedSection } from '../../components/shared/featured-section/featured-section';
 import { Notification } from '../../components/shared/notification/notification';
@@ -34,7 +34,7 @@ import { NotificationService, LoadingService } from '../../services';
     GameCard,
     PlatformBadge,
     SearchBox,
-    ThemeToggle,
+    ThemeSwitcher,
     Pagination,
     FeaturedSection,
     Notification,
