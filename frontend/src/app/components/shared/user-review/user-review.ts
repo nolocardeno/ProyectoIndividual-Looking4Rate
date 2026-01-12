@@ -30,6 +30,6 @@ export class UserReviewComponent {
    * Obtiene la URL del avatar o retorna un avatar por defecto
    */
   get avatarUrl(): string {
-    return this.review.avatarUsuario || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + this.review.nombreUsuario;
+    return this.review.avatarUsuario || 'https://www.gravatar.com/avatar/?d=mp&s=512';
   }
 }

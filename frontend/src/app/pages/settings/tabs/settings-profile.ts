@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CanComponentDeactivate } from '../../../guards/can-deactivate.guard';
 import { Button } from '../../../components/shared/button/button';
-import { AuthService, UsuariosService } from '../../../services';
+import { AuthService, UsuariosService, NotificationService } from '../../../services';
 
 interface ProfileFormData {
   nombre: string;
@@ -22,6 +22,7 @@ interface ProfileFormData {
 export default class SettingsProfileTab implements OnInit, CanComponentDeactivate {
   private authService = inject(AuthService);
   private usuariosService = inject(UsuariosService);
+  private notificationService = inject(NotificationService);
   
   /** Datos originales del usuario */
   private originalData = signal<ProfileFormData>({
@@ -99,10 +100,10 @@ export default class SettingsProfileTab implements OnInit, CanComponentDeactivat
         });
         this.originalData.set({ ...this.formData() });
         this.saving.set(false);
-        alert('Perfil actualizado correctamente');
+        this.notificationService.success('Perfil actualizado correctamente');
       },
       error: () => {
-        alert('Error al guardar los cambios. Inténtalo de nuevo.');
+        this.notificationService.error('Error al guardar los cambios. Inténtalo de nuevo.');
         this.saving.set(false);
       }
     });

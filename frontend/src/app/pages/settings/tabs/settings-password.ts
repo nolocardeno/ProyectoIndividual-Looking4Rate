@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { Button } from '../../../components/shared/button/button';
-import { AuthService, UsuariosService } from '../../../services';
+import { AuthService, UsuariosService, NotificationService } from '../../../services';
 
 interface PasswordFormData {
   currentPassword: string;
@@ -24,6 +24,7 @@ const MIN_PASSWORD_LENGTH = 6;
 export default class SettingsPasswordTab {
   private authService = inject(AuthService);
   private usuariosService = inject(UsuariosService);
+  private notificationService = inject(NotificationService);
   
   /** Datos del formulario */
   formData = signal<PasswordFormData>({
@@ -37,9 +38,6 @@ export default class SettingsPasswordTab {
   
   /** Mensaje de error para la contraseña actual */
   currentPasswordError = signal<string | null>(null);
-  
-  /** Mensaje de éxito */
-  successMessage = signal<string | null>(null);
   
   /** Valida si el formulario es válido */
   isFormValid = computed(() => {
@@ -68,9 +66,6 @@ export default class SettingsPasswordTab {
     
     // Limpiar error de contraseña actual cuando el usuario empieza a escribir
     if (field === 'currentPassword') this.currentPasswordError.set(null);
-    
-    // Limpiar mensaje de éxito
-    this.successMessage.set(null);
   }
   
   /**
@@ -79,7 +74,6 @@ export default class SettingsPasswordTab {
   onSubmit(): void {
     // Limpiar mensajes
     this.currentPasswordError.set(null);
-    this.successMessage.set(null);
     
     const userId = this.authService.getCurrentUserId();
     if (!this.isFormValid() || this.saving() || !userId) return;
@@ -97,7 +91,7 @@ export default class SettingsPasswordTab {
           confirmPassword: ''
         });
         this.saving.set(false);
-        this.successMessage.set('Contraseña cambiada exitosamente');
+        this.notificationService.success('Contraseña cambiada exitosamente');
       },
       error: (error) => {
         this.saving.set(false);
@@ -107,12 +101,13 @@ export default class SettingsPasswordTab {
         const isWrongPassword = 
           error.statusCode === 401 || 
           error.type === 'unauthorized';
+        
+        const errorMessage = isWrongPassword 
+          ? 'La contraseña actual no es correcta'
+          : 'Error al cambiar la contraseña. Inténtalo de nuevo.';
           
-        this.currentPasswordError.set(
-          isWrongPassword 
-            ? 'La contraseña actual no es correcta'
-            : 'Error al cambiar la contraseña. Inténtalo de nuevo.'
-        );
+        this.currentPasswordError.set(errorMessage);
+        this.notificationService.error(errorMessage);
       }
     });
   }

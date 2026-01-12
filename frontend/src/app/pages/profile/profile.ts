@@ -70,7 +70,7 @@ export default class ProfilePage implements OnInit, OnDestroy {
   /** URL del avatar con fallback */
   avatarUrl = computed(() => {
     const user = this.usuario();
-    return user?.avatar || 'assets/img/avatars/default.png';
+    return user?.avatar || 'https://www.gravatar.com/avatar/?d=mp&s=512';
   });
 
   ngOnInit(): void {
