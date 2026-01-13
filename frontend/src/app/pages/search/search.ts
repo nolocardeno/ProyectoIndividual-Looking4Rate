@@ -1,12 +1,14 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy, ElementRef, ViewChild, AfterViewInit, PLATFORM_ID, NgZone } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, finalize } from 'rxjs';
-import { JuegosService } from '../../services';
+import { JuegosService, GameStateService } from '../../services';
 import { JuegoDTO } from '../../models';
 import { SearchGameCard, SearchGamePlatform, SearchGameDeveloper } from '../../components/shared/search-game-card/search-game-card';
 import { Button } from '../../components/shared/button/button';
 import { EmptyStateComponent } from '../../components/shared/empty-state/empty-state';
 import { SpinnerComponent } from '../../components/shared/spinner/spinner';
+import { SpinnerInline } from '../../components/shared/spinner-inline/spinner-inline';
 import { FeaturedSection } from '../../components/shared/featured-section/featured-section';
 
 /** Número de resultados por página */
@@ -21,14 +23,24 @@ const RESULTS_PER_PAGE = 5;
  */
 @Component({
   selector: 'app-search',
-  imports: [SearchGameCard, Button, EmptyStateComponent, SpinnerComponent, FeaturedSection],
+  imports: [SearchGameCard, Button, EmptyStateComponent, SpinnerComponent, SpinnerInline, FeaturedSection],
   templateUrl: './search.html',
   styleUrl: './search.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export default class SearchPage implements OnInit, OnDestroy {
+export default class SearchPage implements OnInit, OnDestroy, AfterViewInit {
   private route = inject(ActivatedRoute);
   private juegosService = inject(JuegosService);
+  private gameStateService = inject(GameStateService);
+  private platformId = inject(PLATFORM_ID);
+  private ngZone = inject(NgZone);
   private destroy$ = new Subject<void>();
+
+  /** Referencia al sentinel para Intersection Observer */
+  @ViewChild('loadMoreSentinel') loadMoreSentinel!: ElementRef<HTMLDivElement>;
+  
+  /** Observer para scroll infinito */
+  private intersectionObserver: IntersectionObserver | null = null;
 
   /** Término de búsqueda actual */
   searchQuery = signal('');
@@ -39,8 +51,11 @@ export default class SearchPage implements OnInit, OnDestroy {
   /** Número de resultados visibles */
   visibleCount = signal(RESULTS_PER_PAGE);
 
-  /** Estado de carga */
+  /** Estado de carga inicial */
   isLoading = signal(false);
+
+  /** Estado de carga de más resultados (scroll infinito) */
+  isLoadingMore = signal(false);
 
   /** Si hubo un error en la búsqueda */
   hasError = signal(false);
@@ -74,9 +89,72 @@ export default class SearchPage implements OnInit, OnDestroy {
       });
   }
 
+  ngAfterViewInit(): void {
+    this.setupIntersectionObserver();
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.destroyIntersectionObserver();
+  }
+
+  /**
+   * Configura el Intersection Observer para scroll infinito
+   */
+  private setupIntersectionObserver(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    this.intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && this.hasMoreResults() && !this.isLoadingMore()) {
+            this.ngZone.run(() => {
+              this.loadMoreResults();
+            });
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '100px',
+        threshold: 0.1
+      }
+    );
+  }
+
+  /**
+   * Observa el elemento sentinel cuando hay resultados
+   */
+  private observeSentinel(): void {
+    if (this.loadMoreSentinel?.nativeElement && this.intersectionObserver) {
+      this.intersectionObserver.observe(this.loadMoreSentinel.nativeElement);
+    }
+  }
+
+  /**
+   * Destruye el Intersection Observer
+   */
+  private destroyIntersectionObserver(): void {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+      this.intersectionObserver = null;
+    }
+  }
+
+  /**
+   * Carga más resultados (scroll infinito)
+   */
+  private loadMoreResults(): void {
+    if (this.isLoadingMore()) return;
+    
+    this.isLoadingMore.set(true);
+    
+    // Simular pequeño delay para UX
+    setTimeout(() => {
+      this.visibleCount.update((count) => count + RESULTS_PER_PAGE);
+      this.isLoadingMore.set(false);
+    }, 200);
   }
 
   /**
@@ -122,6 +200,9 @@ export default class SearchPage implements OnInit, OnDestroy {
       .then((results) => {
         const validResults = results.filter((r): r is JuegoDTO => r !== undefined);
         this.allResults.set(validResults);
+        
+        // Iniciar observación del sentinel después de que se renderice
+        setTimeout(() => this.observeSentinel(), 100);
       })
       .catch(() => {
         this.hasError.set(true);
@@ -130,10 +211,10 @@ export default class SearchPage implements OnInit, OnDestroy {
   }
 
   /**
-   * Muestra más resultados
+   * Muestra más resultados (para el botón manual)
    */
   showMoreResults(): void {
-    this.visibleCount.update((count) => count + RESULTS_PER_PAGE);
+    this.loadMoreResults();
   }
 
   /**
@@ -178,5 +259,12 @@ export default class SearchPage implements OnInit, OnDestroy {
    */
   getGameLink(gameId: number): string {
     return `/juego/${gameId}`;
+  }
+
+  /**
+   * TrackBy para optimizar el rendimiento de listas
+   */
+  trackByGameId(index: number, game: JuegoDTO): number {
+    return game.id;
   }
 }

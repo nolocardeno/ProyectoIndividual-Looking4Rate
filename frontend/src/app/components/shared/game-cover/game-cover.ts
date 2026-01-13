@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 /** Tamaños disponibles para la carátula */
@@ -9,6 +9,7 @@ export type GameCoverSize = 'sm' | 'md' | 'lg';
   imports: [RouterLink],
   templateUrl: './game-cover.html',
   styleUrl: './game-cover.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameCover {
   /** URL de la imagen de carátula */

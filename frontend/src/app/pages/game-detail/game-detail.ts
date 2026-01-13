@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, takeUntil, forkJoin, of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
@@ -12,6 +12,7 @@ import { JuegosService } from '../../services/juegos.service';
 import { InteraccionesService } from '../../services/interacciones.service';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
+import { GameStateService } from '../../services/game-state.service';
 import { JuegoDTO, InteraccionDTO, ReviewDTO } from '../../models';
 
 export interface UserReviewData {
@@ -36,7 +37,8 @@ export interface UserReviewData {
   selector: 'app-game-detail',
   imports: [RouterLink, GameCard, GameInteractionPanel, ReviewFormModal, UserReviewComponent, FeaturedSection],
   templateUrl: './game-detail.html',
-  styleUrl: './game-detail.scss'
+  styleUrl: './game-detail.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class GameDetailPage implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
@@ -44,6 +46,7 @@ export default class GameDetailPage implements OnInit, OnDestroy {
   private interaccionesService = inject(InteraccionesService);
   private authService = inject(AuthService);
   private notificationService = inject(NotificationService);
+  private gameStateService = inject(GameStateService);
   private destroy$ = new Subject<void>();
   
   /** ID del juego actual */
@@ -248,6 +251,8 @@ export default class GameDetailPage implements OnInit, OnDestroy {
       next: (interaction) => {
         this.userInteraction.set(interaction);
         this.interactionLoading.set(false);
+        // Actualizar estado global
+        this.gameStateService.upsertInteraction(interaction);
       },
       error: (err) => {
         console.error('Error actualizando estado de jugado:', err);
@@ -292,6 +297,8 @@ export default class GameDetailPage implements OnInit, OnDestroy {
     ).subscribe({
       next: (interaction) => {
         this.userInteraction.set(interaction);
+        // Actualizar estado global
+        this.gameStateService.upsertInteraction(interaction);
       },
       error: (err) => {
         console.error('Error actualizando puntuación:', err);
@@ -337,6 +344,10 @@ export default class GameDetailPage implements OnInit, OnDestroy {
         this.notificationService.success(
           this.hasReview ? 'Review actualizada correctamente' : 'Review guardada correctamente'
         );
+        
+        // Actualizar el estado global para sincronizar con otros componentes
+        this.gameStateService.upsertInteraction(interaction);
+        
         // Recargar las reviews del juego
         if (this.gameId) {
           this.loadGameReviews(this.gameId);

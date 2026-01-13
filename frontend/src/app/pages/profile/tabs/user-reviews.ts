@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, takeUntil, catchError, of } from 'rxjs';
 import { UpperCasePipe } from '@angular/common';
@@ -8,7 +8,7 @@ import { StarRating } from '../../../components/shared/star-rating/star-rating';
 import { Pagination } from '../../../components/shared/pagination/pagination';
 import { Button } from '../../../components/shared/button/button';
 import { FeaturedSection } from '../../../components/shared/featured-section/featured-section';
-import { InteraccionesService } from '../../../services';
+import { InteraccionesService, GameStateService, AuthService } from '../../../services';
 import { InteraccionDTO } from '../../../models';
 
 /** Número de reviews por página */
@@ -22,11 +22,14 @@ const REVIEWS_PER_PAGE = 5;
   selector: 'app-user-reviews',
   imports: [RouterLink, GameCover, StarRating, Pagination, Button, FeaturedSection, UpperCasePipe],
   templateUrl: './user-reviews.html',
-  styleUrl: './user-reviews.scss'
+  styleUrl: './user-reviews.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class UserReviewsTab implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private interaccionesService = inject(InteraccionesService);
+  private gameStateService = inject(GameStateService);
+  private authService = inject(AuthService);
   private destroy$ = new Subject<void>();
   
   /** ID del usuario */
@@ -76,6 +79,24 @@ export default class UserReviewsTab implements OnInit, OnDestroy {
         this.userId.set(id);
         if (id) {
           this.loadReviews();
+        }
+      });
+    
+    // Suscribirse a cambios del estado global para actualizar dinámicamente
+    this.gameStateService.updates$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        const currentUserId = this.authService.getCurrentUserId();
+        // Solo refrescar si es el perfil del usuario actual y hubo un cambio de review
+        if (this.userId() === currentUserId && 
+            (event.type === 'review-added' || 
+             event.type === 'interaction-updated' || 
+             event.type === 'interaction-deleted')) {
+          // Usar los datos del estado global en lugar de recargar
+          const userReviews = this.gameStateService.userReviews();
+          if (userReviews.length > 0) {
+            this.reviews.set(userReviews);
+          }
         }
       });
   }
@@ -140,5 +161,12 @@ export default class UserReviewsTab implements OnInit, OnDestroy {
     const month = months[date.getMonth()];
     const year = date.getFullYear();
     return `${day} ${month} ${year}`;
+  }
+
+  /**
+   * TrackBy para optimizar el rendimiento de la lista de reviews
+   */
+  trackByReviewId(index: number, review: InteraccionDTO): number {
+    return review.id;
   }
 }

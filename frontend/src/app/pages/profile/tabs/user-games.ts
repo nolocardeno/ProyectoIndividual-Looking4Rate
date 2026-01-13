@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, takeUntil, of, catchError } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { StarRating } from '../../../components/shared/star-rating/star-rating';
 import { Pagination } from '../../../components/shared/pagination/pagination';
 import { Button } from '../../../components/shared/button/button';
 import { FeaturedSection } from '../../../components/shared/featured-section/featured-section';
-import { InteraccionesService } from '../../../services';
+import { InteraccionesService, GameStateService, AuthService } from '../../../services';
 import { InteraccionDTO } from '../../../models';
 
 /** Número de juegos por página */
@@ -21,11 +21,14 @@ const GAMES_PER_PAGE = 15;
   selector: 'app-user-games',
   imports: [RouterLink, GameCover, StarRating, Pagination, Button, FeaturedSection],
   templateUrl: './user-games.html',
-  styleUrl: './user-games.scss'
+  styleUrl: './user-games.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class UserGamesTab implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private interaccionesService = inject(InteraccionesService);
+  private gameStateService = inject(GameStateService);
+  private authService = inject(AuthService);
   private destroy$ = new Subject<void>();
   
   /** ID del usuario */
@@ -77,6 +80,24 @@ export default class UserGamesTab implements OnInit, OnDestroy {
           this.loadGames();
         }
       });
+    
+    // Suscribirse a cambios del estado global para actualizar dinámicamente
+    this.gameStateService.updates$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        const currentUserId = this.authService.getCurrentUserId();
+        // Solo refrescar si es el perfil del usuario actual y hubo un cambio relevante
+        if (this.userId() === currentUserId && 
+            (event.type === 'interaction-created' || 
+             event.type === 'interaction-updated' || 
+             event.type === 'interaction-deleted')) {
+          // Usar los datos del estado global en lugar de recargar
+          const playedGames = this.gameStateService.playedGames();
+          if (playedGames.length > 0) {
+            this.games.set(playedGames);
+          }
+        }
+      });
   }
   
   /**
@@ -120,6 +141,13 @@ export default class UserGamesTab implements OnInit, OnDestroy {
   convertToStars(puntuacion: number | null): number | null {
     if (puntuacion === null) return null;
     return Math.round(puntuacion / 2);
+  }
+
+  /**
+   * TrackBy para optimizar el rendimiento de la lista de juegos
+   */
+  trackByGameId(index: number, game: InteraccionDTO): number {
+    return game.id;
   }
 
   ngOnDestroy(): void {

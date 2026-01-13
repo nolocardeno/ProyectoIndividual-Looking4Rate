@@ -35,6 +35,11 @@ export {
   StateService
 } from './state.service';
 
+export {
+  GameStateService,
+  type StateUpdateEvent
+} from './game-state.service';
+
 // ============================================
 // Servicios de carga
 // ============================================

@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { UpperCasePipe } from '@angular/common';
 import { Subject, takeUntil, forkJoin, of, catchError } from 'rxjs';
 
 import { Button } from '../../components/shared/button/button';
-import { AuthService, UsuariosService, InteraccionesService } from '../../services';
+import { AuthService, UsuariosService, InteraccionesService, GameStateService } from '../../services';
 import { UsuarioDTO, UserGameStats } from '../../models';
 
 /**
@@ -32,7 +32,8 @@ interface ProfileData {
   selector: 'app-profile',
   imports: [RouterLink, RouterLinkActive, RouterOutlet, UpperCasePipe, Button],
   templateUrl: './profile.html',
-  styleUrl: './profile.scss'
+  styleUrl: './profile.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class ProfilePage implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
@@ -40,6 +41,7 @@ export default class ProfilePage implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private usuariosService = inject(UsuariosService);
   private interaccionesService = inject(InteraccionesService);
+  private gameStateService = inject(GameStateService);
   private destroy$ = new Subject<void>();
   
   /** ID del usuario del perfil */
@@ -81,6 +83,23 @@ export default class ProfilePage implements OnInit, OnDestroy {
         this.userId.set(id);
         if (id) {
           this.loadProfileData(id);
+        }
+      });
+    
+    // Suscribirse a actualizaciones del estado global para refrescar stats
+    this.gameStateService.updates$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        const currentUserId = this.authService.getCurrentUserId();
+        // Solo actualizar si es el perfil del usuario actual
+        if (this.isOwnProfile() && currentUserId) {
+          // Usar las stats calculadas del estado global
+          const globalStats = this.gameStateService.userStats();
+          this.stats.set({
+            juegosJugados: globalStats.totalJuegos,
+            reviews: globalStats.juegosRevieweados,
+            seguidores: 0
+          });
         }
       });
   }

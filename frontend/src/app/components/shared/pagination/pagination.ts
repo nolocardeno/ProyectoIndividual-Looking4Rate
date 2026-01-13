@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Button } from '../button/button';
 
 /**
@@ -19,6 +19,7 @@ import { Button } from '../button/button';
   imports: [Button],
   templateUrl: './pagination.html',
   styleUrl: './pagination.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Pagination {
   /** Página actual (1-indexed) */

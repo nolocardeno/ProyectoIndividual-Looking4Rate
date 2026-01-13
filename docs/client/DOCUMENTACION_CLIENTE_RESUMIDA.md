@@ -2,6 +2,20 @@
 
 Documentación resumida del proyecto Angular.
 
+## 📑 Índice
+
+- [FASE 1: Arquitectura de Eventos](#fase-1-arquitectura-de-eventos-del-cliente)
+- [FASE 2: Servicios y Comunicación](#fase-2-servicios-y-comunicación)
+- [FASE 3: Formularios Reactivos](#fase-3-formularios-reactivos)
+- [FASE 4: Enrutamiento y Navegación](#fase-4-enrutamiento-y-navegación)
+- [FASE 5: Comunicación HTTP](#-fase-5-comunicación-http)
+- [FASE 6: Optimización y Estado](#-fase-6-optimización-y-gestión-de-estado)
+- [Arquitectura CSS](#-arquitectura-css)
+- [Tecnologías](#tecnologías)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+
+---
+
 ## Comandos Rápidos
 
 ```bash
@@ -284,6 +298,83 @@ retryOnError(maxRetries: number = 3) {
 - Toast de confirmación
 - Redirección automática
 - Actualización optimista de UI
+
+---
+
+## ⚡ FASE 6: Optimización y Gestión de Estado
+
+### Patrón de Estado: Angular Signals
+
+**¿Por qué Signals y no NgRx?**
+- Escala media del proyecto (NgRx sería excesivo)
+- Integración nativa en Angular (desde v16)
+- Mínimo boilerplate
+- Rendimiento óptimo con detección granular
+
+**GameStateService:**
+```typescript
+// Signals privados (mutables)
+private _userInteractions = signal<InteraccionDTO[]>([]);
+
+// Signals públicos (solo lectura)
+public readonly userInteractions = this._userInteractions.asReadonly();
+
+// Computed (derivados automáticamente)
+public readonly userStats = computed(() => ({
+  totalJuegos: this._userInteractions().filter(i => i.estadoJugado).length,
+  // ...
+}));
+```
+
+### Estrategias de Optimización
+
+**1. OnPush en 20+ componentes:**
+```typescript
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+```
+
+**2. TrackBy en iteraciones:**
+```html
+@for (game of games; track game.id) { }
+```
+
+**3. Async Pipe:**
+```html
+@if (authState$ | async; as auth) { }
+```
+
+**4. Debounce en búsqueda (300ms):**
+```typescript
+this.searchSubject.pipe(
+  debounceTime(300),
+  distinctUntilChanged()
+).subscribe(query => this.search.emit(query));
+```
+
+**5. Infinite Scroll con Intersection Observer:**
+```typescript
+this.intersectionObserver = new IntersectionObserver(entries => {
+  if (entry.isIntersecting && hasMore) {
+    this.loadMoreResults();
+  }
+}, { rootMargin: '100px', threshold: 0.1 });
+```
+
+**6. takeUntil para suscripciones:**
+```typescript
+data$.pipe(takeUntil(this.destroy$)).subscribe();
+```
+
+### Comparativa de Opciones
+
+| Opción | Decisión | Razón |
+|--------|----------|-------|
+| **Signals vs NgRx** | Signals | Menos boilerplate, nativo |
+| **Infinite vs Pagination** | Ambos | Infinite en búsqueda, paginación en perfil |
+| **OnPush vs Default** | OnPush | Rendimiento en 20+ componentes |
+| **RxJS debounce vs setTimeout** | RxJS | Cancelable, composable |
 
 ---
 

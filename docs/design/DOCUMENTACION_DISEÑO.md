@@ -2413,7 +2413,7 @@ Se creó un mixin genérico para facilitar la implementación de Container Queri
 |--------|------|-------------|-------------------|
 | **Home** | `/` | Página principal con hero y secciones de juegos | Hero responsive, grid de carátulas adaptativo, secciones con flex-wrap |
 | **Game Detail** | `/juego/:id` | Detalle de un juego con carátula, info y panel de interacción | Layout 2→1 columnas, panel horizontal en móvil |
-| **Search** | `/buscar` | Resultados de búsqueda de juegos | Cards con Container Queries, botón "mostrar más" escalable |
+| **Search** | `/buscar` | Resultados de búsqueda de juegos | Cards con Container Queries, scroll infinito con Intersection Observer |
 | **Profile** | `/perfil` | Perfil del usuario con estadísticas y listas | Grid adaptativo de estadísticas, listas responsive |
 | **Settings** | `/ajustes` | Configuración de cuenta del usuario | Formularios a ancho completo, inputs optimizados |
 | **Style Guide** | `/style-guide` | Catálogo de componentes UI | Grid de ejemplos adaptativo |
@@ -2455,7 +2455,7 @@ Móvil: layout de 1 columna (carátula arriba, información abajo, botones de in
 
 *Desktop: tarjetas de resultados amplias mostrando carátula, título, desarrollador y plataformas.  
 Tablet: tarjetas adaptadas, carátulas de 10rem y badges legibles.  
-Móvil: tarjetas compactas gracias a Container Queries, carátulas de 8rem y botón "Mostrar más" prominente.*
+Móvil: tarjetas compactas gracias a Container Queries, carátulas de 8rem y scroll infinito automático.*
 
 ---
 

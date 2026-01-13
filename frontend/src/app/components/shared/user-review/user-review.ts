@@ -5,7 +5,7 @@
  * Incluye avatar, nombre, puntuación y texto de la review.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,7 +13,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './user-review.html',
-  styleUrls: ['./user-review.scss']
+  styleUrls: ['./user-review.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserReviewComponent {
   /** Datos de la review */

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * Star Rating Component
@@ -24,7 +24,8 @@ import { Component, Input, Output, EventEmitter, HostListener } from '@angular/c
   selector: 'app-star-rating',
   imports: [],
   templateUrl: './star-rating.html',
-  styleUrl: './star-rating.scss'
+  styleUrl: './star-rating.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StarRating {
   /** Puntuación actual (1-5) */

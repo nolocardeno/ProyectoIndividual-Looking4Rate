@@ -35,13 +35,13 @@
   // Por defecto: 800px para móviles
   background: url('/assets/img/hero/hero-background-small.avif') center center / cover no-repeat;
   
-  // Tablets - 768px+: usar 1400px
-  @media (min-width: 768px) {
+  // Tablets: usar 1400px
+  @media (min-width: $breakpoint-md) {
     background-image: url('/assets/img/hero/hero-background-medium.avif');
   }
   
-  // Desktop - 1280px+: usar 1920px full resolution
-  @media (min-width: 1280px) {
+  // Desktop: usar 1920px full resolution
+  @media (min-width: $breakpoint-xl) {
     background-image: url('/assets/img/hero/hero-background-large.avif');
   }
   

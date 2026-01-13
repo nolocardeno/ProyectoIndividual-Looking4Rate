@@ -25,25 +25,28 @@
     <nav class="header__actions header__actions--desktop">
       <app-theme-switcher></app-theme-switcher>
       
-      <!-- Mostrar botones de login/registro si NO está autenticado -->
-      @if (!authState.isAuthenticated) {
-        <app-button variant="primary" size="md" (btnClick)="loginClick.emit()">INICIAR SESIÓN</app-button>
-        <app-button variant="primary" size="md" (btnClick)="registerClick.emit()">CREAR CUENTA</app-button>
+      <!-- Usar async pipe para gestión automática de suscripciones -->
+      @if (authState$ | async; as authState) {
+        <!-- Mostrar botones de login/registro si NO está autenticado -->
+        @if (!authState.isAuthenticated) {
+          <app-button variant="primary" size="md" (btnClick)="loginClick.emit()">INICIAR SESIÓN</app-button>
+          <app-button variant="primary" size="md" (btnClick)="registerClick.emit()">CREAR CUENTA</app-button>
+        }
+        
+        <!-- Mostrar dropdown de usuario si SÍ está autenticado -->
+        @if (authState.isAuthenticated && authState.user) {
+          <app-user-dropdown
+            [userName]="authState.user.nombre"
+            (navigateHome)="goToHome()"
+            (navigateProfile)="goToProfile()"
+            (navigateSettings)="goToSettings()"
+            (logoutClick)="logout()">
+          </app-user-dropdown>
+        }
       }
       
-      <!-- Mostrar dropdown de usuario si SÍ está autenticado -->
-      @if (authState.isAuthenticated && authState.user) {
-        <app-user-dropdown
-          [userName]="authState.user.nombre"
-          (navigateHome)="goToHome()"
-          (navigateProfile)="goToProfile()"
-          (navigateSettings)="goToSettings()"
-          (logoutClick)="logout()">
-        </app-user-dropdown>
-      }
-      
-      <app-search-box 
-        placeholder="Buscar juegos..."
+      <!-- Buscador desktop -->
+      <app-search-box
         [(value)]="searchQuery"
         (search)="onSearch($event)">
       </app-search-box>
@@ -86,36 +89,39 @@
       [attr.aria-hidden]="!isMenuOpen"
       role="menu">
       <ul class="header__mobile-menu-content">
-        @if (!authState.isAuthenticated) {
-          <li role="menuitem">
-            <app-button variant="primary" size="lg" (btnClick)="onLoginClick()">INICIAR SESIÓN</app-button>
-          </li>
-          <li role="menuitem">
-            <app-button variant="primary" size="lg" (btnClick)="onRegisterClick()">CREAR CUENTA</app-button>
-          </li>
-        }
-        
-        @if (authState.isAuthenticated && authState.user) {
-          <li role="menuitem">
-            <app-button variant="primary" size="lg" (btnClick)="goToHome()">
-              <fa-icon [icon]="['fas', 'home']" style="margin-right: 0.5rem;"></fa-icon> INICIO
-            </app-button>
-          </li>
-          <li role="menuitem">
-            <app-button variant="primary" size="lg" (btnClick)="goToProfile()">
-              <fa-icon [icon]="['fas', 'user-circle']" style="margin-right: 0.5rem;"></fa-icon> PERFIL
-            </app-button>
-          </li>
-          <li role="menuitem">
-            <app-button variant="primary" size="lg" (btnClick)="goToSettings()">
-              <fa-icon [icon]="['fas', 'cog']" style="margin-right: 0.5rem;"></fa-icon> AJUSTES
-            </app-button>
-          </li>
-          <li role="menuitem">
-            <app-button variant="primary" size="lg" (btnClick)="logout()">
-              <fa-icon [icon]="['fas', 'sign-out-alt']" style="margin-right: 0.5rem;"></fa-icon> CERRAR SESIÓN
-            </app-button>
-          </li>
+        <!-- Usar async pipe para gestión automática de suscripciones -->
+        @if (authState$ | async; as authState) {
+          @if (!authState.isAuthenticated) {
+            <li role="menuitem">
+              <app-button variant="primary" size="lg" (btnClick)="onLoginClick()">INICIAR SESIÓN</app-button>
+            </li>
+            <li role="menuitem">
+              <app-button variant="primary" size="lg" (btnClick)="onRegisterClick()">CREAR CUENTA</app-button>
+            </li>
+          }
+          
+          @if (authState.isAuthenticated && authState.user) {
+            <li role="menuitem">
+              <app-button variant="primary" size="lg" (btnClick)="goToHome()">
+                <fa-icon [icon]="['fas', 'home']" class="header__menu-icon"></fa-icon> INICIO
+              </app-button>
+            </li>
+            <li role="menuitem">
+              <app-button variant="primary" size="lg" (btnClick)="goToProfile()">
+                <fa-icon [icon]="['fas', 'user-circle']" class="header__menu-icon"></fa-icon> PERFIL
+              </app-button>
+            </li>
+            <li role="menuitem">
+              <app-button variant="primary" size="lg" (btnClick)="goToSettings()">
+                <fa-icon [icon]="['fas', 'cog']" class="header__menu-icon"></fa-icon> AJUSTES
+              </app-button>
+            </li>
+            <li role="menuitem">
+              <app-button variant="primary" size="lg" (btnClick)="logout()">
+                <fa-icon [icon]="['fas', 'sign-out-alt']" class="header__menu-icon"></fa-icon> CERRAR SESIÓN
+              </app-button>
+            </li>
+          }
         }
       </ul>
     </nav>

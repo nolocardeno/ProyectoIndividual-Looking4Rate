@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameCover } from '../game-cover/game-cover';
 import { PlatformBadge } from '../platform-badge/platform-badge';
@@ -36,6 +36,7 @@ export interface GamePlatform {
   imports: [RouterLink, GameCover, PlatformBadge],
   templateUrl: './game-card.html',
   styleUrl: './game-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameCard {
   /** URL de la imagen de carátula */

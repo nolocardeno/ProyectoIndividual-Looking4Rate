@@ -105,37 +105,38 @@
 
 // --------------------------------------------------------------------------
 // VISIBILITY HELPERS (Desktop-First)
+// Nota: Usar estas clases directamente en elementos, no en contenedores padres
 // --------------------------------------------------------------------------
 
 // Ocultar en tablet y menor
 @mixin hide-tablet {
   @media (max-width: $breakpoint-md) {
-    display: none !important;
+    display: none;
   }
 }
 
 // Ocultar en móvil
 @mixin hide-mobile {
   @media (max-width: $breakpoint-sm) {
-    display: none !important;
+    display: none;
   }
 }
 
 // Mostrar solo en tablet y menor
 @mixin show-tablet-only {
-  display: none !important;
+  display: none;
   
   @media (max-width: $breakpoint-md) {
-    display: flex !important;
+    display: flex;
   }
 }
 
 // Mostrar solo en móvil
 @mixin show-mobile-only {
-  display: none !important;
+  display: none;
   
   @media (max-width: $breakpoint-sm) {
-    display: flex !important;
+    display: flex;
   }
 }
 

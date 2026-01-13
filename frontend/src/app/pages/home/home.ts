@@ -5,7 +5,7 @@
  * Muestra hero section y secciones de juegos del backend.
  */
 
-import { Component, OnInit, OnDestroy, inject, signal, computed, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -40,6 +40,7 @@ interface SectionState {
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class Home implements OnInit, OnDestroy {
   private juegosService = inject(JuegosService);

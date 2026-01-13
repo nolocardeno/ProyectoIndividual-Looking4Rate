@@ -1,7 +1,7 @@
-import { Component, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewInit, Inject, PLATFORM_ID, inject, OnInit, OnDestroy } from '@angular/core';
-import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { Component, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewInit, Inject, PLATFORM_ID, inject, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { isPlatformBrowser, CommonModule, AsyncPipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SearchBox } from '../../shared/search-box/search-box';
 import { Button } from '../../shared/button/button';
@@ -11,9 +11,10 @@ import { AuthService, AuthState } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink, FontAwesomeModule, SearchBox, Button, ThemeSwitcher, UserDropdown],
+  imports: [CommonModule, RouterLink, FontAwesomeModule, SearchBox, Button, ThemeSwitcher, UserDropdown, AsyncPipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Header implements AfterViewInit, OnInit, OnDestroy {
   /** Router para navegación */
@@ -38,32 +39,40 @@ export class Header implements AfterViewInit, OnInit, OnDestroy {
   isUserDropdownOpen = false;
   private isBrowser: boolean;
   
-  // Estado de autenticación
-  authState: AuthState = {
+  /** 
+   * Observable del estado de autenticación para usar con async pipe
+   * El async pipe gestiona automáticamente la suscripción/desuscripción
+   */
+  authState$: Observable<AuthState>;
+  
+  /**
+   * Valor actual del estado de autenticación para usar en métodos del componente
+   */
+  private currentAuthState: AuthState = {
     isAuthenticated: false,
     user: null,
     token: null,
     loading: false
   };
-  
-  private authSubscription?: Subscription;
 
   @Output() loginClick = new EventEmitter<void>();
   @Output() registerClick = new EventEmitter<void>();
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
+    // Exponer el observable para usar con async pipe en el template
+    this.authState$ = this.authService.authState$;
   }
 
   ngOnInit(): void {
-    // Suscribirse al estado de autenticación
-    this.authSubscription = this.authService.authState$.subscribe(state => {
-      this.authState = state;
+    // Mantener el valor actual para usarlo en métodos
+    this.authState$.subscribe(state => {
+      this.currentAuthState = state;
     });
   }
 
   ngOnDestroy(): void {
-    this.authSubscription?.unsubscribe();
+    // El async pipe gestiona automáticamente la desuscripción
   }
 
   ngAfterViewInit(): void {
@@ -293,8 +302,8 @@ export class Header implements AfterViewInit, OnInit, OnDestroy {
    * Navega al perfil del usuario
    */
   goToProfile(): void {
-    if (this.authState.user) {
-      this.router.navigate(['/usuario', this.authState.user.id]);
+    if (this.currentAuthState.user) {
+      this.router.navigate(['/usuario', this.currentAuthState.user.id]);
       this.isUserDropdownOpen = false;
     }
   }

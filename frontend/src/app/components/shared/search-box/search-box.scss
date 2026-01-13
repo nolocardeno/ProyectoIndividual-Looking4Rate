@@ -158,7 +158,7 @@
   }
 
   &__icon {
-    font-size: 16px;
+    font-size: $font-size-md;
     color: $color-text-alt-dark;
     @include transition(all);
   }
@@ -210,7 +210,7 @@
     }
 
     &__icon {
-      font-size: 14px;
+      font-size: $font-size-sm;
     }
 
     &--icon-only {

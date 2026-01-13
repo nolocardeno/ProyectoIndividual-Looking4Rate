@@ -2,6 +2,35 @@
 
 Este proyecto fue generado usando [Angular CLI](https://github.com/angular/angular-cli) versión 20.3.9.
 
+## 📑 Índice de Contenidos
+
+- [Inicio Rápido](#inicio-rápido)
+- [FASE 1: Arquitectura de Eventos del Cliente](#fase-1-arquitectura-de-eventos-del-cliente)
+  - [Manipulación del DOM](#manipulación-del-dom)
+  - [Sistema de Eventos](#-sistema-de-eventos)
+  - [Componentes Interactivos](#componentes-interactivos)
+- [FASE 2: Servicios y Comunicación entre Componentes](#fase-2-servicios-y-comunicación-entre-componentes)
+  - [Servicios Principales](#servicios-principales)
+  - [Comunicación entre Componentes](#comunicación-entre-componentes)
+- [FASE 3: Formularios Reactivos y Validación](#fase-3-formularios-reactivos-y-validación)
+  - [Formularios Implementados](#formularios-implementados)
+  - [Validadores Personalizados](#validadores-personalizados)
+  - [Validación Asíncrona](#validación-asíncrona)
+- [FASE 4: Enrutamiento y Navegación](#fase-4-enrutamiento-y-navegación)
+  - [Configuración de Rutas](#configuración-de-rutas)
+  - [Guards y Protección](#guards-y-protección)
+  - [Navegación Programática](#navegación-programática)
+- [FASE 5: Comunicación HTTP con Backend](#-fase-5-comunicación-http-con-backend)
+  - [Configuración de HttpClient](#configuración-de-httpclient)
+  - [Operaciones CRUD](#operaciones-crud)
+  - [Interceptores HTTP](#interceptores-http)
+- [FASE 6: Optimización y Gestión de Estado](#-fase-6-optimización-y-gestión-de-estado)
+  - [Patrón de Estado con Signals](#patrón-de-estado-elegido-angular-signals)
+  - [Estrategias de Optimización](#estrategias-de-optimización-aplicadas)
+  - [Comparativa de Opciones](#comparativa-de-opciones-evaluadas)
+
+---
+
 ## Inicio Rápido
 
 ### Servidor de desarrollo
@@ -3264,3 +3293,436 @@ export class GameListComponent implements OnInit {
 - [HTTP Interceptors](https://angular.dev/guide/http/interceptors)
 - [RxJS Error Handling](https://rxjs.dev/guide/operators#error-handling-operators)
 - [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+
+<br><br>
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ⚡ FASE 6: OPTIMIZACIÓN Y GESTIÓN DE ESTADO
+# ═══════════════════════════════════════════════════════════════════════════════
+
+> **Objetivo:** Implementar gestión de estado moderna con Signals, optimizar rendimiento
+> con estrategias de detección de cambios, y aplicar técnicas avanzadas de UX.
+
+---
+
+## Patrón de Estado Elegido: Angular Signals
+
+### Justificación de la Elección
+
+Se eligió **Angular Signals** como patrón de gestión de estado por las siguientes razones:
+
+| Criterio | Signals | NgRx | BehaviorSubject |
+|----------|---------|------|-----------------|
+| **Complejidad** | Baja | Alta | Media |
+| **Curva de aprendizaje** | Mínima | Pronunciada | Moderada |
+| **Integración Angular** | Nativa | Externa | Manual |
+| **Rendimiento** | Excelente | Bueno | Bueno |
+| **Boilerplate** | Mínimo | Alto | Medio |
+| **Escalabilidad** | Media-Alta | Muy Alta | Media |
+| **Debugging** | DevTools | Redux DevTools | Console |
+
+#### ¿Por qué Signals y no NgRx?
+
+1. **Escala del proyecto:** Looking4Rate es una aplicación de tamaño medio donde NgRx agregaría complejidad innecesaria (actions, reducers, effects, selectors).
+
+2. **Integración nativa:** Signals es parte del core de Angular desde v16, lo que garantiza soporte a largo plazo y optimizaciones automáticas.
+
+3. **Interoperabilidad:** `toObservable()` y `toSignal()` permiten combinar Signals con código RxJS existente.
+
+4. **Rendimiento:** Signals ofrece detección de cambios granular sin configuración adicional.
+
+### Implementación: GameStateService
+
+El servicio centraliza el estado de juegos e interacciones del usuario:
+
+```typescript
+// services/game-state.service.ts
+@Injectable({ providedIn: 'root' })
+export class GameStateService {
+  // ========================================
+  // SIGNALS DE ESTADO (Privados, mutables)
+  // ========================================
+  
+  private _userInteractions = signal<InteraccionDTO[]>([]);
+  private _currentUserId = signal<number | null>(null);
+  private _currentGameReviews = signal<InteraccionDTO[]>([]);
+  private _isLoading = signal(false);
+
+  // ========================================
+  // SIGNALS PÚBLICOS (Solo lectura)
+  // ========================================
+  
+  public readonly userInteractions = this._userInteractions.asReadonly();
+  public readonly currentUserId = this._currentUserId.asReadonly();
+  public readonly isLoading = this._isLoading.asReadonly();
+
+  // ========================================
+  // COMPUTED SIGNALS (Derivados automáticamente)
+  // ========================================
+  
+  public readonly userStats = computed<UserGameStats>(() => {
+    const interactions = this._userInteractions();
+    return {
+      totalJuegos: interactions.filter(i => i.estadoJugado).length,
+      juegosRevieweados: interactions.filter(i => i.review?.trim()).length,
+      puntuacionMediaDada: this.calcularMedia(interactions)
+    };
+  });
+
+  public readonly playedGames = computed(() => 
+    this._userInteractions().filter(i => i.estadoJugado)
+  );
+
+  public readonly userReviews = computed(() => 
+    this._userInteractions().filter(i => i.review?.trim().length > 0)
+  );
+}
+```
+
+### Patrón de Actualización Inmutable
+
+```typescript
+// Añadir interacción
+addInteraction(interaction: InteraccionDTO): void {
+  this._userInteractions.update(list => [...list, interaction]);
+  this.emitEvent('interaction-created', interaction);
+}
+
+// Actualizar interacción (inmutable)
+updateInteraction(updated: InteraccionDTO): void {
+  this._userInteractions.update(list => 
+    list.map(i => i.id === updated.id ? updated : i)
+  );
+  this.emitEvent('interaction-updated', updated);
+}
+
+// Eliminar interacción
+removeInteraction(id: number): void {
+  this._userInteractions.update(list => 
+    list.filter(i => i.id !== id)
+  );
+}
+```
+
+### Sistema de Eventos para Comunicación
+
+```typescript
+// Subject para eventos de actualización
+private updateEvents$ = new Subject<StateUpdateEvent>();
+public readonly updates$ = this.updateEvents$.asObservable();
+
+interface StateUpdateEvent {
+  type: 'interaction-created' | 'interaction-updated' | 'interaction-deleted';
+  payload: any;
+  timestamp: Date;
+}
+
+private emitEvent(type: StateUpdateEvent['type'], payload: any): void {
+  this.updateEvents$.next({ type, payload, timestamp: new Date() });
+}
+```
+
+---
+
+## Estrategias de Optimización Aplicadas
+
+### 1. ChangeDetectionStrategy.OnPush
+
+Se aplicó `OnPush` a **20+ componentes** para reducir ciclos de detección de cambios:
+
+```typescript
+@Component({
+  selector: 'app-search',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  // ...
+})
+export class SearchPage { }
+```
+
+#### Componentes Optimizados
+
+| Categoría | Componentes |
+|-----------|-------------|
+| **Páginas** | SearchPage, ProfilePage, GameDetailPage |
+| **Tabs** | UserGames, UserReviews |
+| **UI Shared** | GameCard, GameCover, StarRating, Tooltip, Spinner, Notification, Pagination, Tabs, Accordion, EmptyState, RequestState |
+| **Formularios** | SearchBox, FormSelect |
+
+#### Cuándo usar OnPush
+
+✅ **Usar en:**
+- Componentes que reciben datos vía `@Input()`
+- Componentes que usan Signals o Observables con `async`
+- Componentes de presentación (dumb components)
+
+❌ **Evitar en:**
+- Componentes que modifican estado interno frecuentemente sin Signals
+- Componentes con animaciones complejas basadas en timers
+
+### 2. TrackBy en Iteraciones
+
+Todas las directivas `@for` usan `track` para optimizar re-renderizado:
+
+```html
+<!-- Búsqueda de juegos -->
+@for (game of visibleResults(); track game.id) {
+  <app-search-game-card [game]="game" />
+}
+
+<!-- Reviews del usuario -->
+@for (review of paginatedReviews(); track review.id) {
+  <app-user-review [review]="review" />
+}
+
+<!-- Pestañas dinámicas -->
+@for (tab of tabs; track tab.id) {
+  <button [class.active]="tab.id === activeTab">{{ tab.label }}</button>
+}
+
+<!-- Ítems de acordeón -->
+@for (item of items; track item.id; let i = $index) {
+  <div class="accordion__item">...</div>
+}
+```
+
+### 3. Async Pipe para Suscripciones Automáticas
+
+```html
+<!-- header.html - Gestión automática de suscripción -->
+@if (authState$ | async; as authState) {
+  @if (authState.isAuthenticated) {
+    <app-user-dropdown [usuario]="authState.usuario!" />
+  } @else {
+    <app-button (onClick)="openLogin()">Iniciar sesión</app-button>
+  }
+}
+```
+
+**Ventajas:**
+- Suscripción/desuscripción automática
+- Compatible con OnPush (marca para check automáticamente)
+- Evita memory leaks
+
+### 4. Debounce en Búsqueda
+
+El `SearchBox` implementa debounce de 300ms para evitar peticiones excesivas:
+
+```typescript
+@Component({
+  selector: 'app-search-box',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class SearchBox implements OnInit, OnDestroy {
+  @Input() debounceMs = 300;
+  
+  private searchSubject = new Subject<string>();
+  private subscription: Subscription | null = null;
+
+  ngOnInit(): void {
+    this.subscription = this.searchSubject.pipe(
+      debounceTime(this.debounceMs),
+      distinctUntilChanged()
+    ).subscribe(query => {
+      this.search.emit(query);
+    });
+  }
+
+  onInputChange(): void {
+    this.searchSubject.next(this.value);
+  }
+}
+```
+
+### 5. Infinite Scroll con Intersection Observer
+
+Implementación eficiente de paginación infinita sin librerías externas:
+
+```typescript
+@Component({
+  selector: 'app-search',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class SearchPage implements AfterViewInit, OnDestroy {
+  @ViewChild('loadMoreSentinel') loadMoreSentinel!: ElementRef<HTMLElement>;
+  
+  private intersectionObserver: IntersectionObserver | null = null;
+  
+  // Signals para control de paginación
+  visibleCount = signal(RESULTS_PER_PAGE);
+  isLoadingMore = signal(false);
+  
+  visibleResults = computed(() => 
+    this.filteredResults().slice(0, this.visibleCount())
+  );
+  
+  hasMoreResults = computed(() => 
+    this.visibleCount() < this.filteredResults().length
+  );
+
+  ngAfterViewInit(): void {
+    this.setupIntersectionObserver();
+  }
+
+  private setupIntersectionObserver(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    this.intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && this.hasMoreResults() && !this.isLoadingMore()) {
+            this.ngZone.run(() => this.loadMoreResults());
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '100px',  // Precarga 100px antes del viewport
+        threshold: 0.1
+      }
+    );
+  }
+
+  private loadMoreResults(): void {
+    this.isLoadingMore.set(true);
+    setTimeout(() => {
+      this.visibleCount.update(count => count + RESULTS_PER_PAGE);
+      this.isLoadingMore.set(false);
+    }, 200);
+  }
+}
+```
+
+```html
+<!-- search.html - Elemento sentinel para trigger -->
+@if (hasMoreResults()) {
+  <output #loadMoreSentinel class="search__sentinel" aria-live="polite">
+    @if (isLoadingMore()) {
+      <app-spinner-inline />
+    }
+  </output>
+}
+```
+
+### 6. Patrón takeUntil para Gestión de Suscripciones
+
+```typescript
+export class SomeComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
+
+  ngOnInit(): void {
+    this.someService.data$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(data => {
+      // procesar data
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+}
+```
+
+---
+
+## Comparativa de Opciones Evaluadas
+
+### Gestión de Estado
+
+| Opción | Pros | Contras | Decisión |
+|--------|------|---------|----------|
+| **Angular Signals** | Nativo, simple, rendimiento óptimo | Menos maduro que NgRx | ✅ **Elegido** |
+| **NgRx** | Muy escalable, DevTools, patrones probados | Boilerplate excesivo, curva de aprendizaje | ❌ Sobredimensionado |
+| **BehaviorSubject** | Familiar, flexible | Manual, propenso a memory leaks | ❌ Menos optimizado |
+| **Akita/NGXS** | Menos boilerplate que NgRx | Dependencia externa, menos soporte | ❌ Riesgo de abandono |
+
+### Paginación
+
+| Opción | Pros | Contras | Decisión |
+|--------|------|---------|----------|
+| **Infinite Scroll (IO)** | UX fluida, nativo | Más complejo de implementar | ✅ **Elegido para búsqueda** |
+| **Paginación tradicional** | Simple, predecible | UX fragmentada | ✅ **Elegido para listas de perfil** |
+| **Virtual Scroll** | Muy eficiente para listas enormes | Complejidad, altura fija requerida | ❌ No necesario |
+
+### Detección de Cambios
+
+| Opción | Pros | Contras | Decisión |
+|--------|------|---------|----------|
+| **OnPush + Signals** | Máximo rendimiento, granular | Requiere inmutabilidad | ✅ **Elegido** |
+| **Default** | Simple, automático | Ineficiente en apps grandes | ❌ Solo para casos específicos |
+| **Zone-less** | Rendimiento máximo | Cambio arquitectural mayor | ❌ Demasiado invasivo |
+
+### Debounce de Búsqueda
+
+| Opción | Pros | Contras | Decisión |
+|--------|------|---------|----------|
+| **RxJS debounceTime** | Integrado, cancelable, composable | Requiere Subject | ✅ **Elegido** |
+| **setTimeout manual** | Simple | No cancelable, race conditions | ❌ Propenso a bugs |
+| **Lodash debounce** | Familiar | Dependencia extra, menos integrado | ❌ Innecesario |
+
+---
+
+## Estructura de Archivos - Fase 6
+
+```
+frontend/src/app/
+├── services/
+│   └── game-state.service.ts    # 🆕 Servicio de estado con Signals
+├── core/
+│   └── rxjs-utils.ts            # Utilidades RxJS (debounce, takeUntil)
+├── components/
+│   └── shared/
+│       └── search-box/
+│           └── search-box.ts    # 🔄 Debounce implementado
+├── pages/
+│   ├── search/
+│   │   └── search.ts            # 🔄 Infinite scroll + OnPush
+│   ├── profile/
+│   │   ├── profile.ts           # 🔄 OnPush
+│   │   └── tabs/
+│   │       ├── user-games.ts    # 🔄 OnPush + track
+│   │       └── user-reviews.ts  # 🔄 OnPush + track
+│   └── game-detail/
+│       └── game-detail.ts       # 🔄 OnPush
+└── components/layout/
+    └── header/
+        └── header.html          # 🔄 Async pipe
+```
+
+---
+
+## 🎯 Resumen de Cumplimiento - Fase 6
+
+| Requisito | Estado | Implementación |
+|-----------|--------|----------------|
+| **Gestión de Estado** | ✅ | |
+| - Patrón de estado elegido | ✅ | Angular Signals (GameStateService) |
+| - Signals de estado privados | ✅ | `_userInteractions`, `_currentUserId`, etc. |
+| - Signals públicos readonly | ✅ | `.asReadonly()` |
+| - Computed signals | ✅ | `userStats`, `playedGames`, `userReviews` |
+| - Sistema de eventos | ✅ | `Subject<StateUpdateEvent>` |
+| **Optimización de Rendimiento** | ✅ | |
+| - OnPush en componentes | ✅ | 20+ componentes |
+| - TrackBy en iteraciones | ✅ | Todos los `@for` usan `track` |
+| - Async pipe | ✅ | Header (authState$) |
+| - Debounce en búsqueda | ✅ | 300ms con RxJS |
+| **Paginación/Scroll** | ✅ | |
+| - Infinite scroll | ✅ | Intersection Observer en Search |
+| - Paginación tradicional | ✅ | Profile tabs |
+| **Gestión de Suscripciones** | ✅ | |
+| - takeUntil pattern | ✅ | En todos los componentes con subscriptions |
+| - Cleanup en ngOnDestroy | ✅ | destroy$.next() + complete() |
+| **Documentación** | ✅ | |
+| - Patrón elegido y justificación | ✅ | Este documento |
+| - Estrategias de optimización | ✅ | Este documento |
+| - Comparativa de opciones | ✅ | Este documento |
+
+---
+
+## Recursos Adicionales - Fase 6
+
+- [Angular Signals Guide](https://angular.dev/guide/signals)
+- [Change Detection Strategy](https://angular.dev/guide/components/advanced-configuration#changedetectionstrategy)
+- [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+- [RxJS debounceTime](https://rxjs.dev/api/operators/debounceTime)

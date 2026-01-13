@@ -1,7 +1,7 @@
 <!-- Search Page: Página de resultados de búsqueda de juegos -->
 
 <section class="search-page">
-  <!-- Estado de carga -->
+  <!-- Estado de carga inicial -->
   @if (isLoading()) {
     <aside class="search-page__loading">
       <app-spinner />
@@ -29,7 +29,7 @@
     />
   } @else {
     <!-- Sección de resultados usando FeaturedSection -->
-    <app-featured-section [title]="'Mostrando resultados de \u0022' + searchQuery() + '\u0022'">
+    <app-featured-section [title]="'Mostrando ' + visibleResults().length + ' de ' + totalResults() + ' resultados para \u0022' + searchQuery() + '\u0022'">
       <!-- Lista de resultados -->
       <ul class="search-page__results">
         @for (game of visibleResults(); track game.id) {
@@ -46,17 +46,27 @@
         }
       </ul>
 
-      <!-- Botón mostrar más -->
+      <!-- Sentinel para scroll infinito -->
       @if (hasMoreResults()) {
-        <footer class="search-page__load-more">
-          <app-button
-            variant="primary"
-            size="lg"
-            (btnClick)="showMoreResults()"
-          >
-            Mostrar más resultados
-          </app-button>
-        </footer>
+        <output #loadMoreSentinel class="search-page__sentinel">
+          @if (isLoadingMore()) {
+            <aside class="search-page__loading-more">
+              <app-spinner-inline size="md" />
+              <p>Cargando más resultados...</p>
+            </aside>
+          } @else {
+            <!-- Botón manual como fallback -->
+            <footer class="search-page__load-more">
+              <app-button
+                variant="primary"
+                size="lg"
+                (btnClick)="showMoreResults()"
+              >
+                Mostrar más resultados
+              </app-button>
+            </footer>
+          }
+        </output>
       }
     </app-featured-section>
   }
