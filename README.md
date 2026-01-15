@@ -127,7 +127,7 @@ npm start
 ### Backend
 - **Framework:** Spring Boot 3.5.8
 - **Lenguaje:** Java 21
-- **Base de Datos:** H2 (en memoria)
+- **Base de Datos:** PostgreSQL 16 (producción) / H2 (desarrollo local)
 - **Seguridad:** Spring Security con JWT
 - **ORM:** JPA/Hibernate
 - **Build:** Maven 3.9
@@ -171,7 +171,7 @@ npm start
                              ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                  CAPA DE BASE DE DATOS                      │
-│                (Base de Datos H2 en Memoria)                │
+│          PostgreSQL 16 (producción) / H2 (desarrollo)       │
 │       Tablas: juego, usuario, interaccion, catalogo         │
 └─────────────────────────────────────────────────────────────┘
 ```

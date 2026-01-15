@@ -2,25 +2,25 @@
 
 Documentación resumida del proyecto Angular.
 
-## 🌐 Acceso a Producción
+## Acceso a Producción
 
 | Componente | URL |
 |------------|-----|
-| **🔗 Frontend** | **https://looking4rate-nu8km.ondigitalocean.app/** |
-| **🔗 API Backend** | **https://looking4rate-nu8km.ondigitalocean.app/api/** |
+| **Frontend** | **https://looking4rate-nu8km.ondigitalocean.app/** |
+| **API Backend** | **https://looking4rate-nu8km.ondigitalocean.app/api/** |
 
 ---
 
-## 📑 Índice
+## Índice
 
 - [FASE 1: Arquitectura de Eventos](#fase-1-arquitectura-de-eventos-del-cliente)
 - [FASE 2: Servicios y Comunicación](#fase-2-servicios-y-comunicación)
 - [FASE 3: Formularios Reactivos](#fase-3-formularios-reactivos)
 - [FASE 4: Enrutamiento y Navegación](#fase-4-enrutamiento-y-navegación)
-- [FASE 5: Comunicación HTTP](#-fase-5-comunicación-http)
-- [FASE 6: Optimización y Estado](#-fase-6-optimización-y-gestión-de-estado)
+- [FASE 5: Comunicación HTTP](#fase-5-comunicación-http)
+- [FASE 6: Optimización y Estado](#fase-6-optimización-y-gestión-de-estado)
 - [FASE 7: Testing, Build y Despliegue](#fase-7-testing-build-y-despliegue)
-- [Arquitectura CSS](#-arquitectura-css)
+- [Arquitectura CSS](#arquitectura-css)
 - [Tecnologías](#tecnologías)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 
@@ -215,7 +215,7 @@ route.queryParamMap.subscribe(params => {
 
 ---
 
-## 📔 FASE 5: Comunicación HTTP
+## FASE 5: Comunicación HTTP
 
 ### HttpClient y Servicios
 
@@ -311,7 +311,7 @@ retryOnError(maxRetries: number = 3) {
 
 ---
 
-## ⚡ FASE 6: Optimización y Gestión de Estado
+## FASE 6: Optimización y Gestión de Estado
 
 ### Patrón de Estado: Angular Signals
 
@@ -388,7 +388,7 @@ data$.pipe(takeUntil(this.destroy$)).subscribe();
 
 ---
 
-## 🎨 Arquitectura CSS
+## Arquitectura CSS
 
 ### Metodología
 - **BEM:** Nomenclatura de clases
@@ -417,7 +417,7 @@ data$.pipe(takeUntil(this.destroy$)).subscribe();
 
 ## FASE 7: Testing, Build y Despliegue
 
-### 🧪 Testing
+### Testing
 
 **Métricas**
 | Métrica | Valor |
@@ -436,7 +436,7 @@ data$.pipe(takeUntil(this.destroy$)).subscribe();
 - Karma + Jasmine
 - Coverage: Istanbul
 
-### 🌐 Cross-Browser
+### Cross-Browser
 
 **Navegadores Soportados:** 34 browsers
 - Chrome, Firefox, Safari, Edge (desktop)
@@ -452,19 +452,19 @@ last 2 Edge versions
 iOS >= 15.1
 ```
 
-### ⚡ Rendimiento
+### Rendimiento
 
 | Métrica | Bundle | Gzip |
 |---------|--------|------|
 | Initial | **596.49 KB** | **155.32 KB** |
 
 **Optimizaciones Aplicadas:**
-- ✅ Lazy loading en 12 rutas
-- ✅ OnPush change detection
-- ✅ Tree-shaking y minificación
-- ✅ Compresión gzip
+- Lazy loading en 12 rutas
+- OnPush change detection
+- Tree-shaking y minificación
+- Compresión gzip
 
-### 🏗️ Build de Producción
+### Build de Producción
 
 ```bash
 # Comando
@@ -477,7 +477,7 @@ main-XXXXXXXX.js              | 596.49 kB | 155.32 kB
 styles-XXXXXXXX.css           |  18.95 kB |   3.94 kB
 ```
 
-### 🚀 Despliegue
+### Despliegue
 
 **Plataforma:** DigitalOcean App Platform
 - Contenedores Docker
@@ -487,12 +487,12 @@ styles-XXXXXXXX.css           |  18.95 kB |   3.94 kB
 **Rutas Verificadas:**
 | Ruta | Estado |
 |------|--------|
-| `/` | ✅ |
-| `/buscar` | ✅ |
-| `/juego/:id` | ✅ |
-| `/usuario/:id` | ✅ |
-| `/ajustes` | ✅ |
-| `/404` | ✅ |
+| `/` | OK |
+| `/buscar` | OK |
+| `/juego/:id` | OK |
+| `/usuario/:id` | OK |
+| `/ajustes` | OK |
+| `/404` | OK |
 
 ---
 
@@ -541,9 +541,9 @@ frontend/
 
 ---
 
-## 🔗 Enlaces Útiles
+## Enlaces Útiles
 
-- **🌐 Producción:** https://looking4rate-nu8km.ondigitalocean.app/
+- **Producción:** https://looking4rate-nu8km.ondigitalocean.app/
 - [Documentación Completa](./DOCUMENTACION_CLIENTE.md)
 - [Angular Docs](https://angular.dev)
 - [RxJS Docs](https://rxjs.dev)

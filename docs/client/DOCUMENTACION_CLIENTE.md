@@ -1,21 +1,21 @@
 # Frontend - Looking4Rate
 
-## 🌐 Acceso a Producción
+## Acceso a Producción
 
 | Componente | URL |
 |------------|-----|
-| **🔗 Frontend** | **https://looking4rate-nu8km.ondigitalocean.app/** |
+| **Frontend** | **https://looking4rate-nu8km.ondigitalocean.app/** |
 
 > **Plataforma:** DigitalOcean App Platform · Docker · HTTPS automático
 
 ---
 
-## 📑 Índice de Contenidos
+## Índice de Contenidos
 
 - [Inicio Rápido](#inicio-rápido)
 - [FASE 1: Arquitectura de Eventos del Cliente](#fase-1-arquitectura-de-eventos-del-cliente)
   - [Manipulación del DOM](#manipulación-del-dom)
-  - [Sistema de Eventos](#-sistema-de-eventos)
+  - [Sistema de Eventos](#sistema-de-eventos)
   - [Componentes Interactivos](#componentes-interactivos)
 - [FASE 2: Servicios y Comunicación entre Componentes](#fase-2-servicios-y-comunicación-entre-componentes)
   - [Servicios Principales](#servicios-principales)
@@ -28,24 +28,24 @@
   - [Configuración de Rutas](#configuración-de-rutas)
   - [Guards y Protección](#guards-y-protección)
   - [Navegación Programática](#navegación-programática)
-- [FASE 5: Comunicación HTTP con Backend](#-fase-5-comunicación-http-con-backend)
+- [FASE 5: Comunicación HTTP con Backend](#fase-5-comunicación-http-con-backend)
   - [Configuración de HttpClient](#configuración-de-httpclient)
   - [Operaciones CRUD](#operaciones-crud)
   - [Interceptores HTTP](#interceptores-http)
-- [FASE 6: Optimización y Gestión de Estado](#-fase-6-optimización-y-gestión-de-estado)
+- [FASE 6: Optimización y Gestión de Estado](#fase-6-optimización-y-gestión-de-estado)
   - [Patrón de Estado con Signals](#patrón-de-estado-elegido-angular-signals)
   - [Estrategias de Optimización](#estrategias-de-optimización-aplicadas)
   - [Comparativa de Opciones](#comparativa-de-opciones-evaluadas)
 - [FASE 7: Testing, Despliegue y Documentación](#fase-7-testing-despliegue-y-documentación)
-  - [Testing Unitario](#-testing-unitario)
-  - [Testing de Integración](#-testing-de-integración)
-  - [Verificación Cross-Browser](#-verificación-cross-browser)
-  - [Optimización de Rendimiento](#-optimización-de-rendimiento)
-  - [Build de Producción](#️-build-de-producción)
-  - [Despliegue en Producción](#-despliegue-en-producción)
-  - [Documentación Técnica](#-documentación-técnica)
-  - [Guía de Contribución](#-guía-de-contribución)
-  - [Changelog](#-changelog)
+  - [Testing Unitario](#testing-unitario)
+  - [Testing de Integración](#testing-de-integración)
+  - [Verificación Cross-Browser](#verificación-cross-browser)
+  - [Optimización de Rendimiento](#optimización-de-rendimiento)
+  - [Build de Producción](#build-de-producción)
+  - [Despliegue en Producción](#despliegue-en-producción)
+  - [Documentación Técnica](#documentación-técnica)
+  - [Guía de Contribución](#guía-de-contribución)
+  - [Changelog](#changelog)
 
 ---
 
@@ -136,7 +136,7 @@ private updateMetaThemeColor(theme: 'dark' | 'light'): void {
 
 ---
 
-### 🎯 Sistema de Eventos
+### Sistema de Eventos
 
 #### Event Binding en Componentes
 
@@ -329,7 +329,7 @@ onModalClick(event: MouseEvent): void {
 
 ---
 
-### 🎨 Componentes Interactivos
+### Componentes Interactivos
 
 #### Menú Hamburguesa
 - **Archivo:** `components/layout/header/`
@@ -393,34 +393,34 @@ onModalClick(event: MouseEvent): void {
 
 | Evento/API | Chrome | Firefox | Safari | Edge | IE11 |
 |------------|--------|---------|--------|------|------|
-| `click` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `keydown` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `keyup` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `mouseenter` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `mouseleave` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `focus` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `blur` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `focusin` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `focusout` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `scroll` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `input` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `change` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `submit` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `localStorage` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `matchMedia` | ✅ | ✅ | ✅ | ✅ | ⚠️ Parcial |
-| `prefers-color-scheme` | ✅ 76+ | ✅ 67+ | ✅ 12.1+ | ✅ 79+ | ❌ |
-| `Element.closest()` | ✅ | ✅ | ✅ | ✅ | ❌ |
-| `Event.stopPropagation()` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `Event.preventDefault()` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| CSS `@keyframes` | ✅ | ✅ | ✅ | ✅ | ✅ 10+ |
-| CSS `transform` | ✅ | ✅ | ✅ | ✅ | ✅ 10+ |
-| CSS `transition` | ✅ | ✅ | ✅ | ✅ | ✅ 10+ |
-| `aria-*` attributes | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `click` | Sí | Sí | Sí | Sí | Sí |
+| `keydown` | Sí | Sí | Sí | Sí | Sí |
+| `keyup` | Sí | Sí | Sí | Sí | Sí |
+| `mouseenter` | Sí | Sí | Sí | Sí | Sí |
+| `mouseleave` | Sí | Sí | Sí | Sí | Sí |
+| `focus` | Sí | Sí | Sí | Sí | Sí |
+| `blur` | Sí | Sí | Sí | Sí | Sí |
+| `focusin` | Sí | Sí | Sí | Sí | Sí |
+| `focusout` | Sí | Sí | Sí | Sí | Sí |
+| `scroll` | Sí | Sí | Sí | Sí | Sí |
+| `input` | Sí | Sí | Sí | Sí | Sí |
+| `change` | Sí | Sí | Sí | Sí | Sí |
+| `submit` | Sí | Sí | Sí | Sí | Sí |
+| `localStorage` | Sí | Sí | Sí | Sí | Sí |
+| `matchMedia` | Sí | Sí | Sí | Sí | Parcial |
+| `prefers-color-scheme` | Sí 76+ | Sí 67+ | Sí 12.1+ | Sí 79+ | No |
+| `Element.closest()` | Sí | Sí | Sí | Sí | No |
+| `Event.stopPropagation()` | Sí | Sí | Sí | Sí | Sí |
+| `Event.preventDefault()` | Sí | Sí | Sí | Sí | Sí |
+| CSS `@keyframes` | Sí | Sí | Sí | Sí | Sí 10+ |
+| CSS `transform` | Sí | Sí | Sí | Sí | Sí 10+ |
+| CSS `transition` | Sí | Sí | Sí | Sí | Sí 10+ |
+| `aria-*` attributes | Sí | Sí | Sí | Sí | Sí |
 
 **Notas:**
-- ⚠️ **matchMedia en IE11**: Funciona pero no soporta `addListener` con callback functions modernas.
-- ❌ **prefers-color-scheme en IE11**: No soportado, se usa el tema oscuro por defecto.
-- ❌ **Element.closest() en IE11**: Requiere polyfill si se necesita soporte.
+- **matchMedia en IE11**: Funciona pero no soporta `addListener` con callback functions modernas.
+- **prefers-color-scheme en IE11**: No soportado, se usa el tema oscuro por defecto.
+- **Element.closest() en IE11**: Requiere polyfill si se necesita soporte.
 
 ---
 
@@ -520,7 +520,7 @@ src/app/components/
 <br><br>
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 📗 FASE 2: ARQUITECTURA DE SERVICIOS Y COMUNICACIÓN
+# FASE 2: ARQUITECTURA DE SERVICIOS Y COMUNICACIÓN
 # ═══════════════════════════════════════════════════════════════════════════════
 
 > **Objetivo:** Servicios de comunicación entre componentes, gestión de estado global, sistema de notificaciones y gestión de estados de carga.
@@ -529,7 +529,7 @@ src/app/components/
 
 ## Arquitectura de Servicios
 
-### 📡 EventBusService - Comunicación entre Componentes
+### EventBusService - Comunicación entre Componentes
 
 Servicio centralizado para comunicación entre componentes hermanos y no relacionados directamente en el árbol de componentes, implementando el patrón **Publish/Subscribe** con RxJS Subject.
 
@@ -594,7 +594,7 @@ eventBus.onCategory('auth').subscribe(event => {
 
 ---
 
-### 💾 StateService - Estado Global
+### StateService - Estado Global
 
 Servicio de estado global usando el patrón **BehaviorSubject** para almacenar datos compartidos entre componentes con persistencia en localStorage.
 
@@ -675,7 +675,7 @@ stateService.updateUIPreferences({
 
 ---
 
-### ⏳ LoadingService - Estados de Carga
+### LoadingService - Estados de Carga
 
 Servicio centralizado para gestionar estados de carga, soportando un spinner global y estados de carga locales por componente.
 
@@ -760,7 +760,7 @@ loadingService.hide('upload');
 
 ---
 
-### 🔔 NotificationService - Sistema de Notificaciones
+### NotificationService - Sistema de Notificaciones
 
 Sistema de notificaciones/toasts con soporte para diferentes tipos, posiciones y auto-dismiss.
 
@@ -827,13 +827,13 @@ Componente de spinner global que se suscribe automáticamente al LoadingService.
 
 #### Características
 
-- ✅ Animaciones CSS puras para rendimiento óptimo
-- ✅ Overlay con blur de fondo
-- ✅ Mensaje personalizable
-- ✅ Barra de progreso opcional
-- ✅ Bloquea scroll del body
-- ✅ Accesible con `role="alert"` y `aria-busy`
-- ✅ Soporte para `prefers-reduced-motion`
+- Animaciones CSS puras para rendimiento óptimo
+- Overlay con blur de fondo
+- Mensaje personalizable
+- Barra de progreso opcional
+- Bloquea scroll del body
+- Accesible con `role="alert"` y `aria-busy`
+- Soporte para `prefers-reduced-motion`
 
 #### Integración
 
@@ -1010,11 +1010,11 @@ password: ['', [
 ```
 
 **Requisitos:**
-- ✅ Mínimo 8 caracteres
-- ✅ Al menos una mayúscula
-- ✅ Al menos una minúscula
-- ✅ Al menos un número
-- ✅ Al menos un símbolo (cualquier carácter especial)
+- Mínimo 8 caracteres
+- Al menos una mayúscula
+- Al menos una minúscula
+- Al menos un número
+- Al menos un símbolo (cualquier carácter especial)
 
 **Error devuelto:**
 ```typescript
@@ -1206,9 +1206,9 @@ email: ['',
 ```
 
 **Características:**
-- ⏱️ Debounce de 600ms (configurable)
-- 🔄 Usa RxJS `timer` + `switchMap`
-- ❌ Emails de prueba que devuelven error: `test@test.com`, `admin@example.com`
+- Debounce de 600ms (configurable)
+- Usa RxJS `timer` + `switchMap`
+- Emails de prueba que devuelven error: `test@test.com`, `admin@example.com`
 
 **Error devuelto:** `{ emailNotUnique: true }`
 
@@ -1246,9 +1246,9 @@ username: ['',
 ```
 
 **Características:**
-- ⏱️ Debounce de 600ms (configurable)
-- 🔄 Usa RxJS `timer` + `switchMap`
-- ❌ Usernames de prueba ocupados: `admin`, `test`, `user`
+- Debounce de 600ms (configurable)
+- Usa RxJS `timer` + `switchMap`
+- Usernames de prueba ocupados: `admin`, `test`, `user`
 
 **Error devuelto:** `{ usernameNotAvailable: true }`
 
@@ -1839,25 +1839,25 @@ src/app/
 
 ---
 
-## 🎯 Resumen de Cumplimiento - Fase 3
+## Resumen de Cumplimiento - Fase 3
 
 | Requisito | Mínimo | Implementado | Estado |
 |-----------|--------|--------------|--------|
-| **Formularios reactivos** | 3 | 3 | ✅ |
-| - LoginForm | - | ✅ | Usuario + contraseña |
-| - RegisterForm | - | ✅ | Email, usuario, contraseña con validación async |
-| - EditProfileForm | - | ✅ | Datos personales + FormArray de teléfonos |
-| **Validadores síncronos** | 3 | **13** | ✅ |
-| - strongPassword | - | ✅ | Requisitos de seguridad estrictos |
-| - username, nif, spanishPhone | - | ✅ | Validaciones específicas |
-| - url, range, minAge, etc. | - | ✅ | 9 validadores adicionales |
-| **Validadores asíncronos** | 2 | 2 | ✅ |
-| - uniqueEmail | - | ✅ | Con debounce de 600ms |
-| - availableUsername | - | ✅ | Con debounce de 600ms |
-| **FormArray** | 1 | 1 | ✅ |
-| - Teléfonos en EditProfileForm | - | ✅ | Añadir/eliminar dinámicamente |
-| **ViewChild + ElementRef** | Requerido | ✅ | ✅ |
-| - Focus automático | - | ✅ | firstNameInput en EditProfileForm |
+| **Formularios reactivos** | 3 | 3 | OK |
+| - LoginForm | - | OK | Usuario + contraseña |
+| - RegisterForm | - | OK | Email, usuario, contraseña con validación async |
+| - EditProfileForm | - | OK | Datos personales + FormArray de teléfonos |
+| **Validadores síncronos** | 3 | **13** | OK |
+| - strongPassword | - | OK | Requisitos de seguridad estrictos |
+| - username, nif, spanishPhone | - | OK | Validaciones específicas |
+| - url, range, minAge, etc. | - | OK | 9 validadores adicionales |
+| **Validadores asíncronos** | 2 | 2 | OK |
+| - uniqueEmail | - | OK | Con debounce de 600ms |
+| - availableUsername | - | OK | Con debounce de 600ms |
+| **FormArray** | 1 | 1 | OK |
+| - Teléfonos en EditProfileForm | - | OK | Añadir/eliminar dinámicamente |
+| **ViewChild + ElementRef** | Requerido | OK | OK |
+| - Focus automático | - | OK | firstNameInput en EditProfileForm |
 | - Scroll automático | - | ✅ | phonesContainer en EditProfileForm |
 | **Feedback visual** | Completo | ✅ | ✅ |
 | - Spinners de validación async | - | ✅ | RegisterForm + EditProfileForm |
@@ -3119,7 +3119,7 @@ Estado vacío reutilizable:
 
 ---
 
-## 🛡️ Estrategia de Manejo de Errores
+## Estrategia de Manejo de Errores
 
 ### Niveles de Manejo
 
@@ -3315,7 +3315,7 @@ export class GameListComponent implements OnInit {
 <br><br>
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# ⚡ FASE 6: OPTIMIZACIÓN Y GESTIÓN DE ESTADO
+# FASE 6: OPTIMIZACIÓN Y GESTIÓN DE ESTADO
 # ═══════════════════════════════════════════════════════════════════════════════
 
 > **Objetivo:** Implementar gestión de estado moderna con Signals, optimizar rendimiento
@@ -3757,7 +3757,7 @@ frontend/src/app/
 
 ---
 
-## 🧪 Testing Unitario
+## Testing Unitario
 
 ### Resumen de Cobertura
 
@@ -3829,7 +3829,7 @@ Total: 737 tests SUCCESS
 
 ---
 
-## 🔗 Testing de Integración
+## Testing de Integración
 
 ### Flujos Completos Testeados
 
@@ -3915,7 +3915,7 @@ req.flush(mockAuthResponse);
 
 ---
 
-## 🌐 Verificación Cross-Browser
+## Verificación Cross-Browser
 
 ### Navegadores Soportados
 
@@ -4024,32 +4024,79 @@ export const routes: Routes = [
 ### Tree Shaking
 
 Verificado automáticamente en producción:
-- ✅ Dead code elimination
-- ✅ Unused imports removed
-- ✅ FontAwesome optimizado (13 iconos de ~100)
+- Dead code elimination
+- Unused imports removed
+- FontAwesome optimizado (13 iconos de ~100)
 
 ### Análisis con Lighthouse
 
-Para ejecutar análisis de Lighthouse:
+#### Cómo Ejecutar el Análisis
 
-```bash
-# Opción 1: Chrome DevTools
-# F12 → Lighthouse → Analyze
+**Opción recomendada: Chrome DevTools**
+1. Abrir la aplicación: https://looking4rate-nu8km.ondigitalocean.app/
+2. Presionar `F12` para abrir DevTools
+3. Ir a la pestaña **Lighthouse**
+4. Seleccionar categorías: Performance, Accessibility, Best Practices, SEO
+5. Seleccionar dispositivo: Mobile o Desktop
+6. Clic en **Analyze page load**
 
-# Opción 2: CLI
-npm install -g lighthouse
-lighthouse https://looking4rate-nu8km.ondigitalocean.app/ --view
-```
+**Exportar el Reporte:**
+- Clic en el ícono ⚙️ (arriba a la derecha del reporte)
+- Seleccionar **"Save as HTML"**
+- Guardar en `docs/client/lighthouse/lighthouse-report-[fecha].html`
 
-**Métricas objetivo:**
-- Performance: > 80
-- Accessibility: > 90
-- Best Practices: > 90
-- SEO: > 80
+#### Resultados Obtenidos
+
+##### Métricas Alcanzadas
+
+> **Fecha del análisis:** 15 de enero de 2026  
+> **Modo:** Desktop (DevTools)  
+> **URL:** https://looking4rate-nu8km.ondigitalocean.app/
+
+| Categoría | Puntuación | Estado | Objetivo |
+|-----------|------------|--------|----------|
+| **⚡ Performance** | **87** | ✅ | > 80 |
+| **♿ Accessibility** | **86** | ✅ | > 80 |
+| **✅ Best Practices** | **100** | ✅ | > 90 |
+| **🔍 SEO** | **83** | ✅ | > 80 |
+
+##### Evidencias
+
+**Reportes HTML Completos:**
+- [Lighthouse Report - Página Home](./lighthouse/looking4rate-nu8km.ondigitalocean.app-20260115T231337.html)
+
+**Capturas de Pantalla:**
+
+![Lighthouse Score Overview](./img/lighthouse-pagina-home.png)
+_Resumen de puntuaciones Lighthouse - Página Principal_
+
+##### Métricas Core Web Vitals
+
+| Métrica | Valor | Estado | Descripción |
+|---------|-------|--------|-------------|
+| **LCP** (Largest Contentful Paint) | _[X.X]s_ | 🟢/🟡/🔴 | < 2.5s = 🟢 |
+| **FID** (First Input Delay) | _[XX]ms**1.0s** | 🟢 | < 2.5s = 🟢 |
+| **TBT** (Total Blocking Time) | **20ms** | 🟢 | < 200ms = 🟢 |
+| **CLS** (Cumulative Layout Shift) | **0.228** | 🟡 | < 0.1 = 🟢 |
+| **FCP** (First Contentful Paint) | **0.7s** | 🟢 | < 1.8s = 🟢 |
+| **TTI** (Time to Interactive) | **1.0s** | 🟢 | < 3.8s = 🟢 |
+| **SI** (Speed Index) | **0.7s** | 🟢 | < 3.4
+##### Recomendaciones Aplicadas
+
+- Lazy loading de rutas y componentes
+- Optimización de imágenes (WebP, lazy loading)
+- Minificación de CSS/JS
+- Tree shaking automático
+- Compresión gzip habilitada
+- Caché de recursos estáticos
+- Meta tags SEO implementados
+- Atributos `alt` en imágenes
+- Contraste de colores accesible
+- ARIA labels en elementos interactivos
 
 ---
 
-## 🏗️ Build de Producción
+## Build de Producción
 
 ### Comando de Build
 
@@ -4117,7 +4164,7 @@ source-map-explorer dist/frontend/browser/*.js
 
 ---
 
-## 🚀 Despliegue en Producción
+## Despliegue en Producción
 
 ### URL de Producción
 
@@ -4268,7 +4315,7 @@ frontend/
 
 ---
 
-## 📋 Guía de Contribución
+## Guía de Contribución
 
 ### Requisitos Previos
 
@@ -4363,7 +4410,7 @@ refactor: simplificar lógica de estado
 
 ---
 
-## 📝 Changelog
+## Changelog
 
 ### v1.0.0 (2026-01-14)
 
