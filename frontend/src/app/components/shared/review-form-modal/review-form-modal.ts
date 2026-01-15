@@ -12,7 +12,7 @@ import {
   OnChanges,
   SimpleChanges
 } from '@angular/core';
-import { isPlatformBrowser, CommonModule, UpperCasePipe } from '@angular/common';
+import { isPlatformBrowser, UpperCasePipe } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GameCover } from '../game-cover/game-cover';
 import { FormTextarea } from '../form-textarea/form-textarea';
@@ -37,7 +37,7 @@ import { FormTextarea } from '../form-textarea/form-textarea';
  */
 @Component({
   selector: 'app-review-form-modal',
-  imports: [FontAwesomeModule, CommonModule, UpperCasePipe, GameCover, FormTextarea],
+  imports: [FontAwesomeModule, UpperCasePipe, GameCover, FormTextarea],
   templateUrl: './review-form-modal.html',
   styleUrl: './review-form-modal.scss'
 })

@@ -10,18 +10,22 @@
 <app-footer></app-footer>
 
 <!-- Modal de Login -->
-<app-login-form 
-  [isOpen]="showLoginModal" 
-  (close)="closeLoginModal()"
-  (switchToRegister)="switchToRegister()">
-</app-login-form>
+@if (showLoginModal) {
+  <app-login-form 
+    [isOpen]="showLoginModal" 
+    (close)="closeLoginModal()"
+    (switchToRegister)="switchToRegister()">
+  </app-login-form>
+}
 
 <!-- Modal de Registro -->
-<app-register-form 
-  [isOpen]="showRegisterModal" 
-  (close)="closeRegisterModal()"
-  (switchToLogin)="switchToLogin()">
-</app-register-form>
+@if (showRegisterModal) {
+  <app-register-form 
+    [isOpen]="showRegisterModal" 
+    (close)="closeRegisterModal()"
+    (switchToLogin)="switchToLogin()">
+  </app-register-form>
+}
 
 <!-- Sistema de notificaciones global -->
 <app-notification></app-notification>

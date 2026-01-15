@@ -24,7 +24,7 @@
 
     // Mantener estilo hover del botón mientras se navega el dropdown
     .user-dropdown__button {
-      transform: translateY(-1px);
+      transform: $transform-hover-lift;
       box-shadow: $shadow-hover-accent;
 
       &::before {
@@ -70,7 +70,7 @@
     }
 
     &:hover {
-      transform: translateY(-1px);
+      transform: $transform-hover-lift;
       box-shadow: $shadow-hover-accent;
 
       &::before {
@@ -79,7 +79,7 @@
     }
 
     &:active {
-      transform: translateY(0);
+      transform: $transform-active-reset;
       box-shadow: $shadow-active-accent;
     }
   }

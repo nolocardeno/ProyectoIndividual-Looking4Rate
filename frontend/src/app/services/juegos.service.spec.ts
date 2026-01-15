@@ -216,8 +216,9 @@ describe('JuegosService', () => {
         expect(juegos).toBeDefined();
       });
 
-      const req = httpMock.expectOne('/api/juegos/populares');
+      const req = httpMock.expectOne(req => req.url === '/api/juegos/populares');
       expect(req.request.method).toBe('GET');
+      expect(req.request.params.get('limite')).toBe('10');
       req.flush([mockJuegoResumen]);
     });
   });

@@ -21,12 +21,16 @@ describe('Auth Guards', () => {
       'isAuthenticated',
       'setRedirectUrl',
       'requestLogin',
-      'getCurrentUserId'
+      'getCurrentUserId',
+      'isAdmin'
     ]);
 
     // Configurar retorno por defecto para createUrlTree
     const mockUrlTree = {} as UrlTree;
     router.createUrlTree.and.returnValue(mockUrlTree);
+
+    // isAdmin retorna false por defecto
+    authService.isAdmin.and.returnValue(false);
 
     TestBed.configureTestingModule({
       providers: [

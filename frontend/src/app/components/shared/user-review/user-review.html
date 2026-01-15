@@ -10,7 +10,28 @@
     decoding="async"
   />
   <section class="user-review__content">
-    <h3 class="user-review__title">Review de <strong>{{ review.nombreUsuario }}</strong></h3>
+    <h3 class="user-review__title">
+      Review de 
+      @if (review.usuarioId) {
+        <a [routerLink]="userProfileLink" class="user-review__user-link">
+          <strong>{{ review.nombreUsuario }}</strong>
+        </a>
+      } @else {
+        <strong>{{ review.nombreUsuario }}</strong>
+      }
+    </h3>
     <p class="user-review__text">{{ review.review }}</p>
   </section>
+  
+  <!-- Botón eliminar (solo si es propia) -->
+  @if (isOwn) {
+    <button 
+      class="user-review__delete-btn" 
+      (click)="onDeleteClick()"
+      aria-label="Eliminar review"
+      type="button"
+    >
+      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+    </button>
+  }
 </article>

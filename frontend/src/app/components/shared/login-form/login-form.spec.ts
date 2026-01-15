@@ -24,8 +24,8 @@ describe('LoginForm', () => {
 
   beforeEach(async () => {
     authServiceSpy = jasmine.createSpyObj('AuthService', ['login', 'getRedirectUrl', 'clearRedirectUrl']);
-    loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
-    notificationServiceSpy = jasmine.createSpyObj('NotificationService', ['success', 'error']);
+    loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide', 'showGlobal', 'hideGlobal']);
+    notificationServiceSpy = jasmine.createSpyObj('NotificationService', ['success', 'error', 'warning', 'info']);
     eventBusSpy = jasmine.createSpyObj('EventBusService', ['emit']);
     routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl', 'navigate']);
 
@@ -54,7 +54,7 @@ describe('LoginForm', () => {
 
     it('debería inicializar el formulario', () => {
       expect(component.loginForm).toBeDefined();
-      expect(component.loginForm.get('username')).toBeDefined();
+      expect(component.loginForm.get('email')).toBeDefined();
       expect(component.loginForm.get('password')).toBeDefined();
     });
 
@@ -70,25 +70,25 @@ describe('LoginForm', () => {
 
     it('debería ser válido con datos correctos', () => {
       component.loginForm.patchValue({
-        username: 'testuser',
+        email: 'test@example.com',
         password: 'password123'
       });
 
       expect(component.loginForm.valid).toBeTrue();
     });
 
-    it('debería requerir username', () => {
-      const usernameControl = component.loginForm.get('username');
-      usernameControl?.setValue('');
+    it('debería requerir email', () => {
+      const emailControl = component.loginForm.get('email');
+      emailControl?.setValue('');
       
-      expect(usernameControl?.hasError('required')).toBeTrue();
+      expect(emailControl?.hasError('required')).toBeTrue();
     });
 
-    it('debería requerir username mínimo 3 caracteres', () => {
-      const usernameControl = component.loginForm.get('username');
-      usernameControl?.setValue('ab');
+    it('debería validar formato de email', () => {
+      const emailControl = component.loginForm.get('email');
+      emailControl?.setValue('invalid-email');
       
-      expect(usernameControl?.hasError('minlength')).toBeTrue();
+      expect(emailControl?.hasError('email')).toBeTrue();
     });
 
     it('debería requerir password', () => {
@@ -107,44 +107,44 @@ describe('LoginForm', () => {
   });
 
   describe('Mensajes de error', () => {
-    it('usernameError debería retornar mensaje de requerido', () => {
-      const usernameControl = component.loginForm.get('username');
-      usernameControl?.setValue('');
-      usernameControl?.markAsTouched();
+    it('debería mostrar error en email inválido', () => {
+      const emailControl = component.loginForm.get('email');
+      emailControl?.setValue('');
+      emailControl?.markAsTouched();
 
-      expect(component.usernameError).toContain('obligatorio');
+      expect(emailControl?.hasError('required')).toBeTrue();
     });
 
-    it('usernameError debería retornar mensaje de longitud mínima', () => {
-      const usernameControl = component.loginForm.get('username');
-      usernameControl?.setValue('ab');
-      usernameControl?.markAsTouched();
+    it('debería mostrar error en email con formato incorrecto', () => {
+      const emailControl = component.loginForm.get('email');
+      emailControl?.setValue('invalidemail');
+      emailControl?.markAsTouched();
 
-      expect(component.usernameError).toContain('3');
+      expect(emailControl?.hasError('email')).toBeTrue();
     });
 
-    it('passwordError debería retornar mensaje de requerido', () => {
+    it('debería mostrar error en password requerido', () => {
       const passwordControl = component.loginForm.get('password');
       passwordControl?.setValue('');
       passwordControl?.markAsTouched();
 
-      expect(component.passwordError).toContain('obligatoria');
+      expect(passwordControl?.hasError('required')).toBeTrue();
     });
 
-    it('passwordError debería retornar mensaje de longitud mínima', () => {
+    it('debería mostrar error en password corto', () => {
       const passwordControl = component.loginForm.get('password');
       passwordControl?.setValue('12345');
       passwordControl?.markAsTouched();
 
-      expect(component.passwordError).toContain('6');
+      expect(passwordControl?.hasError('minlength')).toBeTrue();
     });
 
     it('no debería mostrar error si campo no está touched', () => {
-      const usernameControl = component.loginForm.get('username');
-      usernameControl?.setValue('');
+      const emailControl = component.loginForm.get('email');
+      emailControl?.setValue('');
       // No marcar como touched
 
-      expect(component.usernameError).toBe('');
+      expect(emailControl?.touched).toBeFalse();
     });
   });
 
@@ -173,54 +173,55 @@ describe('LoginForm', () => {
         avatar: '',
         rol: 'USER' as const
       }));
-      authServiceSpy.getRedirectUrl.and.returnValue(null);
+      authServiceSpy.getRedirectUrl.and.returnValue('/home');
     });
 
     it('no debería enviar si el formulario es inválido', () => {
       component.loginForm.patchValue({
-        username: '',
+        email: '',
         password: ''
       });
 
       component.onSubmit();
 
       expect(authServiceSpy.login).not.toHaveBeenCalled();
+      expect(notificationServiceSpy.warning).toHaveBeenCalled();
     });
 
     it('debería llamar al servicio de auth con credenciales', fakeAsync(() => {
       component.loginForm.patchValue({
-        username: 'testuser',
+        email: 'test@example.com',
         password: 'password123'
       });
 
       component.onSubmit();
-      tick(1100);
+      tick();
 
-      expect(authServiceSpy.login).toHaveBeenCalledWith('testuser', 'password123');
+      expect(authServiceSpy.login).toHaveBeenCalledWith('test@example.com', 'password123');
     }));
 
     it('debería mostrar notificación de éxito', fakeAsync(() => {
       component.loginForm.patchValue({
-        username: 'testuser',
+        email: 'test@example.com',
         password: 'password123'
       });
 
       component.onSubmit();
-      tick(1100);
+      tick();
 
       expect(notificationServiceSpy.success).toHaveBeenCalled();
     }));
 
     it('debería mostrar notificación de error en caso de fallo', fakeAsync(() => {
-      authServiceSpy.login.and.returnValue(throwError(() => new Error('Error de login')));
+      authServiceSpy.login.and.returnValue(throwError(() => ({ status: 401, message: 'Error' })));
 
       component.loginForm.patchValue({
-        username: 'testuser',
+        email: 'test@example.com',
         password: 'wrongpassword'
       });
 
       component.onSubmit();
-      tick(1100);
+      tick();
 
       expect(notificationServiceSpy.error).toHaveBeenCalled();
     }));

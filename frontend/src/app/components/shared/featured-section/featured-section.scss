@@ -8,12 +8,14 @@
 
 :host {
   display: block;
+  background: transparent;
 }
 
 .featured-section {
   display: flex;
   flex-direction: column;
   gap: $spacing-3;
+  background: transparent;
 
   // --------------------------------------------------------------------------
   // HEADER
@@ -26,6 +28,13 @@
     padding-bottom: $spacing-1;
     gap: $spacing-2;
     flex-wrap: wrap;
+  }
+
+  // --------------------------------------------------------------------------
+  // CONTENT
+  // --------------------------------------------------------------------------
+  &__content {
+    background: transparent;
   }
 
   &__title {

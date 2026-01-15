@@ -17,6 +17,7 @@ import { JuegoDTO, InteraccionDTO, ReviewDTO } from '../../models';
 
 export interface UserReviewData {
   id: number;
+  usuarioId: number;
   nombreUsuario: string;
   avatarUsuario?: string;
   puntuacion: number;
@@ -194,6 +195,7 @@ export default class GameDetailPage implements OnInit, OnDestroy {
           .filter(i => i.review !== null && i.review.trim().length > 0)
           .map(i => ({
             id: i.id,
+            usuarioId: i.usuarioId,
             nombreUsuario: i.nombreUsuario,
             avatarUsuario: i.avatarUsuario,
             puntuacion: i.puntuacion || 0,
@@ -369,6 +371,7 @@ export default class GameDetailPage implements OnInit, OnDestroy {
           .filter(i => i.review !== null && i.review.trim().length > 0)
           .map(i => ({
             id: i.id,
+            usuarioId: i.usuarioId,
             nombreUsuario: i.nombreUsuario,
             avatarUsuario: i.avatarUsuario,
             puntuacion: i.puntuacion || 0,
@@ -382,6 +385,55 @@ export default class GameDetailPage implements OnInit, OnDestroy {
     ).subscribe({
       next: (reviews) => {
         this.gameReviews.set(reviews);
+      }
+    });
+  }
+
+  /** Verifica si una review es del usuario actual */
+  isOwnReview(review: UserReviewData): boolean {
+    return this.currentUserId !== null && review.usuarioId === this.currentUserId;
+  }
+
+  /** Elimina una review del usuario */
+  onDeleteReview(reviewId: number): void {
+    if (!this.currentUserId || !this.gameId) return;
+
+    // Confirmar eliminación
+    if (!confirm('¿Estás seguro de que quieres eliminar tu review?')) return;
+
+    this.interactionLoading.set(true);
+    
+    const currentInteraction = this.userInteraction();
+    
+    // Actualizar la interacción quitando la review
+    this.interaccionesService.crearOActualizar(
+      this.currentUserId,
+      this.gameId,
+      {
+        estadoJugado: currentInteraction?.estadoJugado ?? false,
+        puntuacion: currentInteraction?.puntuacion ?? null,
+        review: null // Eliminar la review
+      }
+    ).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (interaction) => {
+        this.userInteraction.set(interaction);
+        this.interactionLoading.set(false);
+        this.notificationService.success('Review eliminada');
+        
+        // Actualizar el estado global
+        this.gameStateService.upsertInteraction(interaction);
+        
+        // Recargar las reviews
+        if (this.gameId) {
+          this.loadGameReviews(this.gameId);
+        }
+      },
+      error: (err) => {
+        console.error('Error eliminando review:', err);
+        this.interactionLoading.set(false);
+        this.notificationService.error('Error al eliminar la review');
       }
     });
   }

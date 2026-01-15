@@ -2,6 +2,10 @@
 
 Guía completa para ejecutar Looking4Rate con Docker.
 
+## URL de Producción
+
+**🌐 Aplicación desplegada:** https://looking4rate-nu8km.ondigitalocean.app/
+
 ## Requisitos Previos
 
 - Docker Desktop instalado (incluye Docker Compose)
@@ -265,6 +269,59 @@ Spring Boot Actuator expone métricas en:
 
 ## Despliegue en Producción
 
+### DigitalOcean App Platform
+
+La aplicación está desplegada en **DigitalOcean App Platform**:
+
+| Componente | URL |
+|------------|-----|
+| Frontend | https://looking4rate-nu8km.ondigitalocean.app/ |
+| API Backend | https://looking4rate-nu8km.ondigitalocean.app/api/ |
+
+#### Verificación del Despliegue
+
+##### Rutas del Frontend (SPA)
+
+Todas las rutas SPA funcionan correctamente con acceso directo:
+
+| Ruta | Estado | Descripción |
+|------|--------|-------------|
+| `/` | ✅ | Home - Página principal |
+| `/buscar` | ✅ | Búsqueda de juegos |
+| `/juego/:id` | ✅ | Detalle de juego |
+| `/usuario/:id` | ✅ | Perfil de usuario |
+| `/ajustes` | ✅ | Ajustes de cuenta (requiere login) |
+| `/404` | ✅ | Página no encontrada |
+| `/*` (wildcard) | ✅ | Redirige a 404 |
+
+##### Endpoints de la API
+
+| Endpoint | Estado | Autenticación |
+|----------|--------|---------------|
+| `GET /api/juegos` | ✅ | Pública |
+| `GET /api/juegos/:id` | ✅ | Pública |
+| `GET /api/usuarios/:id` | ✅ | Requiere JWT |
+| `GET /api/catalogos/*` | ✅ | Requiere JWT |
+| `POST /api/auth/login` | ✅ | Pública |
+| `POST /api/auth/registro` | ✅ | Pública |
+
+#### Configuración de Redirects para SPA
+
+El archivo `nginx.conf` está configurado para manejar correctamente las rutas de la SPA:
+
+```nginx
+location / {
+  try_files $uri $uri/ /index.html;
+  add_header Cache-Control "no-cache, no-store, must-revalidate";
+}
+```
+
+Esta configuración asegura que:
+1. Primero se busca el archivo exacto (`$uri`)
+2. Si no existe, se busca un directorio (`$uri/`)
+3. Si tampoco existe, se sirve `index.html` para que Angular Router maneje la ruta
+4. No se cachea el HTML para asegurar actualizaciones inmediatas
+
 ### Docker Hub
 
 ```bash
@@ -333,4 +390,4 @@ docker-compose up --build -d
 
 ---
 
-**Última Actualización:** 15 de diciembre de 2025
+**Última Actualización:** 14 de enero de 2026

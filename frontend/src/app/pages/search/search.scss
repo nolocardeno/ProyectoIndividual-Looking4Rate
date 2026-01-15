@@ -8,7 +8,6 @@
 
 .search-page {
   min-height: 100vh;
-  background-color: var(--bg-primary);
 
   // Eliminar padding superior del primer resultado para igualar espaciado del home
   &__result-item:first-child ::ng-deep .search-game-card {

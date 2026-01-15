@@ -70,6 +70,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/desarrolladoras/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/generos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/interacciones/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/usuarios/{id}").permitAll()
                 
                 // Registro de usuarios público
                 .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()

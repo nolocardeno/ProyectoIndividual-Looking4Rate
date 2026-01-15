@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -22,7 +21,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
  */
 @Component({
   selector: 'app-user-dropdown',
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [FontAwesomeModule],
   templateUrl: './user-dropdown.html',
   styleUrl: './user-dropdown.scss',
 })

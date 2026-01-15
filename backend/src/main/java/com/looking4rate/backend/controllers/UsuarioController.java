@@ -43,10 +43,9 @@ public class UsuarioController {
     }
 
     /**
-     * GET /api/usuarios/{id} - Obtiene un usuario por ID (propio usuario o ADMIN)
+     * GET /api/usuarios/{id} - Obtiene un usuario por ID (público para ver perfiles)
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<UsuarioDTO> obtenerPorId(@PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.obtenerPorId(id));
     }

@@ -60,7 +60,7 @@
     }
 
     &:hover {
-      transform: translateY(-1px);
+      transform: $transform-hover-lift;
       box-shadow: $shadow-hover-accent;
       background: linear-gradient(180deg, $color-primary-dark 0%, color.mix($color-primary-dark, $color-accent-dark, 70%) 100%);
 
@@ -74,7 +74,7 @@
     }
 
     &:active {
-      transform: translateY(0);
+      transform: $transform-active-reset;
       box-shadow: $shadow-active-accent;
     }
   }

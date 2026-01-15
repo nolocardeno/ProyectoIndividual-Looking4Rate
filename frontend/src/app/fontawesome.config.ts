@@ -1,244 +1,63 @@
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { 
-  // Iconos de navegación y UI
+  // Iconos de navegación y UI (realmente usados)
   faHome,
   faSearch,
-  faBars,
   faTimes,
   faChevronDown,
-  faChevronUp,
-  faChevronLeft,
-  faChevronRight,
-  faArrowLeft,
-  faArrowRight,
-  faAngleDown,
-  faAngleUp,
   
   // Iconos de usuario y autenticación
-  faUser,
   faUserCircle,
-  faUserPlus,
-  faSignInAlt,
   faSignOutAlt,
-  faLock,
-  faEnvelope,
   
   // Iconos de acciones
-  faPlus,
-  faMinus,
-  faEdit,
-  faTrash,
-  faSave,
   faCheck,
   faCog,
-  faEllipsisV,
-  faEllipsisH,
-  faShare,
-  faDownload,
-  faUpload,
-  
-  // Iconos de rating y favoritos
-  faStar,
-  faStarHalfAlt,
-  faHeart,
-  faThumbsUp,
-  faThumbsDown,
+  faTrash,
   
   // Iconos de gaming
-  faGamepad,
-  faDesktop,
-  faLaptop,
-  faMobileAlt,
-  
-  // Información
-  faInfoCircle,
-  faQuestionCircle,
-  faExclamationCircle,
-  faExclamationTriangle,
-  faBell,
-  faComment,
-  faComments,
-  
-  // Iconos de lista y vista
-  faList,
-  faTh,
-  faThLarge,
-  faFilter,
-  faSort,
-  faSortUp,
-  faSortDown,
-  
-  // Iconos de tiempo y calendario
-  faClock,
-  faCalendar,
-  faCalendarAlt,
-  
-  // Iconos de media
-  faPlay,
-  faPause,
-  faStop,
-  faImage,
-  faImages,
-  faVideo,
-  
-  // Iconos varios
-  faGlobe,
-  faLink,
-  faTag,
-  faTags,
-  faBookmark,
-  faFire,
-  faTrophy,
-  faCrown,
-  faMedal,
-  faEye,
-  faEyeSlash,
-  faSpinner,
-  faCircleNotch,
-  faMoon,
-  faSun
+  faGamepad
 } from '@fortawesome/free-solid-svg-icons';
 
-// Iconos de marcas (brands)
+// Iconos de marcas (brands) - solo los usados en footer
 import {
-  faPlaystation,
-  faXbox,
-  faSteam,
-  faWindows,
-  faApple,
-  faAndroid,
-  faLinux,
-  faTwitter,
   faXTwitter,
   faFacebook,
   faInstagram,
-  faYoutube,
-  faDiscord,
-  faTwitch,
-  faGithub,
-  faGoogle
+  faYoutube
 } from '@fortawesome/free-brands-svg-icons';
 
 /**
- * Configura la librería de Font Awesome con todos los iconos necesarios
- * para la aplicación Looking4Rate
+ * Configura la librería de Font Awesome con SOLO los iconos necesarios
+ * para la aplicación Looking4Rate.
+ * 
+ * OPTIMIZACIÓN: Se eliminaron iconos no utilizados para reducir el bundle size.
+ * Solo se incluyen los iconos que realmente aparecen en los templates HTML.
  */
 export function configureFontAwesome(library: FaIconLibrary): void {
   library.addIcons(
     // Navegación y UI
     faHome,
     faSearch,
-    faBars,
     faTimes,
     faChevronDown,
-    faChevronUp,
-    faChevronLeft,
-    faChevronRight,
-    faArrowLeft,
-    faArrowRight,
-    faAngleDown,
-    faAngleUp,
     
     // Usuario y autenticación
-    faUser,
     faUserCircle,
-    faUserPlus,
-    faSignInAlt,
     faSignOutAlt,
-    faLock,
-    faEnvelope,
     
     // Acciones
-    faPlus,
-    faMinus,
-    faEdit,
-    faTrash,
-    faSave,
     faCheck,
     faCog,
-    faEllipsisV,
-    faEllipsisH,
-    faShare,
-    faDownload,
-    faUpload,
-    
-    // Rating y favoritos
-    faStar,
-    faStarHalfAlt,
-    faHeart,
-    faThumbsUp,
-    faThumbsDown,
+    faTrash,
     
     // Gaming
     faGamepad,
-    faDesktop,
-    faLaptop,
-    faMobileAlt,
     
-    // Información
-    faInfoCircle,
-    faQuestionCircle,
-    faExclamationCircle,
-    faExclamationTriangle,
-    faBell,
-    faComment,
-    faComments,
-    
-    // Lista y vista
-    faList,
-    faTh,
-    faThLarge,
-    faFilter,
-    faSort,
-    faSortUp,
-    faSortDown,
-    
-    // Tiempo y calendario
-    faClock,
-    faCalendar,
-    faCalendarAlt,
-    
-    // Media
-    faPlay,
-    faPause,
-    faStop,
-    faImage,
-    faImages,
-    faVideo,
-    
-    // Varios
-    faGlobe,
-    faLink,
-    faTag,
-    faTags,
-    faBookmark,
-    faFire,
-    faTrophy,
-    faCrown,
-    faMedal,
-    faEye,
-    faEyeSlash,
-    faSpinner,
-    faCircleNotch,
-    faMoon,
-    faSun,
-    
-    // Marcas (brands)
-    faPlaystation,
-    faXbox,
-    faSteam,
-    faWindows,
-    faApple,
-    faAndroid,
-    faLinux,
-    faTwitter,
+    // Marcas (brands) - Footer
     faXTwitter,
     faFacebook,
     faInstagram,
-    faYoutube,
-    faDiscord,
-    faTwitch,
-    faGithub,
-    faGoogle
+    faYoutube
   );
 }

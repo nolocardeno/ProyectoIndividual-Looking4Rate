@@ -108,7 +108,7 @@
   // Estados interactivos
   // --------------------------------------------------------------------------
   &:hover {
-    transform: translateY(-1px);
+    transform: $transform-hover-lift;
     
     .theme-switcher__track {
       background: linear-gradient(
@@ -129,7 +129,7 @@
   }
 
   &:active {
-    transform: translateY(0);
+    transform: $transform-active-reset;
     
     .theme-switcher__track {
       box-shadow: $shadow-active-accent;

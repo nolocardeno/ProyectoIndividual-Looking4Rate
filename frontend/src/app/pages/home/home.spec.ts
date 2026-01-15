@@ -6,6 +6,8 @@
 
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import Home from './home';
@@ -53,6 +55,8 @@ describe('Home', () => {
       imports: [Home],
       providers: [
         provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: JuegosService, useValue: juegosServiceSpy },
         { provide: EventBusService, useValue: eventBusSpy },
         { provide: PLATFORM_ID, useValue: 'browser' }
@@ -245,6 +249,8 @@ describe('Home', () => {
         imports: [Home],
         providers: [
           provideRouter([]),
+          provideHttpClient(),
+          provideHttpClientTesting(),
           { provide: JuegosService, useValue: juegosServiceSpy },
           { provide: EventBusService, useValue: eventBusSpy },
           { provide: PLATFORM_ID, useValue: 'server' }

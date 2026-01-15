@@ -18,8 +18,8 @@ import { EventBusService, StateService, LoadingService } from './services';
     RouterOutlet, 
     Header, 
     Main, 
-    Footer, 
-    LoginForm, 
+    Footer,
+    LoginForm,
     RegisterForm,
     Notification,
     SpinnerComponent

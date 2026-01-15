@@ -107,7 +107,7 @@
         $color-primary-dark 0%,
         color.mix($color-primary-dark, $color-accent-dark, 75%) 100%
       );
-      transform: translateY(-1px);
+      transform: $transform-hover-lift;
       box-shadow: $shadow-hover-accent;
 
       &::before {
@@ -117,7 +117,7 @@
     }
 
     &:active:not(&--active) {
-      transform: translateY(0);
+      transform: $transform-active-reset;
       box-shadow: $shadow-active-accent;
     }
 
@@ -399,29 +399,54 @@
   }
   
   .profile-header {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    
+    // Avatar y info en fila, centrados
+    &__avatar-container {
+      order: 1;
+    }
+    
+    &__info {
+      flex-direction: column;
+      align-items: center;
+      width: auto;
+      order: 2;
+      flex: 0;
+    }
+    
+    &__stats {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+      margin-top: $spacing-2;
+    }
+    
     &__avatar {
       width: $spacing-8; // 64px
       height: $spacing-8;
     }
     
     &__name {
-      font-size: $font-size-sm;
+      font-size: $font-size-md;
     }
     
+    // Estadísticas más grandes
     &__stat-value {
-      font-size: $font-size-sm;
+      font-size: $font-size-md;
     }
     
     &__stat-label {
-      font-size: $font-size-xs; // 8px
+      font-size: $font-size-xs;
     }
     
     &__stats {
-      gap: $spacing-1;
+      gap: $spacing-2;
     }
     
     &__stat-divider {
-      height: $spacing-3; // 24px
+      height: $spacing-4; // 32px
     }
   }
   
@@ -441,7 +466,11 @@
     }
     
     &__name {
-      font-size: $font-size-xs;
+      font-size: $font-size-sm;
+    }
+    
+    &__stat-value {
+      font-size: $font-size-sm;
     }
   }
 }

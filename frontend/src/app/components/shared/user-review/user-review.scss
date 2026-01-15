@@ -22,6 +22,7 @@
   gap: $spacing-2; // 16px entre avatar y contenido
   padding-bottom: $spacing-3; // 24px abajo para separar del borde
   border-bottom: $border-thin solid var(--border-color);
+  position: relative;
 
   // Avatar del usuario
   &__avatar {
@@ -44,24 +45,65 @@
   // Título "Review de Usuario"
   &__title {
     font-family: $font-primary;
-    font-size: 1.125rem; // 18px - un poco más grande que md (16px)
-    font-weight: $font-weight-bold; // Mismo grosor que el nombre
-    color: var(--text-secondary); // "Review de" en gris
-    margin-bottom: $spacing-2; // 16px de separación entre título y texto
+    font-size: $font-size-md;
+    font-weight: $font-weight-bold;
+    color: var(--text-secondary);
+    margin-bottom: $spacing-2;
     line-height: $line-height-tight;
 
     strong {
-      color: var(--text-primary); // Nombre del usuario en blanco
+      color: var(--text-primary);
+    }
+  }
+
+  // Enlace al perfil del usuario
+  &__user-link {
+    text-decoration: none;
+
+    strong {
+      color: var(--text-primary);
+      @include transition(color);
+    }
+
+    &:hover strong {
+      color: var(--color-accent);
     }
   }
 
   // Texto de la review
   &__text {
     font-family: $font-primary;
-    font-size: $font-size-md; // Mismo tamaño que la descripción del juego
+    font-size: $font-size-md;
     line-height: $line-height-normal;
-    color: var(--text-secondary); // Mismo color que "Desarrollado por"
+    color: var(--text-secondary);
     margin: 0;
+  }
+
+  // Botón de eliminar review
+  &__delete-btn {
+    position: absolute;
+    top: calc(50% - #{$spacing-2});
+    right: 0;
+    transform: translateY(-50%);
+    padding: $spacing-1;
+    background: transparent;
+    border: none;
+    border-radius: $radius-md;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    cursor: pointer;
+    @include transition(all);
+
+    &:hover {
+      color: var(--color-error);
+      background-color: rgba($color-error-dark, 0.1);
+      opacity: 1;
+    }
+
+    &:focus-visible {
+      outline: $border-medium solid var(--color-accent);
+      outline-offset: $border-medium;
+    }
   }
 }
 

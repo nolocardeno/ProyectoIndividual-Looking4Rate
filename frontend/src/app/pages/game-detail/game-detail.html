@@ -59,7 +59,11 @@
         } @else {
           <section class="game-detail__reviews-grid">
             @for (review of gameReviews().slice(0, 3); track review.id) {
-              <app-user-review [review]="review" />
+              <app-user-review 
+                [review]="review" 
+                [isOwn]="isOwnReview(review)"
+                (deleteReview)="onDeleteReview($event)"
+              />
             }
           </section>
         }

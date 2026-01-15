@@ -148,7 +148,7 @@
 
     // Estados interactivos (idénticos a botones)
     &:hover {
-      transform: translateY(-1px);
+      transform: $transform-hover-lift;
       box-shadow: var(--badge-shadow);
       --badge-bg-end: #{color.mix($color-primary-dark, $color-accent-dark, 50%)};
 
@@ -159,7 +159,7 @@
     }
 
     &:active {
-      transform: translateY(0);
+      transform: $transform-active-reset;
       box-shadow: var(--badge-shadow-active);
     }
 

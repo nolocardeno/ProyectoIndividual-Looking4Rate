@@ -11,8 +11,6 @@
   display: block;
   flex: 1;
   min-height: 100%;
-  background-color: var(--bg-primary);
-  @include transition(background-color);
 }
 
 .main {

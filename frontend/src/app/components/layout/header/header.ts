@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewInit, Inject, PLATFORM_ID, inject, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { isPlatformBrowser, CommonModule, AsyncPipe } from '@angular/common';
+import { isPlatformBrowser, AsyncPipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -11,7 +11,7 @@ import { AuthService, AuthState } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink, FontAwesomeModule, SearchBox, Button, ThemeSwitcher, UserDropdown, AsyncPipe],
+  imports: [RouterLink, FontAwesomeModule, SearchBox, Button, ThemeSwitcher, UserDropdown, AsyncPipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -302,6 +302,7 @@ export class Header implements AfterViewInit, OnInit, OnDestroy {
    * Navega al perfil del usuario
    */
   goToProfile(): void {
+    this.closeMenu();
     if (this.currentAuthState.user) {
       this.router.navigate(['/usuario', this.currentAuthState.user.id]);
       this.isUserDropdownOpen = false;
@@ -312,6 +313,7 @@ export class Header implements AfterViewInit, OnInit, OnDestroy {
    * Navega a ajustes
    */
   goToSettings(): void {
+    this.closeMenu();
     this.router.navigate(['/ajustes']);
     this.isUserDropdownOpen = false;
   }
@@ -320,6 +322,7 @@ export class Header implements AfterViewInit, OnInit, OnDestroy {
    * Navega al inicio
    */
   goToHome(): void {
+    this.closeMenu();
     this.router.navigate(['/']);
     this.isUserDropdownOpen = false;
   }
@@ -328,6 +331,7 @@ export class Header implements AfterViewInit, OnInit, OnDestroy {
    * Cierra sesión
    */
   logout(): void {
+    this.closeMenu();
     this.authService.logout();
     this.isUserDropdownOpen = false;
     this.router.navigate(['/']);

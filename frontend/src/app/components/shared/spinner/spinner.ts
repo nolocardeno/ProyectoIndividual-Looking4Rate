@@ -42,14 +42,14 @@ import {
   Renderer2,
   inject
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { LoadingService, LoadingState } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-spinner',
   standalone: true,
-  imports: [CommonModule],
+  imports: [NgClass],
   templateUrl: './spinner.html',
   styleUrls: ['./spinner.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

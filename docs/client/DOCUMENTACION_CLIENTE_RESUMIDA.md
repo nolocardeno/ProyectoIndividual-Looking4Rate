@@ -2,6 +2,15 @@
 
 Documentación resumida del proyecto Angular.
 
+## 🌐 Acceso a Producción
+
+| Componente | URL |
+|------------|-----|
+| **🔗 Frontend** | **https://looking4rate-nu8km.ondigitalocean.app/** |
+| **🔗 API Backend** | **https://looking4rate-nu8km.ondigitalocean.app/api/** |
+
+---
+
 ## 📑 Índice
 
 - [FASE 1: Arquitectura de Eventos](#fase-1-arquitectura-de-eventos-del-cliente)
@@ -10,6 +19,7 @@ Documentación resumida del proyecto Angular.
 - [FASE 4: Enrutamiento y Navegación](#fase-4-enrutamiento-y-navegación)
 - [FASE 5: Comunicación HTTP](#-fase-5-comunicación-http)
 - [FASE 6: Optimización y Estado](#-fase-6-optimización-y-gestión-de-estado)
+- [FASE 7: Testing, Build y Despliegue](#fase-7-testing-build-y-despliegue)
 - [Arquitectura CSS](#-arquitectura-css)
 - [Tecnologías](#tecnologías)
 - [Estructura del Proyecto](#estructura-del-proyecto)
@@ -405,6 +415,87 @@ data$.pipe(takeUntil(this.destroy$)).subscribe();
 
 ---
 
+## FASE 7: Testing, Build y Despliegue
+
+### 🧪 Testing
+
+**Métricas**
+| Métrica | Valor |
+|---------|-------|
+| Tests Totales | **737** |
+| Tests Pasados | **737 (100%)** |
+| Cobertura Líneas | **70.5%** |
+| Cobertura Funciones | **63.25%** |
+
+**Archivos de Test**
+- **21 componentes** testeados (`*.spec.ts`)
+- **9 servicios** con tests unitarios
+- **2 archivos** de tests de integración
+
+**Herramientas**
+- Karma + Jasmine
+- Coverage: Istanbul
+
+### 🌐 Cross-Browser
+
+**Navegadores Soportados:** 34 browsers
+- Chrome, Firefox, Safari, Edge (desktop)
+- Chrome/Safari (iOS 15.1+)
+- Chrome/Firefox (Android)
+
+**Configuración:** `.browserslistrc`
+```
+last 2 Chrome versions
+last 2 Firefox versions
+last 2 Safari versions
+last 2 Edge versions
+iOS >= 15.1
+```
+
+### ⚡ Rendimiento
+
+| Métrica | Bundle | Gzip |
+|---------|--------|------|
+| Initial | **596.49 KB** | **155.32 KB** |
+
+**Optimizaciones Aplicadas:**
+- ✅ Lazy loading en 12 rutas
+- ✅ OnPush change detection
+- ✅ Tree-shaking y minificación
+- ✅ Compresión gzip
+
+### 🏗️ Build de Producción
+
+```bash
+# Comando
+ng build --configuration production
+
+# Salida
+✔ Compiled successfully.
+Initial chunk files           | Raw       | Gzip
+main-XXXXXXXX.js              | 596.49 kB | 155.32 kB
+styles-XXXXXXXX.css           |  18.95 kB |   3.94 kB
+```
+
+### 🚀 Despliegue
+
+**Plataforma:** DigitalOcean App Platform
+- Contenedores Docker
+- SSL/HTTPS automático
+- CI/CD integrado
+
+**Rutas Verificadas:**
+| Ruta | Estado |
+|------|--------|
+| `/` | ✅ |
+| `/buscar` | ✅ |
+| `/juego/:id` | ✅ |
+| `/usuario/:id` | ✅ |
+| `/ajustes` | ✅ |
+| `/404` | ✅ |
+
+---
+
 ## Tecnologías
 
 - **Angular 19:** Standalone components, Signals
@@ -452,7 +543,7 @@ frontend/
 
 ## 🔗 Enlaces Útiles
 
-- [Documentación Completa](./README_CLIENTE.md)
-- [Documentación de Diseño](./design/DOCUMENTACION.md)
+- **🌐 Producción:** https://looking4rate-nu8km.ondigitalocean.app/
+- [Documentación Completa](./DOCUMENTACION_CLIENTE.md)
 - [Angular Docs](https://angular.dev)
 - [RxJS Docs](https://rxjs.dev)

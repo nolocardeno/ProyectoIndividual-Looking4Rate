@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, AfterViewChecked, Inject, PLATFORM_ID, inject, OnInit, OnDestroy } from '@angular/core';
-import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormInput } from '../form-input/form-input';
@@ -10,7 +10,7 @@ import { CustomValidators, AsyncValidators, ValidationService } from '../../../v
 
 @Component({
   selector: 'app-register-form',
-  imports: [FormInput, FontAwesomeModule, ReactiveFormsModule, CommonModule],
+  imports: [FormInput, FontAwesomeModule, ReactiveFormsModule],
   templateUrl: './register-form.html',
   styleUrl: './register-form.scss',
 })

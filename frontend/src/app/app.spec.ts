@@ -4,11 +4,13 @@
  * Suite de pruebas para el componente principal de la aplicación.
  */
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { App } from './app';
-import { EventBusService, StateService, LoadingService } from './services';
+import { EventBusService, StateService, LoadingService, NotificationService } from './services';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 
 describe('App', () => {
@@ -17,6 +19,7 @@ describe('App', () => {
   let eventBusSpy: jasmine.SpyObj<EventBusService>;
   let stateServiceSpy: jasmine.SpyObj<StateService>;
   let loadingServiceSpy: jasmine.SpyObj<LoadingService>;
+  let notificationServiceSpy: jasmine.SpyObj<NotificationService>;
   let iconLibrarySpy: jasmine.SpyObj<FaIconLibrary>;
 
   beforeEach(async () => {
@@ -30,7 +33,12 @@ describe('App', () => {
       })
     });
     loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide'], {
-      isLoading$: of(false)
+      isLoading$: of(false),
+      globalLoading$: of(null)
+    });
+    notificationServiceSpy = jasmine.createSpyObj('NotificationService', ['show', 'success', 'error', 'warning', 'info', 'dismiss'], {
+      notifications$: of(null),
+      currentNotification$: of(null)
     });
     iconLibrarySpy = jasmine.createSpyObj('FaIconLibrary', ['addIcons', 'addIconPacks']);
 
@@ -41,9 +49,12 @@ describe('App', () => {
       imports: [App],
       providers: [
         provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: EventBusService, useValue: eventBusSpy },
         { provide: StateService, useValue: stateServiceSpy },
         { provide: LoadingService, useValue: loadingServiceSpy },
+        { provide: NotificationService, useValue: notificationServiceSpy },
         { provide: FaIconLibrary, useValue: iconLibrarySpy }
       ]
     }).compileComponents();
@@ -65,7 +76,8 @@ describe('App', () => {
 
   describe('ngOnInit', () => {
     it('debería suscribirse a eventos de modal', () => {
-      fixture.detectChanges();
+      // Llamar ngOnInit manualmente sin detectChanges (evita renderizar componentes hijos)
+      component.ngOnInit();
       expect(eventBusSpy.on).toHaveBeenCalled();
     });
   });
@@ -117,26 +129,33 @@ describe('App', () => {
   });
 
   describe('Cambio entre modales', () => {
-    it('debería cambiar de login a registro', () => {
+    it('debería cambiar de login a registro', fakeAsync(() => {
       component.showLoginModal = true;
       component.switchToRegister();
       
       expect(component.showLoginModal).toBeFalse();
+      
+      tick(200); // Esperar el setTimeout de 150ms
+      
       expect(component.showRegisterModal).toBeTrue();
-    });
+    }));
 
-    it('debería cambiar de registro a login', () => {
+    it('debería cambiar de registro a login', fakeAsync(() => {
       component.showRegisterModal = true;
       component.switchToLogin();
       
       expect(component.showRegisterModal).toBeFalse();
+      
+      tick(200); // Esperar el setTimeout de 150ms
+      
       expect(component.showLoginModal).toBeTrue();
-    });
+    }));
   });
 
   describe('ngOnDestroy', () => {
     it('debería limpiar suscripciones', () => {
-      fixture.detectChanges();
+      // Inicializar suscripciones sin renderizar
+      component.ngOnInit();
       
       // No debería lanzar error al destruir
       expect(() => {
@@ -147,24 +166,18 @@ describe('App', () => {
 
   describe('Eventos del EventBus', () => {
     it('debería responder a openLoginModal event', () => {
-      // Simular que el evento openLoginModal se emite
-      const openLoginCallback = eventBusSpy.on.calls.allArgs()
-        .find(args => args[0] === 'openLoginModal');
-      
-      if (openLoginCallback) {
-        fixture.detectChanges();
-        // El componente debería haberse suscrito
-        expect(eventBusSpy.on).toHaveBeenCalledWith('openLoginModal');
-      }
+      // Llamar ngOnInit para que se suscriba a eventos
+      component.ngOnInit();
+      expect(eventBusSpy.on).toHaveBeenCalledWith('openLoginModal');
     });
 
     it('debería responder a openRegisterModal event', () => {
-      fixture.detectChanges();
+      component.ngOnInit();
       expect(eventBusSpy.on).toHaveBeenCalledWith('openRegisterModal');
     });
 
     it('debería responder a closeAllModals event', () => {
-      fixture.detectChanges();
+      component.ngOnInit();
       expect(eventBusSpy.on).toHaveBeenCalledWith('closeAllModals');
     });
   });
