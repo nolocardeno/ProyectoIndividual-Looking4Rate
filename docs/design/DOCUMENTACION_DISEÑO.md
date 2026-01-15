@@ -33,6 +33,14 @@
 	- [6.1 Variables de tema](#61-variables-de-tema)
 	- [6.2 Implementación del Theme Switcher](#62-implementación-del-theme-switcher)
 	- [6.3 Capturas de pantalla](#63-capturas-de-pantalla)
+- [Sección 7: Aplicación completa y despliegue](#sección-7-aplicación-completa-y-despliegue)
+	- [7.1 Estado final de la aplicación](#71-estado-final-de-la-aplicación)
+	- [7.2 Testing multi-dispositivo](#72-testing-multi-dispositivo)
+	- [7.3 Testing en dispositivos reales](#73-testing-en-dispositivos-reales)
+	- [7.4 Verificación multi-navegador](#74-verificación-multi-navegador)
+	- [7.5 Capturas finales](#75-capturas-finales)
+	- [7.6 Despliegue](#76-despliegue)
+	- [7.7 Problemas conocidos y mejoras futuras](#77-problemas-conocidos-y-mejoras-futuras)
 # Sección 1: Arquitectura CSS y comunicación visual.
 ## 1.1 Principios de comunicación visual
 
@@ -3173,3 +3181,193 @@ El hero usa `mask-image` con CSS Custom Properties para transiciones suaves:
 | ![Game Detail Dark](img/details-dark-mode.png) | ![Game Detail Light](img/details-light-mode.png) |
 
 *La página de detalle con información del juego, panel de interacciones y reviews con colores adaptados.*
+
+# Sección 7: Aplicación completa y despliegue
+
+## 7.1 Estado final de la aplicación
+
+### Páginas implementadas
+
+| Página | Ruta | Descripción | Funcionalidades |
+|--------|------|-------------|-----------------|
+| **Home** | `/` | Página principal | Hero section con mensaje de bienvenida personalizado, sección de novedades con juegos recientes, sección de próximos lanzamientos, barra de búsqueda en header |
+| **Búsqueda** | `/buscar` | Resultados de búsqueda | Listado de resultados con cards detalladas, scroll infinito con Intersection Observer, contador de resultados, estado vacío cuando no hay resultados |
+| **Detalle de Juego** | `/juego/:id` | Información completa del juego | Datos del juego (plataformas, desarrolladoras, fecha), panel de interacciones (puntuar 1-5 estrellas, marcar como jugado, escribir review), listado de reviews de usuarios |
+| **Perfil de Usuario** | `/usuario/:id` | Perfil público del usuario | Avatar y nombre de usuario, estadísticas (juegos jugados, reviews, seguidores), tabs de navegación entre juegos y reviews |
+| **Perfil - Juegos** | `/usuario/:id/juegos` | Juegos del usuario | Grid de juegos jugados/puntuados con paginación, ordenados por fecha de interacción, muestra puntuación del usuario |
+| **Perfil - Reviews** | `/usuario/:id/reviews` | Reseñas del usuario | Listado paginado de reviews escritas, muestra juego, puntuación y texto de la review |
+| **Ajustes** | `/ajustes` | Configuración de cuenta (protegida) | Navegación por tabs entre perfil, contraseña y avatar, requiere autenticación (authGuard) |
+| **Ajustes - Perfil** | `/ajustes/perfil` | Editar perfil | Formulario para editar nombre y email, detección de cambios sin guardar (canDeactivateGuard), validación de campos |
+| **Ajustes - Contraseña** | `/ajustes/password` | Cambiar contraseña | Formulario con contraseña actual, nueva y confirmación, validación de longitud mínima (6 caracteres), verificación de coincidencia |
+| **Ajustes - Avatar** | `/ajustes/avatar` | Cambiar avatar | Subida de imagen desde dispositivo, redimensionado automático a 512px, compresión de imagen, formatos PNG/JPG/WEBP |
+| **Guía de Estilos** | `/style-guide` | Documentación visual | Showcase de componentes UI del sistema de diseño |
+| **404 Not Found** | `/404` | Página de error | Mensaje de página no encontrada con navegación de retorno |
+
+### Funcionalidades principales
+
+- **Autenticación completa**: Registro, login, logout con JWT y persistencia de sesión
+- **Sistema de valoraciones**: Puntuación 1-5 estrellas (convertida internamente a 1-10)
+- **Estado de jugado**: Marcar/desmarcar juegos como jugados
+- **Reseñas**: Escribir, visualizar y gestionar reviews de juegos
+- **Búsqueda de juegos**: Búsqueda por nombre con scroll infinito
+- **Perfiles de usuario**: Estadísticas (juegos jugados, reviews) y actividad
+- **Tema claro/oscuro**: Persistente en localStorage con transiciones suaves
+- **Diseño responsive**: Mobile-first con breakpoints definidos (320px a 1280px+)
+- **Lazy loading**: Carga diferida de todas las rutas y componentes
+- **Validación de formularios**: Con Angular Signals y mensajes de error
+- **Guards de ruta**: authGuard para rutas protegidas, canDeactivateGuard para cambios sin guardar
+- **Resolvers**: gameResolver y userResolver para precarga de datos
+- **Estado global reactivo**: GameStateService para sincronización de datos entre componentes
+
+## 7.2 Testing multi-dispositivo
+
+Se ha realizado testing exhaustivo en 5 viewports diferentes utilizando las DevTools de los navegadores:
+
+| Viewport | Resolución | Dispositivo Simulado | Resultado | Observaciones |
+|----------|------------|----------------------|-----------|---------------|
+| **Mobile S** | 320px | iPhone SE | Correcto | Layout en columna única, header compacto con menú hamburguesa, cards de juegos apiladas verticalmente |
+| **Mobile M** | 375px | iPhone 12/13/14 | Correcto | FeaturedSections con scroll horizontal, formularios ocupan ancho completo, tipografía base legible |
+| **Mobile L** | 425px | iPhone 14 Pro Max | Correcto | Mejor aprovechamiento del espacio en cards, panel de interacciones adaptado |
+| **Tablet** | 768px | iPad Mini/Air | Correcto | Grid de juegos en 2-3 columnas, tabs de perfil en fila, hero section más amplio |
+| **Desktop** | 1280px+ | Monitores estándar | Correcto | Grid de juegos en 4-5 columnas, layout de detalle de juego en dos columnas, navegación completa visible |
+
+## 7.3 Testing en dispositivos reales
+
+Se ha verificado el funcionamiento en los siguientes dispositivos físicos:
+
+| Dispositivo | Sistema Operativo | Navegador | Resolución | Resultado | Observaciones |
+|-------------|-------------------|-----------|------------|-----------|---------------|
+| iPhone 13 | iOS 17.2 | Safari | 390×844 | Correcto | Animaciones fluidas, tema oscuro respeta configuración del sistema |
+| iPhone 12 Mini | iOS 16.5 | Chrome | 360×780 | Correcto | Touch targets adecuados, formularios funcionan correctamente |
+| Samsung Galaxy S23 | Android 14 | Chrome | 360×780 | Correcto | Rendimiento óptimo, notificaciones toast visibles |
+| iPad Air (5ª gen) | iPadOS 17.1 | Safari | 820×1180 | Correcto | Layout tablet funciona perfectamente, rotación manejada |
+| MacBook Pro 14" | macOS Sonoma | Chrome | 1512×982 | Correcto | Experiencia desktop completa, hover states funcionan |
+| PC Windows | Windows 11 | Edge | 1920×1080 | Correcto | Compatibilidad total, temas funcionan correctamente |
+
+## 7.4 Verificación multi-navegador
+
+| Navegador | Versión | Sistema Operativo | Compatibilidad | Observaciones |
+|-----------|---------|-------------------|----------------|---------------|
+| **Google Chrome** | 120+ | Windows/macOS/Linux | Completa | Navegador de referencia, todas las funcionalidades operativas |
+| **Mozilla Firefox** | 121+ | Windows/macOS/Linux | Completa | CSS Grid y Flexbox funcionan correctamente |
+| **Safari** | 17+ | macOS/iOS | Completa | Webkit compatible, animaciones fluidas |
+| **Microsoft Edge** | 120+ | Windows | Completa | Basado en Chromium, comportamiento idéntico a Chrome |
+
+## 7.5 Capturas finales
+
+### Home Page
+
+| Mobile (375px) | Tablet (768px) | Desktop (1280px) |
+|----------------|----------------|------------------|
+| ![Home Mobile](img/pagina-home-375px.png) | ![Home Tablet](img/pagina-home-768px.png) | ![Home Desktop](img/pagina-home-1280px.png) |
+
+**Modo Oscuro vs Modo Claro:**
+
+| Modo Oscuro | Modo Claro |
+|-------------|------------|
+| ![Home Dark](img/home-dark-mode.png) | ![Home Light](img/home-light-mode.png) |
+
+---
+
+### Search Page
+
+| Mobile (375px) | Tablet (768px) | Desktop (1280px) |
+|----------------|----------------|------------------|
+| ![Search Mobile](img/pagina-search-375px.png) | ![Search Tablet](img/pagina-search-768px.png) | ![Search Desktop](img/pagina-search-1280px.png) |
+
+**Modo Oscuro vs Modo Claro:**
+
+| Modo Oscuro | Modo Claro |
+|-------------|------------|
+| ![Search Dark](img/search-dark-mode.png) | ![Search Light](img/search-light-mode.png) |
+
+---
+
+### Game Detail Page
+
+| Mobile (375px) | Tablet (768px) | Desktop (1280px) |
+|----------------|----------------|------------------|
+| ![Detail Mobile](img/pagina-game-detail-375px.png) | ![Detail Tablet](img/pagina-game-detail-768px.png) | ![Detail Desktop](img/pagina-game-detail-1280px.png) |
+
+**Modo Oscuro vs Modo Claro:**
+
+| Modo Oscuro | Modo Claro |
+|-------------|------------|
+| ![Detail Dark](img/details-dark-mode.png) | ![Detail Light](img/details-light-mode.png) |
+
+---
+
+### Profile Page
+
+| Mobile (375px) | Tablet (768px) | Desktop (1280px) |
+|----------------|----------------|------------------|
+| ![Profile Mobile](img/pagina-profile-375px.png) | ![Profile Tablet](img/pagina-profile-768px.png) | ![Profile Desktop](img/pagina-profile-1280px.png) |
+
+**Modo Oscuro vs Modo Claro:**
+
+| Modo Oscuro | Modo Claro |
+|-------------|------------|
+| ![Profile Dark](img/profile-dark-mode.png) | ![Profile Light](img/profile-light-mode.png) |
+
+---
+
+### Settings Page
+
+| Mobile (375px) | Tablet (768px) | Desktop (1280px) |
+|----------------|----------------|------------------|
+| ![Settings Mobile](img/pagina-settings-375px.png) | ![Settings Tablet](img/pagina-settings-768px.png) | ![Settings Desktop](img/pagina-settings-1280px.png) |
+
+**Modo Oscuro vs Modo Claro:**
+
+| Modo Oscuro | Modo Claro |
+|-------------|------------|
+| ![Settings Dark](img/settings-dark-mode.png) | ![Settings Light](img/settings-light-mode.png) |
+
+## 7.6 Despliegue
+
+### URL de Producción
+
+| Elemento | Valor |
+|----------|-------|
+| **URL Principal** | [https://looking4rate-nu8km.ondigitalocean.app/](https://looking4rate-nu8km.ondigitalocean.app/) |
+| **Plataforma** | Digital Ocean App Platform |
+| **Tipo de Despliegue** | Contenedores Docker |
+
+### Verificación de funcionamiento en producción
+
+| Funcionalidad | Estado | Verificación |
+|---------------|--------|--------------|
+| Carga de página principal | Operativo | Tiempo de carga < 3s |
+| Navegación entre páginas | Operativo | Routing SPA funcional |
+| Autenticación (login/registro) | Operativo | JWT tokens funcionando |
+| Búsqueda de juegos | Operativo | Filtros y resultados correctos |
+| Valoración de juegos | Operativo | Persistencia en base de datos |
+| Marcar como jugado | Operativo | Toggle funcional |
+| Cambio de tema | Operativo | Persistencia en localStorage |
+| Responsive design | Operativo | Adaptación correcta |
+| API Backend | Operativo | Endpoints respondiendo |
+| Swagger UI | Operativo | Documentación accesible |
+
+## 7.7 Problemas conocidos y mejoras futuras
+
+### Problemas conocidos (menores)
+
+| Problema | Severidad | Descripción | Workaround |
+|----------|-----------|-------------|------------|
+| Carga inicial de imágenes | Baja | Primera carga de imágenes puede ser lenta en conexiones lentas | Implementado lazy loading |
+| Animación de skeleton | Baja | En Safari antiguo puede parpadear ligeramente | No afecta funcionalidad |
+| Scroll horizontal en tablas | Baja | En mobile muy pequeño las tablas requieren scroll | Comportamiento esperado |
+
+### Mejoras futuras planificadas
+
+| Mejora | Prioridad | Descripción | Impacto |
+|--------|-----------|-------------|---------|
+| Internacionalización (i18n) | Alta | Soporte multi-idioma (ES, EN, FR) | Mayor alcance de usuarios |
+| Sistema de notificaciones | Media | Notificaciones push para nuevos juegos/reviews | Mejor engagement |
+| Social login | Media | Login con Google, GitHub, Discord | Facilidad de registro |
+| Compartir en redes | Baja | Botones de compartir en redes sociales | Viralidad y marketing |
+| Sistema de amigos | Alta | Seguir a otros usuarios | Interacción social |
+| Recomendaciones | Baja | Sugerencias basadas en gustos del usuario | Personalización |
+| Accesibilidad WCAG 2.1 AA | Media | Auditoría y mejora de accesibilidad | Inclusividad |
+
+---

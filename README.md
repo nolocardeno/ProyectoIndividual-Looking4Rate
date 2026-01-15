@@ -60,7 +60,7 @@ docker-compose up --build
 docker-compose down
 ```
 
-> **Documentación completa de Docker:** [`docs/deployment/DOCKER.md`](docs/deployment/DOCKER.md)
+> **Documentación completa de despliegue:** [`docs/deployment/DOCUMENTACION_DESPLIEGUE.md`](docs/deployment/DOCUMENTACION_DESPLIEGUE.md)
 
 ---
 
@@ -103,12 +103,14 @@ npm start
 ## Características
 
 - **Catálogo de Juegos:** Navega y busca en una completa base de datos de videojuegos
-- **Valoraciones de Usuarios:** Valora juegos y consulta las valoraciones de la comunidad
-- **Perfiles de Usuario:** Perfiles personalizados con preferencias de juego
+- **Valoraciones de Usuarios:** Sistema de puntuación de 1-5 estrellas (1-10 internamente)
+- **Reseñas y Reviews:** Escribe y consulta opiniones detalladas sobre juegos
+- **Estado de Jugado:** Marca juegos como jugados y lleva registro de tu biblioteca
+- **Perfiles de Usuario:** Perfiles personalizados con estadísticas (juegos jugados, reviews escritas)
 - **Diseño Responsive:** Interfaz completamente responsive con soporte para modo claro/oscuro
-- **Interacciones en Tiempo Real:** Experiencia de usuario fluida con Angular signals
-- **API RESTful:** API backend bien documentada con Spring Boot
-- **Autenticación Segura:** Sistema de autenticación basado en JWT
+- **Gestión de Estado Reactiva:** Experiencia de usuario fluida con Angular Signals
+- **API RESTful:** API backend bien documentada con Spring Boot y Swagger UI
+- **Autenticación Segura:** Sistema de autenticación basado en JWT con persistencia de sesión
 
 ---
 
@@ -219,7 +221,7 @@ ProyectoIndividual-Looking4Rate/
 │
 ├── docs/                             # Documentación
 │   ├── deployment/
-│   │   └── DOCKER.md                 # Guía de Docker
+│   │   └── DOCUMENTACION_DESPLIEGUE.md  # Guía de Docker
 │   ├── client/                       # Docs del proyecto
 │   └── design/                       # Docs de diseño
 │
@@ -282,7 +284,7 @@ Endpoints para monitorizar el estado de la aplicación:
 - `GET /api/interacciones` - Obtener todas las interacciones
 - `GET /api/interacciones/usuario/{usuarioId}` - Obtener interacciones de usuario
 - `GET /api/interacciones/juego/{juegoId}` - Obtener interacciones de juego
-- `POST /api/interacciones` - Crear interacción (valoración/favorito)
+- `POST /api/interacciones` - Crear interacción (puntuación, review, estado de jugado)
 - `PUT /api/interacciones/{id}` - Actualizar interacción
 - `DELETE /api/interacciones/{id}` - Eliminar interacción
 
@@ -312,4 +314,4 @@ Autor: Manolo Cárdeno Sánchez.
 
 ---
 
-*Última Actualización: 15 de diciembre de 2025*
+*Última Actualización: 15 de enero de 2026*
