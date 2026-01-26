@@ -8,9 +8,10 @@
   [class.star-rating--md]="size === 'md'"
   [class.star-rating--lg]="size === 'lg'"
   role="slider"
-  [attr.aria-valuenow]="rating"
-  [attr.aria-valuemin]="1"
+  [attr.aria-valuenow]="rating ?? 0"
+  [attr.aria-valuemin]="0"
   [attr.aria-valuemax]="maxStars"
+  [attr.aria-orientation]="'horizontal'"
   [attr.aria-label]="readonly ? 'Puntuación: ' + (rating ?? 0) + ' de ' + maxStars : 'Selecciona una puntuación'"
   [attr.tabindex]="readonly ? -1 : 0"
 >

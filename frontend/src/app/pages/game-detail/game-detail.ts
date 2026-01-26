@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { Subject, takeUntil, forkJoin, of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 
@@ -44,6 +45,7 @@ export interface UserReviewData {
 })
 export default class GameDetailPage implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
+  private titleService = inject(Title);
   private juegosService = inject(JuegosService);
   private interaccionesService = inject(InteraccionesService);
   private authService = inject(AuthService);
@@ -225,6 +227,11 @@ export default class GameDetailPage implements OnInit, OnDestroy {
           this.game.set(result.game);
           this.userInteraction.set(result.interaction);
           this.gameReviews.set(result.reviews);
+          
+          // Actualizar el título de la página con el nombre del juego
+          if (result.game?.nombre) {
+            this.titleService.setTitle(`${result.game.nombre} - Detalles del Juego | Looking4Rate`);
+          }
         }
         this.loading.set(false);
         return of(result);

@@ -3,9 +3,8 @@
   class="theme-switcher" 
   (click)="toggleTheme($event)"
   (keydown)="onKeyDown($event)"
-  [attr.aria-label]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
-  [attr.aria-pressed]="!isDarkMode"
-  role="switch"
+  [attr.aria-label]="isDarkMode ? 'Modo oscuro activado. Cambiar a modo claro' : 'Modo claro activado. Cambiar a modo oscuro'"
+  [attr.aria-pressed]="isDarkMode ? 'true' : 'false'"
   type="button">
   <span class="theme-switcher__track">
     <!-- Icono Luna (izquierda) -->

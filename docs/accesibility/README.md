@@ -1,67 +1,343 @@
-# Análisis de Accesibilidad
+# Índice
 
-## 1. Introducción
-
-### ¿Por qué accesibilidad?
-[50-75 palabras sobre tipos de discapacidad y beneficios para todos]
-
-### Principios WCAG 2.1
-1. **Perceptible** - Ejemplo: [tu ejemplo]
-2. **Operable** - Ejemplo: [tu ejemplo]
-3. **Comprensible** - Ejemplo: [tu ejemplo]
-4. **Robusto** - Ejemplo: [tu ejemplo]
-
-**Objetivo:** Nivel AA
+- [Sección 1: Fundamentos de accesibilidad](#sección-1-fundamentos-de-accesibilidad)
+	- [1.1 ¿Por qué es necesaria la accesibilidad web?](#11-por-qué-es-necesaria-la-accesibilidad-web)
+	- [1.2 Los 4 principios de WCAG 2.1](#12-los-4-principios-de-wcag-21)
+	- [1.3 Niveles de conformidad](#13-niveles-de-conformidad)
+- [Sección 2: Componente multimedia implementado](#sección-2-componente-multimedia-implementado)
+	- [2.1 Tipo de componente](#21-tipo-de-componente)
+	- [2.2 Descripción del componente](#22-descripción-del-componente)
+	- [2.3 Características de accesibilidad implementadas](#23-características-de-accesibilidad-implementadas)
+- [Sección 3: Auditoría automatizada inicial](#sección-3-auditoría-automatizada-inicial)
+	- [3.1 Resultados de las herramientas](#31-resultados-de-las-herramientas)
+	- [3.2 Problemas más graves detectados](#32-problemas-más-graves-detectados)
+- [Sección 4: Análisis y corrección de errores](#sección-4-análisis-y-corrección-de-errores)
+	- [4.1 Tabla resumen de errores](#41-tabla-resumen-de-errores)
+	- [4.2 Detalle de correcciones aplicadas](#42-detalle-de-correcciones-aplicadas)
 
 ---
 
-## 2. Componente multimedia
+# Sección 1: Fundamentos de accesibilidad
 
-**Tipo:** [Galería/Video/Carrusel]
+## 1.1 ¿Por qué es necesaria la accesibilidad web?
 
-**Características accesibles:**
-- [Característica 1]
-- [Característica 2]
-- [Característica 3]
+La accesibilidad web es fundamental para garantizar que todas las personas, independientemente de sus capacidades, puedan acceder a la información y funcionalidades de una aplicación web. Existen diversos tipos de discapacidades que pueden dificultar el uso de la web: **visuales** (ceguera, baja visión), **auditivas** (sordera), **motoras** (dificultad para usar ratón o teclado) y **cognitivas** (dislexia, TDAH). 
 
+Implementar la accesibilidad no solo beneficia a personas con discapacidades, sino que mejora la experiencia para todos los usuarios, facilitando la navegación en diferentes contextos (móviles, conexiones lentas, etc.). Además, en España y Europa existe **obligatoriedad legal** mediante normativas como la Directiva Europea 2016/2102 y el Real Decreto 1112/2018, que exigen que los sitios web del sector público sean accesibles.
 
-## 3. Auditoría automatizada
+## 1.2 Los 4 principios de WCAG 2.1
 
-### Herramientas
-- Lighthouse
-- WAVE
-- TAW
+Las Pautas de Accesibilidad para el Contenido Web (WCAG 2.1) se basan en cuatro principios fundamentales que aseguran que el contenido web sea accesible:
 
-### Resultados iniciales
+### 1. **Perceptible**
+La información y los componentes de la interfaz deben presentarse de forma que los usuarios puedan percibirlos.
+
+**Ejemplo:** En Looking4Rate, todas las imágenes de portadas de juegos incluyen texto alternativo descriptivo (`alt`) que permite a los lectores de pantalla comunicar el contenido visual a usuarios con discapacidad visual.
+
+### 2. **Operable**
+Los componentes de la interfaz y la navegación deben ser operables por todos los usuarios.
+
+**Ejemplo:** En Looking4Rate, todos los elementos interactivos (botones, enlaces, formularios) son accesibles mediante teclado, permitiendo navegar con la tecla `Tab` y activar con `Enter` o `Espacio`, beneficiando a usuarios con discapacidades motoras.
+
+### 3. **Comprensible**
+La información y el manejo de la interfaz de usuario deben ser comprensibles.
+
+**Ejemplo:** Los mensajes de error en los formularios de Looking4Rate son claros y específicos, indicando exactamente qué campo necesita corrección y qué formato se espera (por ejemplo, "El correo electrónico debe tener un formato válido").
+
+### 4. **Robusto**
+El contenido debe ser suficientemente robusto para ser interpretado de forma fiable por una amplia variedad de aplicaciones de usuario, incluyendo tecnologías de asistencia.
+
+**Ejemplo:** El código HTML de Looking4Rate utiliza semántica correcta (`<header>`, `<nav>`, `<main>`, `<article>`) y atributos ARIA cuando es necesario, asegurando compatibilidad con lectores de pantalla como JAWS, NVDA o VoiceOver.
+
+## 1.3 Niveles de conformidad
+
+Las WCAG 2.1 establecen tres niveles de conformidad que indican el grado de accesibilidad de un sitio web:
+
+- **Nivel A:** Nivel básico de accesibilidad. Incluye los requisitos mínimos que deben cumplirse. Si no se cumplen, algunos grupos de usuarios encontrarán imposible acceder al contenido.
+
+- **Nivel AA:** Nivel intermedio de accesibilidad. Aborda las barreras más significativas para los usuarios con discapacidades. Es el nivel recomendado por la mayoría de normativas internacionales y el estándar para sitios web profesionales.
+
+- **Nivel AAA:** Nivel más alto de accesibilidad. Incluye requisitos muy específicos que pueden no ser aplicables a todos los tipos de contenido. No se recomienda como objetivo general para sitios web completos.
+
+**Objetivo del proyecto Looking4Rate:** El objetivo es alcanzar el **nivel AA de conformidad**, cumpliendo con los estándares internacionales y las normativas europeas vigentes.
+
+---
+
+# Sección 2: Componente multimedia implementado
+
+## 2.1 Tipo de componente
+
+El componente que hemos elegido crear de entre las opciones ha sido:
+
+- **Galería**
+
+## 2.2 Descripción del componente
+
+La galería implementada en la página de detalles del juego (Game Details) muestra capturas de pantalla e imágenes relacionadas con el videojuego seleccionado. Este componente permite a los usuarios explorar visualmente el contenido multimedia del juego mediante miniaturas que se pueden ampliar, proporcionando una experiencia visual enriquecida con navegación intuitiva tanto para mouse como para teclado.
+
+## 2.3 Características de accesibilidad implementadas
+
+La galería de imágenes en la página de detalles incorpora las siguientes características de accesibilidad:
+
+#### 1. **Texto alternativo descriptivo en todas las imágenes**
+Cada captura de pantalla y imagen de la galería incluye un atributo `alt` con una descripción significativa del contenido visual mostrado, permitiendo a los usuarios de lectores de pantalla comprender qué se representa en cada imagen sin necesidad de visualizarla.
+
+#### 2. **Navegación completa mediante teclado**
+Todos los elementos de la galería son accesibles utilizando únicamente el teclado:
+- Navegación con la tecla `Tab` entre las diferentes miniaturas de la galería
+- Activación de imágenes con `Enter` o `Espacio` para ampliarlas
+
+#### 3. **Estructura semántica y etiquetado ARIA**
+La galería utiliza elementos HTML semánticos (`<figure>`, `<figcaption>`) y atributos ARIA apropiados:
+- `role="region"` y `aria-label="Galería de imágenes"` para identificar la región
+- `aria-describedby` para asociar descripciones con las imágenes
+- Estados ARIA (`aria-expanded`) para indicar cuando una imagen está ampliada
+
+#### 4. **Controles de navegación accesibles**
+El botón de cierre de la galería cumple con estándares de accesibilidad:
+- Tamaños de objetivo táctil adecuados (mínimo 44x44 píxeles)
+- Indicadores visuales claros de foco para navegación por teclado
+
+---
+
+# Sección 3: Auditoría automatizada inicial
+
+## 3.1 Resultados de las herramientas
+
+Se ha realizado una auditoría inicial utilizando tres herramientas automatizadas de accesibilidad para identificar problemas en la aplicación Looking4Rate:
 
 | Herramienta | Puntuación/Errores | Captura |
-|-------------|-------------------|---------|
-| Lighthouse | [X]/100 | ![](./capturas/lighthouse-antes.png) |
-| WAVE | [X] errores | ![](./capturas/wave-antes.png) |
-| TAW | [X] problemas | ![](./capturas/taw.png) |
+|-------------|-------------------|-------------------------------|
+| **Lighthouse** | [X]/100 | ![Lighthouse inicial](./capturas/lighthouse-antes.png) |
+| **WAVE** | [X] errores, [X] alertas | ![WAVE inicial](./capturas/wave-antes.png) |
+| **TAW** | [X] problemas | ![TAW](./capturas/taw.png) |
 
+## 3.2 Problemas más graves detectados
 
-## 4. Errores encontrados y correcciones
+Tras analizar los resultados de las herramientas de auditoría, se han identificado los siguientes problemas críticos de accesibilidad:
 
-### Resumen
+#### 1. **Controles de formulario sin etiquetar (H44, H65)**
 
-| # | Error | WCAG | Herramienta | Solución |
-|---|-------|------|-------------|----------|
-| 1 | [Breve] | 1.1.1 | WAVE | [Breve] |
-| 2 | [Breve] | X.X.X | Lighthouse | [Breve] |
-| 3 | [Breve] | X.X.X | TAW | [Breve] |
-| 4 | [Breve] | X.X.X | WAVE | [Breve] |
-| 5 | [Breve] | X.X.X | Lighthouse | [Breve] |
+**Ubicación:** Línea 564
 
-### Detalle de errores
+**Descripción del problema:** Existen controles de formulario (inputs, selects, textareas) que no tienen etiquetas asociadas mediante el elemento `<label>` o los atributos `aria-label`/`aria-labelledby`. Esto impide que los usuarios de lectores de pantalla comprendan qué información deben introducir en cada campo. En este caso uno de los controles de formulario que no tiene una etiqueta asociada es el buscador.
 
-#### Error #1: [Título]
-**Problema:** [Qué estaba mal]  
-**Impacto:** [A quién afecta]
+---
 
+#### 2. **Enlaces sin contenido (F89)**
+
+**Ubicación:** Línea 564 (múltiples ocurrencias)
+
+**Descripción del problema:** Se han detectado elementos `<a>` (enlaces) que no contienen texto visible ni alternativas textuales accesibles. Los enlaces vacíos o sin contenido descriptivo no proporcionan información sobre su destino o función.
+
+---
+
+#### 3. **Idioma declarado e idioma real no coinciden (H57)**
+
+**Ubicación:** Línea 1 (elemento `<html>`)
+
+**Descripción del problema:** El atributo `lang` del elemento `<html>` no coincide con el idioma principal del contenido de la página. Esto puede ocurrir si el atributo está mal configurado o si el contenido está en un idioma diferente al declarado.
+
+---
+
+# Sección 4: Análisis y corrección de errores
+
+## 4.1 Tabla resumen de errores
+
+A continuación se presenta un resumen de los principales errores de accesibilidad detectados por las herramientas de auditoría en la **página de detalles del juego (Game Details)** y errores globales que afectan a todo el sitio web:
+
+| # | Error | Ámbito | Criterio WCAG | Herramienta | Solución aplicada |
+|---|-------|--------|---------------|-------------|-------------------|
+| 1 | Controles de formulario sin etiquetar | **Global** (componente search-box) | 1.3.1, 4.1.2 (Nivel A) | TAW | Añadido `aria-label="Buscar juegos"` al campo de búsqueda |
+| 2 | Enlaces sin contenido | **Global** (logo en header) | 2.4.4, 4.1.2 (Nivel A) | TAW | Añadido `aria-label="Ir a la página de inicio"` al enlace del logo |
+| 3 | Idioma declarado no coincide con contenido | **Global** (index.html) | 3.1.1 (Nivel A) | TAW | Cambiado atributo `lang="en"` a `lang="es"` en `<html>` |
+| 4 | Página sin título descriptivo | Game Details | 2.4.2 (Nivel A) | TAW | Implementado título dinámico con servicio Title de Angular |
+| 5 | Atributos ARIA incorrectos en botón de tema | **Global** (theme-switcher) | 4.1.2 (Nivel A) | Lighthouse | Cambiado a patrón de botón toggle con `aria-pressed` |
+
+## 4.2 Detalle de correcciones aplicadas
+
+### Error #1: Controles de formulario sin etiquetar
+
+**Página afectada:** Global - Componente de búsqueda en el header (visible en todas las páginas)
+
+**Problema:** El campo de búsqueda del componente `search-box` no tenía una etiqueta asociada (`<label>`) ni atributos ARIA que describieran su función, imposibilitando que los usuarios de lectores de pantalla comprendieran el propósito del control.
+
+**Impacto:** Afecta principalmente a usuarios con discapacidad visual que dependen de lectores de pantalla para navegar y completar formularios.
+
+**Criterio WCAG:** 
+- **1.3.1 Información y relaciones (Nivel A):** La información, estructura y relaciones transmitidas a través de la presentación pueden ser determinadas por software o están disponibles como texto.
+- **4.1.2 Nombre, función, valor (Nivel A):** Para todos los componentes de la interfaz de usuario, el nombre y la función pueden ser determinados por software.
+
+**Archivo modificado:** `frontend/src/app/components/shared/search-box/search-box.html`
+
+**Código ANTES:**
 ```html
-<!-- ANTES -->
-[código con error]
+<input 
+  type="text" 
+  class="search-box__input" 
+  [placeholder]="placeholder"
+  [(ngModel)]="value"
+  (ngModelChange)="onInputChange()"
+  (keyup.enter)="onSearch()">
+```
 
-<!-- DESPUÉS -->
-[código corregido]
+**Código DESPUÉS:**
+```html
+<input 
+  type="text" 
+  class="search-box__input" 
+  [placeholder]="placeholder"
+  [(ngModel)]="value"
+  (ngModelChange)="onInputChange()"
+  (keyup.enter)="onSearch()"
+  aria-label="Buscar juegos">
+```
+
+---
+
+### Error #2: Enlaces sin contenido
+
+**Página afectada:** Global - Enlace del logo en el header (visible en todas las páginas)
+
+**Problema:** El enlace del logo en el header contenía únicamente una imagen con texto alternativo, pero el propio enlace carecía de un `aria-label` que describiera claramente su destino o función de navegación.
+
+**Impacto:** Afecta a usuarios de lectores de pantalla y usuarios con discapacidades cognitivas que necesitan entender el propósito de cada enlace antes de activarlo.
+
+**Criterio WCAG:**
+- **2.4.4 Propósito de los enlaces (en contexto) (Nivel A):** El propósito de cada enlace puede ser determinado solo del texto del enlace o del texto del enlace junto con su contexto del enlace determinado por software.
+- **4.1.2 Nombre, función, valor (Nivel A):** El nombre de todos los componentes puede ser determinado por software.
+
+**Archivo modificado:** `frontend/src/app/components/layout/header/header.html`
+
+**Código ANTES:**
+```html
+<a routerLink="/" class="header__logo">
+  <picture>
+    <img src="assets/img/logos/logoL4R-large.webp" alt="Looking4Rate Logo" ...>
+  </picture>
+</a>
+```
+
+**Código DESPUÉS:**
+```html
+<a routerLink="/" class="header__logo" aria-label="Ir a la página de inicio">
+  <picture>
+    <img src="assets/img/logos/logoL4R-large.webp" alt="Looking4Rate Logo" ...>
+  </picture>
+</a>
+```
+
+---
+
+### Error #3: Idioma declarado no coincide con contenido
+
+**Página afectada:** **Global - Todas las páginas del sitio web**
+
+**Problema:** El atributo `lang` en el elemento `<html>` estaba configurado como `"en"` (inglés), mientras que todo el contenido de la aplicación está en español. Este error afecta a todas las páginas del sitio, ya que el elemento `<html>` es común a toda la aplicación, causando que los lectores de pantalla pronunciaran incorrectamente el texto en cualquier sección visitada.
+
+**Impacto:** Afecta a usuarios con discapacidad visual que utilizan lectores de pantalla y sintetizadores de voz, quienes escuchan el contenido con pronunciación incorrecta.
+
+**Criterio WCAG:**
+- **3.1.1 Idioma de la página (Nivel A):** El idioma predeterminado de cada página web puede ser determinado por software.
+
+**Archivo modificado:** `frontend/src/index.html`
+
+**Código ANTES:**
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Looking4Rate</title>
+```
+
+**Código DESPUÉS:**
+```html
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Looking4Rate</title>
+```
+
+---
+
+### Error #4: Página sin título descriptivo
+
+**Página afectada:** Game Details (Detalles del juego)
+
+**Problema:** El elemento `<title>` de la página de detalles del juego no se actualizaba dinámicamente para mostrar el nombre del juego que se está visualizando, dificultando la orientación del usuario.
+
+**Impacto:** Afecta a todos los usuarios, especialmente a personas con discapacidades cognitivas y usuarios de lectores de pantalla que dependen del título para identificar la página en pestañas y marcadores.
+
+**Criterio WCAG:**
+- **2.4.2 Titulado de páginas (Nivel A):** Las páginas web tienen títulos que describen tema o propósito.
+
+**Archivo modificado:** `frontend/src/app/pages/game-detail/game-detail.ts`
+
+**Código ANTES:**
+```typescript
+// No se actualizaba el título dinámicamente
+export default class GameDetailPage implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private juegosService = inject(JuegosService);
+  // ...
+}
+```
+
+**Código DESPUÉS:**
+```typescript
+import { Title } from '@angular/platform-browser';
+
+export default class GameDetailPage implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private titleService = inject(Title);
+  private juegosService = inject(JuegosService);
+  // ...
+  
+  // En el método loadGameData(), tras cargar el juego:
+  if (result.game?.nombre) {
+    this.titleService.setTitle(`${result.game.nombre} - Detalles del Juego | Looking4Rate`);
+  }
+}
+```
+
+---
+
+### Error #5: Atributos ARIA incorrectos en botón de tema
+
+**Página afectada:** **Global - Todas las páginas del sitio web**
+
+**Problema:** El botón de cambio de tema (`theme-switcher`) utilizaba `role="switch"` con `aria-checked`, pero Lighthouse detectaba incompatibilidad entre los atributos ARIA y el rol. Este componente está presente en el layout principal de la aplicación, por lo que el error se replica en todas las páginas del sitio web.
+
+**Impacto:** Afecta a usuarios de lectores de pantalla que no pueden determinar el estado actual del tema ni comprender completamente la función del botón.
+
+**Criterio WCAG:**
+- **4.1.2 Nombre, función, valor (Nivel A):** Para todos los componentes de la interfaz de usuario, el nombre, función y valor pueden ser determinados por software.
+
+**Archivo modificado:** `frontend/src/app/components/shared/theme-switcher/theme-switcher.html`
+
+**Código ANTES:**
+```html
+<button 
+  class="theme-switcher" 
+  (click)="toggleTheme($event)"
+  [attr.aria-label]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+  [attr.aria-checked]="isDarkMode"
+  role="switch"
+  type="button">
+```
+
+**Código DESPUÉS:**
+```html
+<button 
+  class="theme-switcher" 
+  (click)="toggleTheme($event)"
+  [attr.aria-label]="isDarkMode ? 'Modo oscuro activado. Cambiar a modo claro' : 'Modo claro activado. Cambiar a modo oscuro'"
+  [attr.aria-pressed]="isDarkMode ? 'true' : 'false'"
+  type="button">
+```
+
+**Nota:** Se eliminó `role="switch"` y se cambió `aria-checked` por `aria-pressed`, utilizando el patrón de botón toggle estándar recomendado por WCAG para botones que alternan entre dos estados.
+
+---

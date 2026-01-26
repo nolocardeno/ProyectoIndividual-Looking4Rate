@@ -15,7 +15,8 @@
       [placeholder]="placeholder"
       [(ngModel)]="value"
       (ngModelChange)="onInputChange()"
-      (keyup.enter)="onSearch()">
+      (keyup.enter)="onSearch()"
+      aria-label="Buscar juegos">
     <button class="search-box__btn" (click)="onSearch()" aria-label="Buscar">
       <fa-icon [icon]="['fas', 'search']" class="search-box__icon"></fa-icon>
     </button>
