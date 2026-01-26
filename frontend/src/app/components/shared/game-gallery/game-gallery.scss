@@ -1,0 +1,243 @@
+@use 'styles/00-settings/variables' as *;
+@use 'styles/01-tools/mixins' as *;
+
+// ==========================================================================
+// GAME GALLERY COMPONENT
+// Galería de imágenes compacta para la página de detalle del juego
+// ==========================================================================
+
+.game-gallery {
+  width: 100%;
+
+  // --------------------------------------------------------------------------
+  // HEADER (Igual que featured-section)
+  // --------------------------------------------------------------------------
+  &__header {
+    border-bottom: 2px solid var(--text-secondary);
+    padding-bottom: $spacing-1;
+    margin-bottom: $spacing-3;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $font-primary;
+    font-size: $font-size-md;
+    font-weight: $font-weight-bold;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  // --------------------------------------------------------------------------
+  // GRID
+  // --------------------------------------------------------------------------
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-2;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // --------------------------------------------------------------------------
+  // ITEM
+  // --------------------------------------------------------------------------
+  &__item {
+    margin: 0;
+  }
+
+  // --------------------------------------------------------------------------
+  // FIGURE
+  // --------------------------------------------------------------------------
+  &__figure {
+    margin: 0;
+  }
+
+  // --------------------------------------------------------------------------
+  // BUTTON (wrapper clickeable)
+  // --------------------------------------------------------------------------
+  &__button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: $radius-md;
+    background: rgba($color-secondary-dark, 0.3);
+
+    &:focus-visible {
+      outline: $border-medium solid var(--color-accent);
+      outline-offset: $border-medium;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // IMAGE
+  // --------------------------------------------------------------------------
+  &__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    transition: transform $transition-base $transition-ease;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // CAPTION
+  // --------------------------------------------------------------------------
+  &__caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: $spacing-1;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    font-family: $font-primary;
+    font-size: $font-size-sm;
+    color: var(--text-primary);
+    opacity: 0;
+    transition: opacity $transition-base $transition-ease;
+
+    .game-gallery__button:hover & {
+      opacity: 1;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // LIGHTBOX MODAL
+  // --------------------------------------------------------------------------
+  &__lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: $spacing-4;
+    cursor: pointer;
+  }
+
+  &__close {
+    position: absolute;
+    top: $spacing-2;
+    right: $spacing-2;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: var(--text-primary);
+    font-size: $font-size-3xl;
+    width: $spacing-6;
+    height: $spacing-6;
+    border-radius: $radius-full;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background $transition-fast $transition-ease;
+    z-index: 10000;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    &:focus-visible {
+      outline: $border-medium solid var(--color-accent);
+      outline-offset: $border-medium;
+    }
+  }
+
+  &__lightbox-figure {
+    margin: 0;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-3;
+    cursor: default;
+  }
+
+  &__lightbox-image {
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-2xl;
+  }
+
+  &__lightbox-caption {
+    margin: 0;
+    padding: $spacing-2 $spacing-4;
+    font-family: $font-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
+    color: var(--text-primary);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: $radius-lg;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    max-width: 80%;
+    line-height: $line-height-normal;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE (Desktop-First Strategy)
+// ==========================================================================
+
+// Desktop pequeño (1024px)
+@media (max-width: $breakpoint-lg) {
+  .game-gallery {
+    &__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+// Tablet (768px)
+@media (max-width: $breakpoint-md) {
+  .game-gallery {
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-1;
+    }
+
+    &__caption {
+      opacity: 1;
+      position: static;
+      background: transparent;
+      padding: $spacing-1 0 0;
+      color: var(--text-secondary);
+    }
+
+    &__lightbox-caption {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// Móvil (640px)
+@media (max-width: $breakpoint-sm) {
+  .game-gallery {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+
+    &__title {
+      font-size: $font-size-md;
+    }
+  }
+}

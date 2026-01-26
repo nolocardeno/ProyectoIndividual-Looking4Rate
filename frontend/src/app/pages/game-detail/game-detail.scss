@@ -86,6 +86,14 @@
     margin-bottom: $spacing-header-footer; // 60px igual que home
   }
 
+  // --------------------------------------------------------------------------
+  // GALERÍA DE IMÁGENES
+  // --------------------------------------------------------------------------
+  app-game-gallery {
+    display: block;
+    margin-top: $spacing-3;
+  }
+
   &__reviews-empty {
     padding: $spacing-4;
     text-align: center;

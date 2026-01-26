@@ -47,6 +47,14 @@
         />
       </section>
 
+      <!-- Galería de imágenes -->
+      @if (game()!.imagenes && game()!.imagenes.length > 0) {
+        <app-game-gallery
+          [imagenes]="game()!.imagenes"
+          [gameTitle]="game()!.nombre"
+        />
+      }
+
       <!-- Sección de Reviews -->
       <app-featured-section
         title="REVIEWS"

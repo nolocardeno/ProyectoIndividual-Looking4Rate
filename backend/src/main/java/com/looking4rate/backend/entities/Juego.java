@@ -48,4 +48,7 @@ public class Juego {
 
     @OneToMany(mappedBy = "juego", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JuegoGenero> generos;
+
+    @OneToMany(mappedBy = "juego", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImagenJuego> imagenes;
 }

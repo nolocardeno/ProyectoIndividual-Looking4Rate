@@ -4,6 +4,7 @@ import { Subject, takeUntil, forkJoin, of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 
 import { GameCard, GamePlatform } from '../../components/shared/game-card/game-card';
+import { GameGallery } from '../../components/shared/game-gallery/game-gallery';
 import { GameInteractionPanel } from '../../components/shared/game-interaction-panel/game-interaction-panel';
 import { ReviewFormModal } from '../../components/shared/review-form-modal/review-form-modal';
 import { UserReviewComponent } from '../../components/shared/user-review/user-review';
@@ -36,7 +37,7 @@ export interface UserReviewData {
  */
 @Component({
   selector: 'app-game-detail',
-  imports: [RouterLink, GameCard, GameInteractionPanel, ReviewFormModal, UserReviewComponent, FeaturedSection],
+  imports: [RouterLink, GameCard, GameGallery, GameInteractionPanel, ReviewFormModal, UserReviewComponent, FeaturedSection],
   templateUrl: './game-detail.html',
   styleUrl: './game-detail.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

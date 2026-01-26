@@ -1,0 +1,68 @@
+<!-- Galería de imágenes del juego -->
+@if (hasImages) {
+  <section class="game-gallery" aria-label="Galería de imágenes de {{ gameTitle }}">
+    <header class="game-gallery__header">
+      <h2 class="game-gallery__title">GALERÍA</h2>
+    </header>
+
+    <ul class="game-gallery__grid" role="list">
+      @for (imagen of displayImages; track imagen.id) {
+        <li class="game-gallery__item">
+          <figure class="game-gallery__figure">
+            <button
+              type="button"
+              class="game-gallery__button"
+              (click)="openLightbox(imagen)"
+              [attr.aria-label]="'Ver imagen en grande: ' + imagen.alt"
+            >
+              <img
+                class="game-gallery__image"
+                [src]="imagen.url"
+                [alt]="imagen.alt"
+                loading="lazy"
+                decoding="async"
+              >
+            </button>
+            @if (imagen.caption) {
+              <figcaption class="game-gallery__caption">
+                {{ imagen.caption }}
+              </figcaption>
+            }
+          </figure>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Lightbox Modal -->
+  @if (selectedImage()) {
+    <aside
+      class="game-gallery__lightbox"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="'Vista ampliada: ' + selectedImage()!.alt"
+      (click)="onOverlayClick($event)"
+    >
+      <button
+        type="button"
+        class="game-gallery__close"
+        (click)="closeLightbox()"
+        aria-label="Cerrar vista ampliada"
+      >
+        ×
+      </button>
+      <figure class="game-gallery__lightbox-figure">
+        <img
+          class="game-gallery__lightbox-image"
+          [src]="selectedImage()!.url"
+          [alt]="selectedImage()!.alt"
+        >
+        @if (selectedImage()!.caption) {
+          <figcaption class="game-gallery__lightbox-caption">
+            {{ selectedImage()!.caption }}
+          </figcaption>
+        }
+      </figure>
+    </aside>
+  }
+}

@@ -7,6 +7,24 @@
  */
 
 // ============================================
+// INTERFACES DE IMAGEN DE GALERÍA
+// ============================================
+
+/**
+ * DTO de imagen de galería de un juego
+ */
+export interface ImagenJuegoDTO {
+  /** Identificador único de la imagen */
+  id: number;
+  /** URL de la imagen */
+  url: string;
+  /** Texto alternativo para accesibilidad */
+  alt: string;
+  /** Título/caption de la imagen */
+  caption: string | null;
+}
+
+// ============================================
 // INTERFACES DE RESPUESTA
 // ============================================
 
@@ -35,6 +53,8 @@ export interface JuegoDTO {
   puntuacionMedia: number | null;
   /** Total de reviews del juego */
   totalReviews: number;
+  /** Imágenes de galería del juego */
+  imagenes: ImagenJuegoDTO[];
 }
 
 /**

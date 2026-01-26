@@ -9,9 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.looking4rate.backend.dtos.ImagenJuegoDTO;
 import com.looking4rate.backend.dtos.JuegoCreacionDTO;
 import com.looking4rate.backend.dtos.JuegoDTO;
 import com.looking4rate.backend.dtos.JuegoResumenDTO;
+import com.looking4rate.backend.entities.ImagenJuego;
 import com.looking4rate.backend.entities.Juego;
 import com.looking4rate.backend.entities.JuegoDesarrolladora;
 import com.looking4rate.backend.entities.JuegoGenero;
@@ -19,6 +21,7 @@ import com.looking4rate.backend.entities.JuegoPlataforma;
 import com.looking4rate.backend.exceptions.ResourceNotFoundException;
 import com.looking4rate.backend.repositories.DesarrolladoraRepository;
 import com.looking4rate.backend.repositories.GeneroRepository;
+import com.looking4rate.backend.repositories.ImagenJuegoRepository;
 import com.looking4rate.backend.repositories.InteraccionRepository;
 import com.looking4rate.backend.repositories.JuegoDesarrolladoraRepository;
 import com.looking4rate.backend.repositories.JuegoGeneroRepository;
@@ -36,6 +39,7 @@ public class JuegoService {
     private final JuegoRepository juegoRepository;
     private final InteraccionRepository interaccionRepository;
     private final PlataformaRepository plataformaRepository;
+    private final ImagenJuegoRepository imagenJuegoRepository;
     private final DesarrolladoraRepository desarrolladoraRepository;
     private final GeneroRepository generoRepository;
     private final JuegoPlataformaRepository juegoPlataformaRepository;
@@ -301,6 +305,10 @@ public void eliminar(Long id) {
                 .map(jg -> jg.getGenero().getNombre())
                 .toList();
         
+        List<ImagenJuegoDTO> imagenes = imagenJuegoRepository.findByJuegoId(juego.getId()).stream()
+                .map(this::convertirImagenADTO)
+                .toList();
+        
         return new JuegoDTO(
                 juego.getId(),
                 juego.getNombre(),
@@ -311,7 +319,17 @@ public void eliminar(Long id) {
                 desarrolladoras,
                 generos,
                 puntuacionMedia,
-                totalReviews != null ? totalReviews.intValue() : 0
+                totalReviews != null ? totalReviews.intValue() : 0,
+                imagenes
+        );
+    }
+
+    private ImagenJuegoDTO convertirImagenADTO(ImagenJuego imagen) {
+        return new ImagenJuegoDTO(
+                imagen.getId(),
+                imagen.getUrl(),
+                imagen.getAlt(),
+                imagen.getCaption()
         );
     }
 

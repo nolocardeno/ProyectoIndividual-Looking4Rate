@@ -16,5 +16,6 @@ public record JuegoDTO(
     List<String> desarrolladoras,
     List<String> generos,
     Double puntuacionMedia,
-    Integer totalReviews
+    Integer totalReviews,
+    List<ImagenJuegoDTO> imagenes
 ) {}
