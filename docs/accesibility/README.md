@@ -112,9 +112,9 @@ Se ha realizado una auditoría inicial utilizando tres herramientas automatizada
 
 | Herramienta | Puntuación/Errores | Captura |
 |-------------|-------------------|-------------------------------|
-| **Lighthouse** | [X]/100 | ![Lighthouse inicial](./capturas/lighthouse-antes.png) |
-| **WAVE** | [X] errores, [X] alertas | ![WAVE inicial](./capturas/wave-antes.png) |
-| **TAW** | [X] problemas | ![TAW](./capturas/taw.png) |
+| **Lighthouse** | 87/100 | ![Lighthouse inicial](./img/lighthouse-antes.png) |
+| **WAVE** | 1 error, 4 alertas | ![WAVE inicial](./img/wave-antes.png) |
+| **TAW** | 10 problemas | ![TAW](./img/taw-antes.png) |
 
 ## 3.2 Problemas más graves detectados
 
@@ -366,22 +366,31 @@ A continuación se representa la estructura de encabezados de las principales p�
 
 ### Página de Inicio (Home)
 ```
-H2: Bienvenido de vuelta, [Usuario] / Ten un seguimiento de lo que juegas
+H1: Bienvenido de vuelta, [Usuario] / Ten un seguimiento de lo que juegas
   H2: NOVEDADES EN L4R (featured-section)
   H2: PRÓXIMOS LANZAMIENTOS (featured-section)
 ```
 
+### Página de Búsqueda (Search)
+```
+H1: Búsqueda de juegos (visually-hidden)
+  H2: Mostrando X de Y resultados para "query" (featured-section)
+    H3: [Nombre de cada juego] (search-game-card)
+```
+
 ### Página de Detalle del Juego (Game Details)
 ```
-H2: [Nombre del juego] (game-card)
+H1: [Nombre del juego] (game-card)
+  H2: Puntúa (game-interaction-panel)
   H2: GALERÍA (game-gallery)
   H2: REVIEWS (featured-section)
+    H3: Review de [usuario] (user-review)
 ```
 
 ### Página de Perfil (Profile)
 ```
 H1: [NOMBRE DE USUARIO]
-  H2: MIS JUEGOS / MIS REVIEWS (tabs)
+  H2: [Título de cada juego/review en la lista]
 ```
 
 ### Página de Ajustes (Settings)
@@ -420,9 +429,10 @@ H1: Style Guide
 ```
 
 **Observaciones:**
-- La página Home no tiene H1 explícito (el logo actúa como identificador principal)
+- La página Home anteriormente no tenía H1 explícito, ahora usa H1 en el hero section
 - Las páginas Profile y Settings tienen H1 correctamente definido
-- No hay saltos de nivel
+- La página de Búsqueda usa H1 oculto visualmente (.visually-hidden) para accesibilidad
+- No hay saltos de nivel en ninguna página
 
 ## 5.3 Análisis de imágenes
 

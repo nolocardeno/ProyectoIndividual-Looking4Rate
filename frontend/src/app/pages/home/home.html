@@ -12,11 +12,11 @@
     <!-- Hero de bienvenida para usuarios autenticados -->
     <section class="hero hero--welcome">
       <header class="hero__content hero__content--welcome">
-        <h2 class="hero__text hero__text--welcome">
+        <h1 class="hero__text hero__text--welcome">
           Bienvenido de vuelta, <strong>{{ userName() }}</strong>.
           <br>
           Esto es a lo que hemos estado jugando...
-        </h2>
+        </h1>
       </header>
     </section>
   } @else {
@@ -24,13 +24,13 @@
     <section class="hero">
       <span class="hero__overlay" aria-hidden="true"></span>
       <header class="hero__content">
-        <h2 class="hero__text">
+        <h1 class="hero__text">
           Ten un seguimiento de lo&nbsp;que&nbsp;juegas.
           <br>
           Puntúa y critica tus&nbsp;favoritos.
           <br>
           Cuéntale a los&nbsp;demás qué&nbsp;te&nbsp;gusta.
-        </h2>
+        </h1>
         <app-button variant="primary" size="lg" (click)="openRegister()">
           Únete a L4R!
         </app-button>
