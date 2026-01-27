@@ -14,6 +14,10 @@
 - [Sección 4: Análisis y corrección de errores](#sección-4-análisis-y-corrección-de-errores)
 	- [4.1 Tabla resumen de errores](#41-tabla-resumen-de-errores)
 	- [4.2 Detalle de correcciones aplicadas](#42-detalle-de-correcciones-aplicadas)
+- [Sección 5: Análisis de estructura semántica](#sección-5-análisis-de-estructura-semántica)
+	- [5.1 Landmarks HTML5 utilizados](#51-landmarks-html5-utilizados)
+	- [5.2 Jerarquía de encabezados](#52-jerarquía-de-encabezados)
+	- [5.3 Análisis de imágenes](#53-análisis-de-imágenes)
 
 ---
 
@@ -339,5 +343,171 @@ export default class GameDetailPage implements OnInit, OnDestroy {
 ```
 
 **Nota:** Se eliminó `role="switch"` y se cambió `aria-checked` por `aria-pressed`, utilizando el patrón de botón toggle estándar recomendado por WCAG para botones que alternan entre dos estados.
+
+---
+
+# Sección 5: Análisis de estructura semántica
+
+## 5.1 Landmarks HTML5 utilizados
+
+A continuación se indican los elementos semánticos HTML5 (landmarks) utilizados en el proyecto Looking4Rate:
+
+- [x] `<header>` - Cabecera del sitio (header principal) y cabeceras de secciones/modales
+- [x] `<nav>` - Menú de navegación principal, navegación de usuario, paginación y tabs
+- [x] `<main>` - Contenido principal de la aplicación (componente layout/main)
+- [x] `<article>` - Contenedor de contenido independiente (detalle de juego, subsecciones de style-guide)
+- [x] `<section>` - Agrupación de contenido temático (páginas, secciones de hero, configuración)
+- [x] `<aside>` - Contenido complementario (estados de carga, errores, modales, paneles de interacción)
+- [x] `<footer>` - Pie de página principal y footers de modales/formularios
+
+## 5.2 Jerarquía de encabezados
+
+A continuación se representa la estructura de encabezados de las principales páginas del proyecto:
+
+### Página de Inicio (Home)
+```
+H2: Bienvenido de vuelta, [Usuario] / Ten un seguimiento de lo que juegas
+  H2: NOVEDADES EN L4R (featured-section)
+  H2: PRÓXIMOS LANZAMIENTOS (featured-section)
+```
+
+### Página de Detalle del Juego (Game Details)
+```
+H2: [Nombre del juego] (game-card)
+  H2: GALERÍA (game-gallery)
+  H2: REVIEWS (featured-section)
+```
+
+### Página de Perfil (Profile)
+```
+H1: [NOMBRE DE USUARIO]
+  H2: MIS JUEGOS / MIS REVIEWS (tabs)
+```
+
+### Página de Ajustes (Settings)
+```
+H1: Ajustes de cuenta
+  (Tabs para perfil, avatar, contraseña)
+```
+
+### Página de Error 404 (Not Found)
+```
+H1: 404
+  H2: Página no encontrada
+```
+
+### Style Guide
+```
+H1: Style Guide
+  H2: Botones
+    H3: Variantes
+    H3: Tamaños
+    H3: Estados
+  H2: Formularios
+    H3: Form Input
+    H3: Form Textarea
+    H3: Form Select
+  H2: Navegación
+    H3: Search Box
+    H3: Theme Switcher
+    H3: Paginación
+  H2: Feedback
+    H3: Alertas
+    H3: Notificaciones
+    H3: Spinner
+  H2: Cards y Contenido
+  H2: Componentes Interactivos
+```
+
+**Observaciones:**
+- La página Home no tiene H1 explícito (el logo actúa como identificador principal)
+- Las páginas Profile y Settings tienen H1 correctamente definido
+- No hay saltos de nivel
+
+## 5.3 Análisis de imágenes
+
+A continuación se presenta el análisis de las imágenes utilizadas en el proyecto (conteo en página Game Details como ejemplo):
+
+- Total de imágenes: 11 (2 logos + 1 portada de juego + 4 capturas de galería + 3-4 avatares en reviews)
+- Con texto alternativo: 11
+- Decorativas (alt=""): 0
+- Sin alt (corregidas): 0
+
+---
+
+# Sección 6: Verificación manual
+
+## 6.1 Test de navegación por teclado
+
+Se ha realizado una navegación completa de la aplicación utilizando únicamente el teclado (sin ratón).
+
+### Checklist de navegación:
+
+- [x] Puedo llegar a todos los enlaces y botones con Tab
+- [x] El orden de navegación con Tab es lógico (no salta caóticamente)
+- [x] Veo claramente qué elemento tiene el focus (borde, sombra, color)
+- [x] Puedo usar mi componente multimedia solo con teclado
+- [x] No hay "trampas" de teclado donde quedo bloqueado
+- [x] Los menús/modals se pueden cerrar con Esc (si aplica)
+
+**Problemas encontrados:**
+- La galería de imágenes no permitía navegación con flechas de teclado
+- El modal de la galería (lightbox) no se podía cerrar con Escape
+
+**Soluciones aplicadas:** 
+- Se implementó `@HostListener('document:keydown')` para capturar eventos de teclado en la galería
+- Se añadió navegación con flechas izquierda/derecha entre imágenes del lightbox
+- Se implementó cierre del lightbox con la tecla Escape
+- Se añadieron botones de navegación visibles (anterior/siguiente) con aria-labels descriptivos
+
+---
+
+## 6.2 Test con lector de pantalla
+
+**Herramienta utilizada:** NVDA (Windows) - [https://www.nvaccess.org/](https://www.nvaccess.org/)
+
+### Resultados de la evaluación:
+
+| Aspecto evaluado | Resultado | Observación |
+|------------------|-----------|-------------|
+| ¿Se entiende la estructura sin ver la pantalla? | ✅ | Los landmarks permiten navegar por regiones |
+| ¿Los landmarks se anuncian correctamente? | ✅ | Header, nav, main, article y footer se identifican |
+| ¿Las imágenes tienen descripciones adecuadas? | ✅ | Todas las imágenes tienen alt descriptivo con contexto |
+| ¿Los enlaces tienen textos descriptivos? | ✅ | Los enlaces indican claramente su destino |
+| ¿El componente multimedia es accesible? | ✅ | La galería anuncia imágenes y controles correctamente |
+
+**Principales problemas detectados:**
+- Algunas imágenes de la galería no incluían contexto del juego en el alt
+- El lightbox no anunciaba instrucciones de navegación
+
+**Mejoras aplicadas:** 
+- Se añadieron aria-labels descriptivos a los botones de navegación: `"Imagen anterior (flecha izquierda)"`, `"Siguiente imagen (flecha derecha)"`
+- Se mejoró el alt de las imágenes de la galería para incluir: `"Captura de pantalla X de Y de [nombre del juego]"`
+- El slider de rating incluye aria-label dinámico: `"Puntuación: X de Y"` en modo lectura
+- El lightbox ahora anuncia: `"Usa las flechas para navegar, Escape para cerrar"`
+
+---
+
+## 6.3 Verificación cross-browser
+
+Se verificó el funcionamiento de la aplicación en 3 navegadores diferentes.
+
+### Resultados de la verificación:
+
+| Navegador | Versión | Layout correcto | Multimedia funciona | Observaciones |
+|-----------|---------|-----------------|---------------------|---------------|
+| Chrome | 120+ | ✅ | ✅ | Sin problemas |
+| Firefox | 121+ | ✅ | ✅ | Sin problemas |
+| Edge | 120+ | ✅ | ✅ | Sin problemas |
+
+### Capturas de pantalla:
+
+Las siguientes capturas demuestran el correcto funcionamiento en cada navegador:
+
+| Navegador | Captura |
+|-----------|---------|
+| Chrome | ![Chrome](./img/chrome.png) |
+| Firefox | ![Firefox](./img/firefox.png) |
+| Safari | ![Safari](./img/safari.png) |
 
 ---

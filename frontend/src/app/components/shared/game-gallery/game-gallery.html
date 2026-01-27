@@ -6,19 +6,19 @@
     </header>
 
     <ul class="game-gallery__grid" role="list">
-      @for (imagen of displayImages; track imagen.id) {
+      @for (imagen of displayImages; track imagen.id; let i = $index) {
         <li class="game-gallery__item">
           <figure class="game-gallery__figure">
             <button
               type="button"
               class="game-gallery__button"
               (click)="openLightbox(imagen)"
-              [attr.aria-label]="'Ver imagen en grande: ' + imagen.alt"
+              [attr.aria-label]="'Ver captura ' + (i + 1) + ' de ' + displayImages.length + ' de ' + gameTitle + ' en pantalla completa'"
             >
               <img
                 class="game-gallery__image"
                 [src]="imagen.url"
-                [alt]="imagen.alt"
+                [alt]="'Captura de pantalla ' + (i + 1) + ' de ' + gameTitle + (imagen.alt ? ': ' + imagen.alt : '')"
                 loading="lazy"
                 decoding="async"
               >
@@ -40,22 +40,33 @@
       class="game-gallery__lightbox"
       role="dialog"
       aria-modal="true"
-      [attr.aria-label]="'Vista ampliada: ' + selectedImage()!.alt"
+      [attr.aria-label]="'Vista ampliada: ' + selectedImage()!.alt + '. Usa las flechas para navegar, Escape para cerrar.'"
       (click)="onOverlayClick($event)"
     >
       <button
         type="button"
         class="game-gallery__close"
         (click)="closeLightbox()"
-        aria-label="Cerrar vista ampliada"
+        aria-label="Cerrar vista ampliada (Escape)"
       >
         ×
       </button>
+      
+      <!-- Botón anterior -->
+      <button
+        type="button"
+        class="game-gallery__nav game-gallery__nav--prev"
+        (click)="previousImage(); $event.stopPropagation()"
+        aria-label="Imagen anterior (flecha izquierda)"
+      >
+        &#10094;
+      </button>
+      
       <figure class="game-gallery__lightbox-figure">
         <img
           class="game-gallery__lightbox-image"
           [src]="selectedImage()!.url"
-          [alt]="selectedImage()!.alt"
+          [alt]="'Captura de pantalla de ' + gameTitle + ': ' + selectedImage()!.alt"
         >
         @if (selectedImage()!.caption) {
           <figcaption class="game-gallery__lightbox-caption">
@@ -63,6 +74,16 @@
           </figcaption>
         }
       </figure>
+      
+      <!-- Botón siguiente -->
+      <button
+        type="button"
+        class="game-gallery__nav game-gallery__nav--next"
+        (click)="nextImage(); $event.stopPropagation()"
+        aria-label="Siguiente imagen (flecha derecha)"
+      >
+        &#10095;
+      </button>
     </aside>
   }
 }

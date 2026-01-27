@@ -159,6 +159,49 @@
     }
   }
 
+  // --------------------------------------------------------------------------
+  // NAVIGATION BUTTONS (Previous/Next)
+  // --------------------------------------------------------------------------
+  &__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: var(--text-primary);
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    text-align: center;
+    transition: background $transition-fast $transition-ease, transform $transition-fast $transition-ease;
+    z-index: 10000;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    &:focus-visible {
+      outline: $border-medium solid var(--color-accent);
+      outline-offset: $border-medium;
+    }
+
+    &--prev {
+      left: 10%;
+    }
+
+    &--next {
+      right: 10%;
+    }
+  }
+
   &__lightbox-figure {
     margin: 0;
     max-width: 90vw;
