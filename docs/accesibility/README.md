@@ -18,6 +18,19 @@
 	- [5.1 Landmarks HTML5 utilizados](#51-landmarks-html5-utilizados)
 	- [5.2 Jerarquía de encabezados](#52-jerarquía-de-encabezados)
 	- [5.3 Análisis de imágenes](#53-análisis-de-imágenes)
+- [Sección 6: Verificación manual](#sección-6-verificación-manual)
+	- [6.1 Test de navegación por teclado](#61-test-de-navegación-por-teclado)
+	- [6.2 Test con lector de pantalla](#62-test-con-lector-de-pantalla)
+	- [6.3 Verificación cross-browser](#63-verificación-cross-browser)
+- [Sección 7: Resultados finales después de correcciones](#sección-7-resultados-finales-después-de-correcciones)
+	- [7.1 Comparativa de resultados](#71-comparativa-de-resultados)
+	- [7.2 Checklist de conformidad WCAG 2.1 Nivel AA](#72-checklist-de-conformidad-wcag-21-nivel-aa)
+	- [7.3 Nivel de conformidad alcanzado](#73-nivel-de-conformidad-alcanzado)
+- [Sección 8: Conclusiones y reflexión](#sección-8-conclusiones-y-reflexión)
+	- [8.1 ¿Es accesible mi proyecto?](#81-es-accesible-mi-proyecto)
+	- [8.2 Principales mejoras aplicadas](#82-principales-mejoras-aplicadas)
+	- [8.3 Mejoras futuras](#83-mejoras-futuras)
+	- [8.4 Aprendizaje clave](#84-aprendizaje-clave)
 
 ---
 
@@ -519,5 +532,112 @@ Las siguientes capturas demuestran el correcto funcionamiento en cada navegador:
 | Chrome | ![Chrome](./img/chrome.png) |
 | Firefox | ![Firefox](./img/firefox.png) |
 | Safari | ![Safari](./img/safari.png) |
+
+---
+
+# Sección 7: Resultados finales después de correcciones
+
+## 7.1 Comparativa de resultados
+
+Se ejecutaron nuevamente las 3 herramientas de auditoría después de aplicar todas las correcciones de accesibilidad.
+
+### Tabla comparativa:
+
+| Herramienta | Antes | Después | Mejora |
+|-------------|-------|---------|--------|
+| Lighthouse | 87/100 | 97/100 | +10 puntos |
+| WAVE | 1 errores, 4 alertas | 0 errores, 1 alerta | -1 errores, -3 alertas |
+| TAW | 10 problemas | X problemas | -X problemas |
+
+### Capturas de resultados finales:
+
+| Herramienta | Captura |
+|-------------|---------|
+| Lighthouse | ![Lighthouse después](./img/lighthouse-despues.png) |
+| WAVE | ![WAVE después](./img/wave-despues.png) |
+
+---
+
+## 7.2 Checklist de conformidad WCAG 2.1 Nivel AA
+
+### Perceptible:
+- [x] **1.1.1 - Contenido no textual**: Todas las imágenes tienen texto alternativo descriptivo
+- [x] **1.3.1 - Información y relaciones**: HTML semántico con landmarks y jerarquía de encabezados correcta
+- [x] **1.4.3 - Contraste mínimo**: Ratio de contraste superior a 4.5:1 en texto normal
+- [x] **1.4.4 - Redimensionar texto**: La interfaz funciona al 200% sin pérdida de funcionalidad
+
+### Operable:
+- [x] **2.1.1 - Teclado**: Toda la funcionalidad es accesible mediante teclado
+- [x] **2.1.2 - Sin trampas de teclado**: No hay trampas de teclado, Escape cierra modales
+- [x] **2.4.3 - Orden del foco**: El orden de navegación es lógico y predecible
+- [x] **2.4.7 - Foco visible**: Los elementos focusables tienen indicador visual claro (:focus-visible)
+
+### Comprensible:
+- [x] **3.1.1 - Idioma de la página**: Atributo `lang="es"` en el elemento `<html>`
+- [x] **3.2.3 - Navegación consistente**: El header y footer se mantienen en todas las páginas
+- [x] **3.3.2 - Etiquetas o instrucciones**: Todos los campos de formulario tienen labels o aria-labels
+
+### Robusto:
+- [x] **4.1.2 - Nombre, función, valor**: Uso correcto de ARIA (aria-label, aria-pressed, aria-orientation, role)
+
+---
+
+## 7.3 Nivel de conformidad alcanzado
+
+**Nivel alcanzado: AA**
+
+- Estructura semántica con landmarks y jerarquía de headings correcta
+- Navegación completa por teclado (Tab, flechas, Escape)
+- ARIA implementado correctamente (aria-label, aria-pressed, role)
+- Todas las imágenes con alt descriptivo
+- Contraste superior a 4.5:1
+- Compatibilidad con lectores de pantalla
+
+---
+
+# Sección 8: Conclusiones y reflexión
+
+## 8.1 ¿Es accesible mi proyecto?
+
+Después de las mejoras implementadas, considero que Looking4Rate es accesible.
+Lo más difícil de corregir fue la navegación por teclado en la galería de imágenes, especialmente lograr que las flechas funcionaran correctamente. También me costó encontrar un buen contraste de colores para el modo claro ya que no veia ninguno adecuado y agradable visualmente.
+Lo que más me sorprendió al usar el lector de pantalla fue descubrir cómo elementos que visualmente parecían claros resultaban confusos sin contexto visual, como botones sin aria-label o imágenes con alt genérico. Además en mi caso concreto nunca habia utilizado un lector de pantalla y me sorprendio ver lo útil que es y en lo que acaban repercutiendo todos estos ajustes de accesibilidad que hemos ido implementando en el proyecto.
+Ahora considero que la accesibilidad es mas importante de lo que creia en un principio, ya que a la hora de la verdad se puede ver la utilidad real de la misma y el como beneficia a un alto porcentaje de usuarios reales. Quizas es algo mas costoso de implementar en un proyecto y acaba conllevando tiempo extra, pero acaba siendo muy util.
+
+---
+
+## 8.2 Principales mejoras aplicadas
+
+1. **Navegación por teclado en la galería** - Permite a usuarios con explorar las imágenes usando flechas y cerrar con Escape
+
+2. **Jerarquía de encabezados correcta (H1→H2→H3)** - Permite a usuarios de lectores de pantalla navegar y entender la estructura del contenido
+
+3. **Atributos ARIA en elementos interactivos** - Los botones toggle, sliders y modales ahora comunican su estado correctamente a tecnologías de asistencia
+
+4. **Textos alternativos descriptivos en imágenes** - Las capturas de galería ahora incluyen contexto del juego, no solo descripciones genéricas
+
+5. **Idioma del documento (lang="es")** - Permite a los lectores de pantalla pronunciar el contenido con el acento correcto
+
+6. **Eliminación de underline en texto no enlazado** - Quitado subrayado de elementos como nombres de plataformas y desarrolladores que no son enlaces, reduciendo alertas WAVE
+
+---
+
+## 8.3 Mejoras futuras
+
+Si tuviera más tiempo, implementaría:
+
+1. **Skip links** - Añadir enlaces "Saltar al contenido principal" para usuarios de teclado que no quieran navegar por todo el header
+
+2. **Modo de alto contraste** - Ofrecer un tema extra con contraste aún mayor para usuarios con baja visión
+
+3. **Transcripciones de contenido multimedia** - Si se añaden vídeos en el futuro, incluir subtítulos y transcripciones
+
+4. **Mas funcionalidades en el proyecto** - Añadir funcionalidades extra. Esto a priori no tiene nada que ver con accesibilidad, pero estas funcionalidades adaptadas con correctas medidas de accesibilidad, mejorarían la experiencia de usuarios objetivos.
+
+---
+
+## 8.4 Aprendizaje clave
+
+La accesibilidad no es un añadido opcional, es parte fundamental del desarrollo web profesional. Diseñar pensando en la accesibilidad desde el principio es más eficiente que corregir errores después, y beneficia a todos los usuarios, no solo a aquellos con discapacidades.
 
 ---

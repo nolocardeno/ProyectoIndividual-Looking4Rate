@@ -18,6 +18,7 @@
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Documentación API y Monitorización](#documentación-api-y-monitorización)
 - [Endpoints de la API](#endpoints-de-la-api)
+- [Accesibilidad y Multimedia](#accesibilidad-y-multimedia)
 - [Documentación Adicional](#documentación-adicional)
 - [Licencia](#licencia)
 
@@ -185,32 +186,43 @@ ProyectoIndividual-Looking4Rate/
 ├── backend/                          # Backend Spring Boot
 │   ├── src/
 │   │   ├── main/
-│   │   │   ├── java/com/looking4rate/
-│   │   │   │   ├── controller/       # Controladores REST
-│   │   │   │   ├── dto/              # DTOs
-│   │   │   │   ├── entity/           # Entidades JPA
-│   │   │   │   ├── repository/       # Repositorios JPA
-│   │   │   │   ├── service/          # Lógica de Negocio
+│   │   │   ├── java/com/looking4rate/backend/
+│   │   │   │   ├── controllers/      # Controladores REST
+│   │   │   │   ├── dtos/             # DTOs
+│   │   │   │   ├── entities/         # Entidades JPA
+│   │   │   │   ├── repositories/     # Repositorios JPA
+│   │   │   │   ├── services/         # Lógica de Negocio
+│   │   │   │   ├── security/         # Configuración JWT
+│   │   │   │   ├── exceptions/       # Excepciones personalizadas
 │   │   │   │   └── config/           # Configuración Spring
 │   │   │   └── resources/
 │   │   │       ├── application.properties
 │   │   │       └── data.sql          # Datos iniciales
-│   │   └── test/                     # Tests
+│   │   └── test/                     # Tests unitarios
 │   ├── pom.xml
 │   ├── Dockerfile
 │   └── .dockerignore
 │
-├── frontend/                         # Frontend Angular
+├── frontend/                         # Frontend Angular 19
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── components/           # Componentes reutilizables
-│   │   │   ├── pages/                # Páginas
+│   │   │   ├── components/           # Componentes reutilizables (30+)
+│   │   │   │   ├── layout/           # Header, footer, navegación
+│   │   │   │   └── shared/           # Componentes compartidos
+│   │   │   ├── pages/                # Páginas (home, search, profile...)
 │   │   │   ├── services/             # Servicios de API
 │   │   │   ├── guards/               # Guards de rutas
 │   │   │   ├── models/               # Interfaces TypeScript
-│   │   │   ├── validators/           # Validadores
-│   │   │   └── core/                 # Utilidades core
+│   │   │   ├── resolvers/            # Resolvers de datos
+│   │   │   ├── validators/           # Validadores de formularios
+│   │   │   ├── tests/                # Tests unitarios
+│   │   │   └── core/                 # Utilidades, interceptores, constantes
 │   │   ├── styles/                   # SCSS (ITCSS)
+│   │   │   ├── 00-settings/          # Variables y configuración
+│   │   │   ├── 01-tools/             # Mixins y funciones
+│   │   │   ├── 02-generic/           # Reset y normalización
+│   │   │   ├── 03-elements/          # Estilos base HTML
+│   │   │   └── 04-layout/            # Layouts generales
 │   │   └── index.html
 │   ├── public/assets/                # Assets estáticos
 │   ├── angular.json
@@ -219,11 +231,13 @@ ProyectoIndividual-Looking4Rate/
 │   ├── nginx.conf
 │   └── .dockerignore
 │
-├── docs/                             # Documentación
-│   ├── deployment/
-│   │   └── DOCUMENTACION_DESPLIEGUE.md  # Guía de Docker
-│   ├── client/                       # Docs del proyecto
-│   └── design/                       # Docs de diseño
+├── docs/                             # Documentación completa
+│   ├── accesibility/                 # Documentación de accesibilidad
+│   │   └── README.md                 # Análisis WCAG 2.1 AA
+│   ├── client/                       # Docs del frontend
+│   ├── server/                       # Docs del backend
+│   ├── deployment/                   # Guía de despliegue
+│   └── design/                       # Guía de diseño
 │
 ├── docker-compose.yml
 └── README.md
@@ -298,12 +312,56 @@ Endpoints para monitorizar el estado de la aplicación:
 
 ---
 
+## Accesibilidad y Multimedia
+
+### Descripción
+Este proyecto añade mejoras de accesibilidad web siguiendo las pautas WCAG 2.1, incluyendo navegación por teclado, compatibilidad con lectores de pantalla, estructura semántica y un componente multimedia accesible.
+
+### Componente multimedia añadido
+**Tipo:** Galería de imágenes  
+**Descripción:** Lightbox interactivo con navegación por teclado (flechas y Escape), botones de navegación visibles y textos alternativos contextuales.
+
+### Resultados de auditoría de accesibilidad
+
+| Herramienta | Puntuación inicial | Puntuación final | Mejora |
+|-------------|-------|---------|--------|
+| Lighthouse | 87/100 | 97/100 | +10 puntos |
+| WAVE | 1 errores, 4 alertas | 0 errores, 1 alerta | -1 errores, -3 alertas |
+| TAW | 10 problemas | X problemas | -X problemas |
+
+**Nivel de conformidad alcanzado:** WCAG 2.1 AA
+
+### Documentación completa
+📄 **[Ver análisis completo de accesibilidad](./docs/accesibility/README.md)**
+
+### Verificación realizada
+- ✅ Auditoría con Lighthouse, WAVE y TAW
+- ✅ Test con lector de pantalla (NVDA)
+- ✅ Test de navegación por teclado
+- ✅ Verificación cross-browser (Chrome, Firefox, Safari)
+
+### Tecnologías utilizadas
+- HTML5 semántico (landmarks, ARIA)
+- SCSS con variables CSS para temas
+- Angular 19 con señales y OnPush
+- TypeScript con tipado estricto
+
+### Autor
+**Nombre:** Manolo Cárdeno Sánchez  
+**Curso:** 2º DAW - Desarrollo de Aplicaciones Web  
+**Módulo:** Diseño de Interfaces Web (DIW)
+
+---
+
 ## Documentación Adicional
 
-- **[Guía de Despliegue con Docker](docs/deployment/DOCUMENTACION_DESPLIEGUE.md)** - Documentación completa de Docker con comandos, troubleshooting y configuración avanzada
-- **[Documentación del Cliente](docs/client/DOCUMENTACION_CLIENTE.md)** - Documentación detallada de todas las fases del frontend (Cliente)
-- **[Documentación del Servidor](docs/server/DOCUMENTACION_SERVIDOR.md)** - Documentación del backend, entidades, DTOs y repositorios
-- **[Documentación de Diseño](docs/design/DOCUMENTACION_DISEÑO.md)** - Guía de estilos, componentes y arquitectura SCSS
+| Documento | Descripción |
+|-----------|-------------|
+| [Guía de Despliegue](docs/deployment/DOCUMENTACION_DESPLIEGUE.md) | Docker, configuración y troubleshooting |
+| [Documentación del Cliente](docs/client/DOCUMENTACION_CLIENTE.md) | Frontend Angular: componentes, servicios, routing |
+| [Documentación del Servidor](docs/server/DOCUMENTACION_SERVIDOR.md) | Backend Spring Boot: entidades, DTOs, repositorios |
+| [Documentación de Diseño](docs/design/DOCUMENTACION_DISEÑO.md) | Guía de estilos, ITCSS, metodología BEM |
+| [Documentación de Accesibilidad](docs/accesibility/README.md) | Análisis WCAG 2.1 AA, auditorías, correcciones |
 
 ---
 
@@ -314,4 +372,4 @@ Autor: Manolo Cárdeno Sánchez.
 
 ---
 
-*Última Actualización: 15 de enero de 2026*
+*Última Actualización: 28 de enero de 2026*
