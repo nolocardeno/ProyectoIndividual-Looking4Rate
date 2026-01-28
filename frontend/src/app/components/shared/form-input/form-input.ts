@@ -16,6 +16,7 @@ export class FormInput {
   @Input() errorMessage = '';
   @Input() helpText = '';
   @Input() value = '';
+  @Input() ariaLabel = '';
 
   @Output() valueChange = new EventEmitter<string>();
   @Output() inputBlur = new EventEmitter<void>();

@@ -1,12 +1,14 @@
 <!-- Form Textarea: Textarea con label, validación y contador de caracteres -->
 
 <label class="form-textarea" [class.form-textarea--error]="errorMessage" [class.form-textarea--disabled]="disabled">
-  <span class="form-textarea__label">
-    {{ label }}
-    @if (required) {
-      <span class="form-textarea__required">*</span>
-    }
-  </span>
+  @if (label) {
+    <span class="form-textarea__label">
+      {{ label }}
+      @if (required) {
+        <span class="form-textarea__required">*</span>
+      }
+    </span>
+  }
 
   <textarea
     [id]="id"
@@ -16,6 +18,7 @@
     [disabled]="disabled"
     [rows]="rows"
     [attr.maxlength]="maxLength"
+    [attr.aria-label]="ariaLabel || null"
     [value]="value"
     (input)="onInputChange($event)"
     (blur)="onBlur()"

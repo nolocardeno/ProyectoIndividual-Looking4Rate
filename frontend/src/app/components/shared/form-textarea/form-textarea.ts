@@ -56,6 +56,9 @@ export class FormTextarea {
   /** Si el textarea puede redimensionarse */
   @Input() resizable = true;
 
+  /** Aria-label para accesibilidad cuando no hay label visible */
+  @Input() ariaLabel = '';
+
   /** Evento de cambio de valor */
   @Output() valueChange = new EventEmitter<string>();
 

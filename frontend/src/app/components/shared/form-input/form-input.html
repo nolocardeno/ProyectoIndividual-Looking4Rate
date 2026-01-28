@@ -1,10 +1,12 @@
 <label class="form-input" [class.form-input--error]="errorMessage" [class.form-input--disabled]="disabled">
-  <span class="form-input__label">
-    {{ label }}
-    @if (required) {
-      <span class="form-input__required">*</span>
-    }
-  </span>
+  @if (label) {
+    <span class="form-input__label">
+      {{ label }}
+      @if (required) {
+        <span class="form-input__required">*</span>
+      }
+    </span>
+  }
 
   <input
     [id]="id"
@@ -14,6 +16,7 @@
     [required]="required"
     [disabled]="disabled"
     [value]="value"
+    [attr.aria-label]="ariaLabel || null"
     (input)="onInputChange($event)"
     (blur)="onBlur()"
     class="form-input__field"

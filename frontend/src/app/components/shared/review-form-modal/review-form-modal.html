@@ -44,6 +44,7 @@
           <form class="review-modal__form" (ngSubmit)="onSubmit($event)">
             <app-form-textarea
               label=""
+              ariaLabel="Escribe tu review del juego"
               name="review"
               placeholder="Añade una review..."
               [value]="reviewText"
