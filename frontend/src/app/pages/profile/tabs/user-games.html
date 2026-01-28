@@ -61,7 +61,11 @@
       <ul class="user-games__grid">
         @for (game of paginatedGames(); track game.id) {
           <li class="user-games__item">
-            <a [routerLink]="'/juego/' + game.juegoId" class="user-games__link">
+            <a 
+              [routerLink]="'/juego/' + game.juegoId" 
+              class="user-games__link"
+              [attr.aria-label]="'Ver detalles de ' + game.nombreJuego"
+            >
               <app-game-cover
                 [src]="game.imagenJuego ?? 'assets/img/games/placeholder.jpg'"
                 [alt]="game.nombreJuego"

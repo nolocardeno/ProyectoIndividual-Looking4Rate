@@ -327,7 +327,7 @@ Este proyecto añade mejoras de accesibilidad web siguiendo las pautas WCAG 2.1,
 |-------------|-------|---------|--------|
 | Lighthouse | 87/100 | 97/100 | +10 puntos |
 | WAVE | 1 errores, 4 alertas | 0 errores, 1 alerta | -1 errores, -3 alertas |
-| TAW | 10 problemas | X problemas | -X problemas |
+| TAW | 10 problemas | 0 problemas | -10 problemas |
 
 **Nivel de conformidad alcanzado:** WCAG 2.1 AA
 

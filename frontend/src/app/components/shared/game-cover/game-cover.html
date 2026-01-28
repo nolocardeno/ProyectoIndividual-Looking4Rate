@@ -1,7 +1,7 @@
 <!-- Game Cover: Carátula de videojuego con borde y efecto hover -->
 
 @if (routerLink) {
-  <a [routerLink]="routerLink" [class]="classes">
+  <a [routerLink]="routerLink" [class]="classes" [attr.aria-label]="'Ver detalles de ' + alt">
     <img 
       [src]="src" 
       [alt]="alt" 

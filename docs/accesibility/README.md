@@ -547,7 +547,7 @@ Se ejecutaron nuevamente las 3 herramientas de auditoría después de aplicar to
 |-------------|-------|---------|--------|
 | Lighthouse | 87/100 | 97/100 | +10 puntos |
 | WAVE | 1 errores, 4 alertas | 0 errores, 1 alerta | -1 errores, -3 alertas |
-| TAW | 10 problemas | X problemas | -X problemas |
+| TAW | 10 problemas | 0 problemas | -10 problemas |
 
 ### Capturas de resultados finales:
 

@@ -67,7 +67,11 @@
         @for (review of paginatedReviews(); track review.id) {
           <li class="user-reviews__item">
             <!-- Carátula del juego -->
-            <a [routerLink]="'/juego/' + review.juegoId" class="user-reviews__cover-link">
+            <a 
+              [routerLink]="'/juego/' + review.juegoId" 
+              class="user-reviews__cover-link"
+              [attr.aria-label]="'Ver detalles de ' + review.nombreJuego"
+            >
               <app-game-cover
                 [src]="review.imagenJuego ?? 'assets/img/games/placeholder.jpg'"
                 [alt]="review.nombreJuego"
