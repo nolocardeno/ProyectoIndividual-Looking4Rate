@@ -13,7 +13,6 @@ import { JuegoRankingDTO } from '../../models';
   selector: 'app-ranking',
   imports: [SpinnerInline, Alert, RankingItem],
   templateUrl: './ranking.html',
-  styleUrl: './ranking.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class Ranking implements OnInit, OnDestroy {

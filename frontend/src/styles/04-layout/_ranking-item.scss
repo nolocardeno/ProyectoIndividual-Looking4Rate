@@ -1,0 +1,14 @@
+@use '../00-settings/variables' as *;
+
+.ranking-item {
+    gap: $spacing-3;
+    background-color: $color-examen-uno;
+    font-family: $font-primary;
+    gap: $spacing-2;
+
+    &__position {
+        font-size: $font-size-md;
+        align-self: center;
+    }
+}
+

@@ -10,7 +10,6 @@ import { JuegoRankingDTO } from '../../../models';
   selector: 'app-ranking-item',
   imports: [RouterLink, DecimalPipe, StarRating, GameCover],
   templateUrl: './ranking-item.html',
-  styleUrl: './ranking-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RankingItem {
