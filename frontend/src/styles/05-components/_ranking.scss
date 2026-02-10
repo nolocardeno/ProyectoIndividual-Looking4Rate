@@ -2,16 +2,20 @@
 
 .ranking {
     display: flex;
-    gap: $spacing-4;
     flex-direction: column;
     padding: $spacing-header-footer 0;
+    gap: $spacing-4;
 
     &__header {
         text-align: center;
     }
     
     &__list {
-        align-items: center;
-        gap: $spacing-3;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-2;
     }
 }

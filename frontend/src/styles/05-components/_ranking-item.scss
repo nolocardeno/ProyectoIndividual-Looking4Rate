@@ -13,5 +13,14 @@
     &__position {
         font-size: $font-size-lg;
         text-align: center;
+        color: $color-examen-dos;
+    }
+
+    &__name {
+        font-size: $font-size-lg;
+    }
+
+    &__stats {
+        font-size: $font-size-md;
     }
 }
