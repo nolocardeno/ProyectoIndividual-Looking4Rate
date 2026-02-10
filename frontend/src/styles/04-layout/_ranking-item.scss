@@ -1,14 +1,17 @@
 @use '../00-settings/variables' as *;
 
 .ranking-item {
+    display: flex;
+    align-items: center;
     gap: $spacing-3;
     background-color: $color-examen-uno;
     font-family: $font-primary;
-    gap: $spacing-2;
+    width: 100%;
+    padding: $spacing-2 $spacing-3;
+    border-radius: $radius-lg;
 
     &__position {
-        font-size: $font-size-md;
-        align-self: center;
+        font-size: $font-size-lg;
+        text-align: center;
     }
 }
-

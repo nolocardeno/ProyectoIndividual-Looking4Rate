@@ -1,11 +1,17 @@
 @use '../00-settings/variables' as *;
 
 .ranking {
+    display: flex;
+    gap: $spacing-4;
+    flex-direction: column;
+    padding: $spacing-header-footer 0;
+
+    &__header {
+        text-align: center;
+    }
     
     &__list {
-        display: flex;
-        flex-direction: wrap;
-        justify-content: flex-start;
         align-items: center;
+        gap: $spacing-3;
     }
 }
