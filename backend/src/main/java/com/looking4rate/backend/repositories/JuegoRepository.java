@@ -96,4 +96,10 @@ public interface JuegoRepository extends JpaRepository<Juego, Long> {
     @Query("SELECT j FROM Juego j LEFT JOIN j.interacciones i " +
            "GROUP BY j ORDER BY COUNT(i) DESC")
     List<Juego> findMostReviewedGames(Pageable pageable);
+
+    @Query("SELECT j.id, j.nombre, j.imagen_portada, AVG(i.puntuacion), COUNT(i) " +
+           "FROM Juego j JOIN j.interacciones i " +
+           "GROUP BY j.id, j.nombre, j.imagen_portada " +
+           "ORDER BY AVG(i.puntuacion) DESC")
+    List<Object[]> findRankingWithStats(Pageable pageable);
 }
