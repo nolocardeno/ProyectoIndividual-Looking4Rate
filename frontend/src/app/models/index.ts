@@ -40,3 +40,10 @@ export * from './catalogo.model';
 // ============================================
 
 export * from './api-response.model';
+
+
+// ============================================
+// Modelos de Ranking
+// ============================================
+
+export * from './ranking.model';

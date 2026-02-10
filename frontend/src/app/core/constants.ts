@@ -108,6 +108,9 @@ export const ENDPOINTS = {
     BY_ID: (id: number) => `/desarrolladoras/${id}`,
     BUSCAR: '/desarrolladoras/buscar',
     BY_PAIS: (pais: string) => `/desarrolladoras/pais/${encodeURIComponent(pais)}`
+  },
+  RANKING: {
+    BASE: '/ranking'
   }
 } as const;
 
