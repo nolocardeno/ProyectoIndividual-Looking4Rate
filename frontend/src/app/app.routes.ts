@@ -138,6 +138,14 @@ export const routes: Routes = [
     data: { breadcrumb: 'Página no encontrada' }
   },
 
+  // RUTA RANKING
+  {
+    path: 'ranking',
+    loadComponent: () => import('./pages/ranking/ranking'),
+    title: 'Ranking - Looking4Rate',
+    data: { breadcrumb: 'Ranking' }
+  },
+
   // ========================================
   // RUTA WILDCARD - Redirige a 404
   // ========================================

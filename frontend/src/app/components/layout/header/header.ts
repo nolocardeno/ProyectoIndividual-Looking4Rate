@@ -318,6 +318,12 @@ export class Header implements AfterViewInit, OnInit, OnDestroy {
     this.isUserDropdownOpen = false;
   }
 
+  goToRanking(): void {
+    this.closeMenu();
+    this.router.navigate(['/ranking']);
+    this.isUserDropdownOpen = false;
+  }
+
   /**
    * Navega al inicio
    */

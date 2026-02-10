@@ -40,6 +40,8 @@ export class UserDropdown {
   /** Evento emitido al navegar a ajustes */
   @Output() navigateSettings = new EventEmitter<void>();
 
+   @Output() navigateRanking = new EventEmitter<void>();
+
   /** Evento emitido al cerrar sesión */
   @Output() logoutClick = new EventEmitter<void>();
 
@@ -62,6 +64,10 @@ export class UserDropdown {
    */
   onSettingsClick(): void {
     this.navigateSettings.emit();
+  }
+
+  onRatingClick(): void {
+    this.navigateRanking.emit();
   }
 
   /**

@@ -117,6 +117,11 @@
               </app-button>
             </li>
             <li role="menuitem">
+              <app-button variant="primary" size="lg" (btnClick)="goToSettings()">
+                <fa-icon [icon]="['fas', 'cog']" class="header__menu-icon"></fa-icon> RANKING
+              </app-button>
+            </li>
+            <li role="menuitem">
               <app-button variant="primary" size="lg" (btnClick)="logout()">
                 <fa-icon [icon]="['fas', 'sign-out-alt']" class="header__menu-icon"></fa-icon> CERRAR SESIÓN
               </app-button>
