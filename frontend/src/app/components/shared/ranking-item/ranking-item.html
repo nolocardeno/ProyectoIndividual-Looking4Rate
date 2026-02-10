@@ -4,9 +4,9 @@
   <div class="ranking-item__info">
     <a class="ranking-item__name" [routerLink]="'/juego/' + juego.id">{{ juego.nombre }}</a>
     <p class="ranking-item__stats">
-      <app-star-rating [rating]="juego.puntuacionMedia" [readonly]="true" size="sm" />
-      <span class="ranking-item__score">{{ juego.puntuacionMedia | number:'1.1-1' }}</span>
-      <span class="ranking-item__reviews">{{ juego.totalReviews }} puntuaciones</span>
+      Tu nota:
+      <app-star-rating [rating]="juego.puntuacionMedia" [readonly]="true" size="md" />
+      <span class="ranking-item__score">Nota total: {{ juego.puntuacionMedia | number:'1.1-1' }}</span>
     </p>
   </div>
 </article>
