@@ -1,15 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { GameCover } from '../game-cover/game-cover';
+
 import { StarRating } from '../star-rating/star-rating';
+import { GameCover } from '../game-cover/game-cover';
+import { JuegoRankingDTO } from '../../../models';
 
 @Component({
   selector: 'app-ranking-item',
-  imports: [RouterLink, GameCover, StarRating],
+  imports: [RouterLink, DecimalPipe, StarRating, GameCover],
   templateUrl: './ranking-item.html',
   styleUrl: './ranking-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RankingItem {
-
+  @Input({ required: true }) juego!: JuegoRankingDTO;
 }

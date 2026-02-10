@@ -108,3 +108,8 @@ export {
 export {
   CatalogoService
 } from './catalogo.service';
+
+
+export {
+  RankingService
+} from './ranking.service';

@@ -138,11 +138,12 @@ export const routes: Routes = [
     data: { breadcrumb: 'Página no encontrada' }
   },
 
-  // RUTA RANKING
+
+  // RANKING
   {
     path: 'ranking',
     loadComponent: () => import('./pages/ranking/ranking'),
-    title: 'Ranking - Looking4Rate',
+    title: 'Top Juegos - Looking4Rate',
     data: { breadcrumb: 'Ranking' }
   },
 

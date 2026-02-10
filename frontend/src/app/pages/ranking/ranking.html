@@ -1,14 +1,27 @@
-<section class="rankings">
-    <header>
-        <h1 class="rankings__title">Top juegos</h1>
-        <p class="rankings__subtitle"></p>
-    </header>
-    
-    <ol class="rankings__list">
-        @for (juego of ranking(); track juego.id) {
-            <li>
-                <app-ranking-item  [juego]="juego" />
-            </li>
-        }
+<section class="ranking">
+  <header class="ranking__header">
+    <h1 class="ranking__title">Top Juegos</h1>
+    <p class="ranking__subtitle">Los juegos mejor valorados por la comunidad</p>
+  </header>
+
+  @if (loading()) {
+    <aside class="ranking__loading">
+      <app-spinner-inline size="md"></app-spinner-inline>
+      <p>Cargando ranking...</p>
+    </aside>
+  } @else if (error()) {
+    <aside class="ranking__error">
+      <app-alert type="error" [dismissible]="false">{{ error() }}</app-alert>
+    </aside>
+  } @else {
+    <ol class="ranking__list">
+      @for (juego of ranking(); track juego.id) {
+        <li>
+          <app-ranking-item [juego]="juego" />
+        </li>
+      } @empty {
+        <p class="ranking__empty">No hay juegos valorados aún</p>
+      }
     </ol>
+  }
 </section>

@@ -40,6 +40,7 @@
             (navigateHome)="goToHome()"
             (navigateProfile)="goToProfile()"
             (navigateSettings)="goToSettings()"
+            (navigateRanking)="goToRanking()"
             (logoutClick)="logout()">
           </app-user-dropdown>
         }
@@ -117,7 +118,7 @@
               </app-button>
             </li>
             <li role="menuitem">
-              <app-button variant="primary" size="lg" (btnClick)="goToSettings()">
+              <app-button variant="primary" size="lg" (btnClick)="goToRanking()">
                 <fa-icon [icon]="['fas', 'cog']" class="header__menu-icon"></fa-icon> RANKING
               </app-button>
             </li>

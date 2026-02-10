@@ -1,10 +1,12 @@
 <article class="ranking-item">
-    <span class="ranking-item__position">#{{ juego.posicion }}</span>
-    <app-game-cover></app-game-cover>
-    <div class="ranking-item__info">
-        <a class="ranking-item__name" href="#"></a>
-        <p class="ranking-item__stats">
-            <span class="ranking-item__score"></span>
-        </p>
-    </div>
+  <span class="ranking-item__position">#{{ juego.posicion }}</span>
+  <app-game-cover [src]="juego.imagenPortada" [alt]="juego.nombre" [routerLink]="'/juego/' + juego.id" size="sm" />
+  <div class="ranking-item__info">
+    <a class="ranking-item__name" [routerLink]="'/juego/' + juego.id">{{ juego.nombre }}</a>
+    <p class="ranking-item__stats">
+      <app-star-rating [rating]="juego.puntuacionMedia" [readonly]="true" size="sm" />
+      <span class="ranking-item__score">{{ juego.puntuacionMedia | number:'1.1-1' }}</span>
+      <span class="ranking-item__reviews">{{ juego.totalReviews }} puntuaciones</span>
+    </p>
+  </div>
 </article>
