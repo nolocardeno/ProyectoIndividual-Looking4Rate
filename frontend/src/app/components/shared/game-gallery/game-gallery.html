@@ -19,6 +19,7 @@
                 class="game-gallery__image"
                 [src]="imagen.url"
                 [alt]="'Captura de pantalla ' + (i + 1) + ' de ' + gameTitle + (imagen.alt ? ': ' + imagen.alt : '')"
+                [title]="'Captura de pantalla ' + (i + 1) + ' de ' + gameTitle"
                 loading="lazy"
                 decoding="async"
               >
@@ -67,6 +68,7 @@
           class="game-gallery__lightbox-image"
           [src]="selectedImage()!.url"
           [alt]="'Captura de pantalla de ' + gameTitle + ': ' + selectedImage()!.alt"
+          [title]="'Captura de pantalla de ' + gameTitle"
         >
         @if (selectedImage()!.caption) {
           <figcaption class="game-gallery__lightbox-caption">
