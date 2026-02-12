@@ -9,13 +9,16 @@
 } @else {
   <!-- Variante por defecto con input -->
   <search class="search-box">
+    <label for="search-box-input" class="visually-hidden">Buscar juegos</label>
     <input 
+      id="search-box-input"
       type="text" 
       class="search-box__input" 
       [placeholder]="placeholder"
       [(ngModel)]="value"
       (ngModelChange)="onInputChange()"
       (keyup.enter)="onSearch()"
+      title="Buscar juegos"
       aria-label="Buscar juegos">
     <button class="search-box__btn" (click)="onSearch()" aria-label="Buscar">
       <fa-icon [icon]="['fas', 'search']" class="search-box__icon"></fa-icon>
