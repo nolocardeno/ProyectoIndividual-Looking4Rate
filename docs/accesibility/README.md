@@ -549,12 +549,21 @@ Se ejecutaron nuevamente las 3 herramientas de auditoría después de aplicar to
 | WAVE | 1 errores, 4 alertas | 0 errores, 1 alerta | -1 errores, -3 alertas |
 | TAW | 10 problemas | 0 problemas | -10 problemas |
 
+Las advertencias de TAW no las he podido "corregir" ya que todas las de esta página son alertas relacionadas con:
+- **Comprobar descripción de imagenes:**
+TAW lanza esta alerta en toda imagen que tenga alt. Es un aviso para que compruebes manualmente si la imagen necesita una descripción larga adicional. Si ya tenemos alt ya tenemos una descripción adecuada y esta alerta es imposible de suprimir.
+- **Anchos o posicionamientos absolutos:**
+TAW lanza esta alerta siempre que detecta un absolute en el CSS. Te pide verificar que este absolute no oculta nada al redimensionar. Pero esto ya lo tenemos contemplado con el responsive, por lo que esta alerta es imposible de eliminar.
+- **Contenido de encabezados:**
+TAW pide que revise que el texto de los encabezados sea descriptivo. Aún comprobando que estos son correctos, la alerta es imposible de suprimir ya que TAW la hace saltar automáticamente al detectar encabezados.
+
 ### Capturas de resultados finales:
 
 | Herramienta | Captura |
 |-------------|---------|
 | Lighthouse | ![Lighthouse después](./img/lighthouse-despues.png) |
 | WAVE | ![WAVE después](./img/wave-despues.png) |
+| TAW | ![TAW después](./img/taw-despues.png) |
 
 ---
 
